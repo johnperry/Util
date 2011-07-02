@@ -1,0 +1,76 @@
+<project name="Utilities" default="all" basedir=".">
+
+	<property name="name" value="util"/>
+
+	<property name="build" value="${basedir}/build"/>
+	<property name="source" value="${basedir}/source"/>
+	<property name="java" value="${source}/java"/>
+	<property name="files" value="${source}/files"/>
+	<property name="libraries" value="${basedir}/libraries"/>
+	<property name="products" value="${basedir}/products"/>
+	<property name="documentation" value="${basedir}/documentation"/>
+	<property name="title" value="Util"/>
+	<property name="copyright" value="Copyright 2010 Radiological Society of North America"/>
+
+	<path id="classpath">
+		<pathelement location="${libraries}/jdbm.jar"/>
+		<pathelement location="${libraries}/log4j.jar"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build}" failonerror="false"/>
+		<delete dir="${documentation}" failonerror="false"/>
+	</target>
+
+	<target name="init">
+		<tstamp>
+			<format property="today" pattern="dd-MMMM-yyyy"/>
+			<format property="now" pattern="HH:mm:ss"/>
+		</tstamp>
+		<echo message="Time now ${now}"/>
+		<echo message="ant.java.version = ${ant.java.version}" />
+		<mkdir dir="${build}"/>
+		<mkdir dir="${products}"/>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac destdir="${build}" optimize="on"
+				classpathref="classpath"
+				debug="true" debuglevel="lines,vars,source">
+			<src path="${java}"/>
+			<!--<compilerarg value="-Xlint:unchecked"/>-->
+		</javac>
+		<copy overwrite="true" todir="${build}">
+			<fileset dir="${files}"/>
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile">
+		<jar jarfile="${products}/${name}.jar">
+			<manifest>
+	            <attribute name="Date" value="${today} at ${now}"/>
+	            <attribute name="Java-Version" value="${ant.java.version}"/>
+				<attribute name="Class-Path" value=""/>
+			</manifest>
+			<fileset dir="${build}" />
+		</jar>
+	</target>
+
+	<target name="javadocs">
+		<mkdir dir="${documentation}"/>
+		<javadoc destdir="${documentation}" sourcepath="${java}" classpathref="classpath"
+				 doctitle="${title}" windowtitle="${title}" bottom="${copyright}">
+			<package name="org.*"/>
+		</javadoc>
+	</target>
+
+	<target name="all" depends="clean, jar, javadocs"/>
+
+	<target name="deploy" depends="all">
+		<copy overwrite="true" file="${products}/${name}.jar" todir="../ClinicalTrialProcessor/libraries"/>
+		<copy overwrite="true" file="${products}/${name}.jar" todir="../Geneva/libraries"/>
+		<copy overwrite="true" file="${products}/${name}.jar" todir="/JavaPrograms/CTP/libraries"/>
+		<!-- <copy overwrite="true" file="${products}/${name}.jar" todir="../MIRC-Development/libraries"/> -->
+	</target>
+
+</project>
