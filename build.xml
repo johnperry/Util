@@ -67,10 +67,9 @@
 	<target name="all" depends="clean, jar, javadocs"/>
 
 	<target name="deploy" depends="all">
-		<copy overwrite="true" file="${products}/${name}.jar" todir="../ClinicalTrialProcessor/libraries"/>
+		<copy overwrite="true" file="${products}/${name}.jar" todir="../CTP/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="../Geneva/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="/JavaPrograms/CTP/libraries"/>
-		<!-- <copy overwrite="true" file="${products}/${name}.jar" todir="../MIRC-Development/libraries"/> -->
 	</target>
 
 </project>

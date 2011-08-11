@@ -121,6 +121,7 @@ public class HttpResponse {
 	 * <table border="1">
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></td>
 	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></td>
+	 *	<tr><td>csv</td><td>text/csv;charset=UTF-8</td></td>
 	 *	<tr><td>dcm</td><td>application/dicom</td></td>
 	 *	<tr><td>gif</td><td>image/gif</td></td>
 	 *	<tr><td>htm</td><td>text/html;charset=UTF-8</td></td>
@@ -164,8 +165,7 @@ public class HttpResponse {
 	}
 
 	/**
-	 * Set the Last-Modifier header for a file. This method
-	 * also includes an ETag header containing the time in ms.
+	 * Set the Last-Modified header for a file.
 	 * @param time the last modified date in milliseconds.
 	 */
 	public void setLastModified(long time) {
@@ -369,7 +369,8 @@ public class HttpResponse {
 		public ContentTypes() {
 			super();
 			put("avi","video/x-msvideo");
-			put("css","text/css");
+			put("css","text/css;charset=UTF-8");
+			put("csv","text/csv;charset=UTF-8");
 			put("dcm","application/dicom");
 			put("gif","image/gif");
 			put("htm","text/html;charset=UTF-8");

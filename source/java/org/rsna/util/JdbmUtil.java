@@ -74,7 +74,7 @@ public class JdbmUtil {
 	/**
 	 * Get a named BTree, or create it if it doesn't exist.
 	 * The BTree is created with a Comparator that puts String
-	 * keys in alphabetical order.
+	 * keys in alphabetical order and Integer and Long keys in numeric order.
 	 * @param recman the RecordManager of the database in which to get the BTree.
 	 * @param name the name of the BTree.
 	 * @return the BTree, or null if one cannot be created.
@@ -102,6 +102,12 @@ public class JdbmUtil {
 		public int compare(Object key1, Object key2) {
 			if ( (key1 instanceof String) && (key2 instanceof String)) {
 				return ((String)key1).compareTo((String)key2);
+			}
+			else if ( (key1 instanceof Integer) && (key2 instanceof Integer)) {
+				return ((Integer)key1).compareTo((Integer)key2);
+			}
+			else if ( (key1 instanceof Long) && (key2 instanceof Long)) {
+				return ((Long)key1).compareTo((Long)key2);
 			}
 			else return 0;
 		}

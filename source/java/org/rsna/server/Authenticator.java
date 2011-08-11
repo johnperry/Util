@@ -59,9 +59,7 @@ public class Authenticator {
 		Session session;
 		//First try the session cookie
 		String id = req.getCookie("RSNASESSION");
-/**/	logger.debug("Authenticator.authenticate: RSNASESSION cookie: "+id);
 		if ( (id != null) && ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
-/**/		logger.debug("...session accepted");
 			session.recordAccess();
 			return session.user;
 		}
@@ -97,7 +95,6 @@ public class Authenticator {
 			}
 		}
 		//The user cannot be authenticated.
-/**/	logger.debug("...authentication failed");
 		return null;
 	}
 
@@ -116,11 +113,9 @@ public class Authenticator {
 			sessions.put(session.id, session);
 			res.setHeader("Set-Cookie", "RSNASESSION="+session.id);
 			res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
-/**/		logger.debug("Authenticator.createSession: session created: "+session.id);
 			return true;
 		}
 		catch (Exception failed) {
-/**/		logger.warn("Authenticator.createSession: unable to create session", failed);
 			return false;
 		}
 	}

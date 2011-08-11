@@ -91,15 +91,12 @@ public class Servlet {
 			}
 		}
 		else if ((url=getClass().getResource(req.path)) != null) {
-			if (clientLMDate > 0) {
-				//Note: since we're serving the object from the jar, the
-				//object cannot have changed since the server started.
-				res.setResponseCode( res.notmodified );
-			}
-			else res.write(url);
+			//When serving from the jar, ignore the clientLMDate
+			//since we can't get a date, and the jar may have changed.
+			res.write(url);
 		}
 		else {
-			res.setResponseCode( res.notfound ); //not found
+			res.setResponseCode( res.notfound );
 		}
 		res.send();
 	}
@@ -112,7 +109,7 @@ public class Servlet {
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) throws Exception {
 		res.disableCaching();
-		res.setResponseCode(404); //not found
+		res.setResponseCode( res.notfound );
 		res.send();
 	}
 
@@ -127,10 +124,10 @@ public class Servlet {
 		if (p.startsWith("/")) p = p.substring(1);
 		File file = new File(root,p);
 		if (file.exists() && file.isDirectory()) {
-			file = new File(file,"index.html");
+			file = new File(file, "index.html");
 			if (!file.exists()) {
 				File parent = file.getParentFile();
-				file = new File(parent,"index.htm");
+				file = new File(parent, "index.htm");
 			}
 		}
 		return file;

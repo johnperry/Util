@@ -7,6 +7,11 @@ function setCookie(name ,value) {
 	document.cookie = name + "=" + escape(value) + path + expires;
 }
 
+function setSessionCookie(name ,value) {
+	var path = ";path=/";
+	document.cookie = name + "=" + escape(value) + path;
+}
+
 function getCookieObject() {
 	var cookies = new Object();
 	var allcookies = document.cookie;

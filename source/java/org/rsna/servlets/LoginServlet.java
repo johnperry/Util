@@ -155,6 +155,8 @@ public class LoginServlet extends Servlet {
 				path = path.substring(0, path.length() - context.length());
 			}
 		}
+
+		if (path.equals("")) path = "/";
 		res.redirect(path);
 	}
 }
