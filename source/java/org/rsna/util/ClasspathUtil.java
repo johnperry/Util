@@ -11,22 +11,21 @@ public class ClasspathUtil {
 	private static final Class<?>[] noparams = new Class[0];
 
 	/**
-	 * Add all the jar files in a directory to the classpath.
-	 * @param dir the directory
-	 * @return true if all the jar files were successfully added; false otherwise.
+	 * Add all the jar files in a directory tree to the classpath.
+	 * @param dir the top-level directory in the tree
 	 */
-	public static boolean addJARs(File dir) {
-		boolean result = true;
+	public static void addJARs(File dir) {
 		if (dir.exists() && dir.isDirectory()) {
 			File[] files = dir.listFiles();
 			for (File file : files) {
-				if (file.getName().toLowerCase().endsWith(".jar") && !addFile(file)) {
-					System.out.println("Unable to add "+file+" to the classpath.");
-					result = false;
+				if (file.isFile()) {
+					if (file.getName().toLowerCase().endsWith(".jar") && !addFile(file)) {
+						System.out.println("Unable to add "+file+" to the classpath.");
+					}
 				}
+				else if (file.isDirectory()) addJARs(file);
 			}
 		}
-		return result;
 	}
 
 	/**
@@ -76,13 +75,13 @@ public class ClasspathUtil {
 	/**
 	 * List the current classpath on System.out.
 	 */
-	public static void listClasspath() {
+	public static String listClasspath() {
+		StringBuffer sb = new StringBuffer();
 		URL[] urls = getClasspath();
-		System.out.println("Classpath:");
 		for (URL url : urls) {
-			System.out.println("  "+url.toString());
+			sb.append(url.toString()+"\n");
 		}
-		System.out.println("end of classpath list");
+		return sb.toString();
 	}
 
 }
