@@ -25,13 +25,6 @@ public class HttpUtil {
 
 	static final Logger logger = Logger.getLogger(HttpUtil.class);
 
-	public static void setDefaultSSLSocketFactory() throws Exception {
-		TrustManager[] trustAllCerts = new TrustManager[] { new AcceptAllX509TrustManager() };
-		SSLContext sc = SSLContext.getInstance("SSL");
-		sc.init(null, trustAllCerts, new SecureRandom());
-		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-	}
-
 	/**
 	 * Get an HttpURLConnection for a specified URL String. The
 	 * connection is returned set up for input and output, with
@@ -75,6 +68,13 @@ public class HttpUtil {
 			httpsConn.setHostnameVerifier(new AcceptAllHostnameVerifier());
 			httpsConn.setUseCaches(false);
 			httpsConn.setDefaultUseCaches(false);
+
+			//Set the socket factory
+			TrustManager[] trustAllCerts = new TrustManager[] { new AcceptAllX509TrustManager() };
+			SSLContext sc = SSLContext.getInstance("SSL");
+			sc.init(null, trustAllCerts, new SecureRandom());
+			httpsConn.setSSLSocketFactory(sc.getSocketFactory());
+
 			conn = httpsConn;
 		}
 		else conn = (HttpURLConnection)url.openConnection();
