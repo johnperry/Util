@@ -33,12 +33,12 @@ public class HttpResponse {
 
 	protected static SimpleDateFormat dateFormat = null;
 
-	Hashtable<String,String> headers;
-	List<ResponseItem> responseContent;
+	final Socket socket;
+	final OutputStream outputStream;
+	final Hashtable<String,String> headers;
+	final List<ResponseItem> responseContent;
 	long responseLength = 0;
 	int responseCode = 200;
-	OutputStream outputStream;
-	Socket socket;
 
 	/**
 	 * Create an HttpResponse, connecting it to an OutputStream and
@@ -65,7 +65,7 @@ public class HttpResponse {
 	/**
 	 * Flush and close the OutputStream associated with this response.
 	 */
-	public void close() {
+	public synchronized void close() {
 		try {
 			if (outputStream != null) {
 				outputStream.flush();
@@ -253,26 +253,6 @@ public class HttpResponse {
 		catch (Exception ignore) {
 			logger.warn("Unable to add the resource "+url+" to the response.");
 		}
-	}
-
-	/**
-	 * Debugging method to save the entire response,
-	 * including the headers, in a file.
-	 * @param file the output file.
-	 * @return true if the save succeeded; false otherwise.
-	 */
-	public boolean save(File file) {
-		OutputStream oldOutputStream = this.outputStream;
-		boolean result = true;
-		try {
-			outputStream = new FileOutputStream(file);
-			send();
-			outputStream.flush();
-			outputStream.close();
-		}
-		catch (Exception ex) { result = false; }
-		this.outputStream = oldOutputStream;
-		return result;
 	}
 
 	/**

@@ -36,8 +36,8 @@ public class HttpRequest {
 
 	protected static SimpleDateFormat dateFormat = null;
 
-	public Socket socket;
-	public InputStream inputStream;
+	public final Socket socket;
+	public final InputStream inputStream;
 	public String method;
 	public String path;
 	public String query;

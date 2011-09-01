@@ -27,11 +27,11 @@ public class HttpServer extends Thread {
 
 	static final Logger logger = Logger.getLogger(HttpServer.class);
 
-	int port;
-	boolean ssl;
-	ServletSelector selector;
-	ServerSocket serverSocket;
-	ExecutorService execSvc;
+	final int port;
+	final boolean ssl;
+	final ServletSelector selector;
+	final ServerSocket serverSocket;
+	final ExecutorService execSvc;
 
 	/**
 	 * Class constructor; creates a new instance of
@@ -48,7 +48,7 @@ public class HttpServer extends Thread {
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);
-		execSvc = Executors.newFixedThreadPool( 4 ); //max 4 concurrent threads
+		execSvc = Executors.newFixedThreadPool( 4 ); //max concurrent threads
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class HttpServer extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				//Wait for a connection
-				Socket socket = serverSocket.accept();
+				final Socket socket = serverSocket.accept();
 
 				//Handle the connection in a separate thread
 				execSvc.execute( new HttpHandler(socket, selector) );
@@ -68,13 +68,13 @@ public class HttpServer extends Thread {
 		}
 		try { serverSocket.close(); }
 		catch (Exception ignore) { logger.warn("Unable to close the server socket."); }
-		serverSocket = null;
 	}
 
 	/**
 	 * Stop the HttpServer.
 	 */
 	public void stopServer() {
+		execSvc.shutdown();
 		this.interrupt();
 		selector.shutdown();
 	}

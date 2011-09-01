@@ -24,7 +24,7 @@ public class Authenticator {
 
 	static Authenticator authenticator = null;
 
-	Hashtable<String,Session> sessions = null;
+	protected Hashtable<String,Session> sessions = null;
 	long timeout = 1 * 60 * 60 * 1000; //default session timeout in ms = 1 hour
 
 	/**
@@ -38,9 +38,17 @@ public class Authenticator {
 	/**
 	 * Get the Authenticator instance, creating it if it does not exist.
 	 */
-	public static Authenticator getInstance() {
+	public synchronized static Authenticator getInstance() {
 		if (authenticator == null) authenticator = new Authenticator();
 		return authenticator;
+	}
+
+	/**
+	 * Set the Session timeout.
+	 * @param timeout the timeout in milliseconds
+	 */
+	public synchronized void setSessionTimeout(long timeout) {
+		this.timeout = timeout;
 	}
 
 	/**
@@ -144,9 +152,9 @@ public class Authenticator {
 	//Class to encapsulate a session
 	class Session {
 		public long lastAccess;
-		public User user;
-		public String ipAddress;
-		public String id;
+		public final User user;
+		public final String ipAddress;
+		public final String id;
 
 		//Construct a Session
 		public Session(User user, String ipAddress) throws Exception {
@@ -157,8 +165,11 @@ public class Authenticator {
 		}
 
 		public boolean appliesTo(HttpRequest req) {
-			return ((System.currentTimeMillis() - lastAccess) < timeout)
-					&& req.getRemoteAddress().equals(ipAddress);
+			boolean ok = req.getRemoteAddress().equals(ipAddress);
+			if (ok && (timeout > 0)) {
+				ok &= ((System.currentTimeMillis() - lastAccess) < timeout);
+			}
+			return ok;
 		}
 
 		public void recordAccess() {
