@@ -7,9 +7,13 @@
 
 package org.rsna.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import org.apache.log4j.Logger;
@@ -46,6 +50,29 @@ public class SerializerUtil {
 	}
 
 	/**
+	 * Deserialize an object from an InputStream.
+	 * @param stream the source of the serialized object.
+	 * @return the deserialized instance.
+	 */
+	public static Object deserialize(InputStream stream) {
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(new BufferedInputStream(stream));
+			Object object = in.readObject();
+			in.close();
+			return object;
+		}
+		catch (Exception ex) {
+			logger.warn("Unable to obtain and deserialize the object", ex);
+			if (in != null) {
+				try { in.close(); }
+				catch (Exception ignore) { }
+			}
+			return null;
+		}
+	}
+
+	/**
 	 * Serialize the supplied object in a specified file.
 	 * @param file the directory in which to store the serialized object.
 	 * @param object the instance to be serialized.
@@ -59,6 +86,27 @@ public class SerializerUtil {
 		}
 		catch(Exception ex) {
 			logger.warn("Unable to serialize the object in "+file, ex);
+			if (out != null) {
+				try { out.close(); }
+				catch (Exception ignore) { }
+			}
+		}
+	}
+
+	/**
+	 * Serialize the supplied object to an OutputStream.
+	 * @param stream the stream to which to write the serialized object.
+	 * @param object the instance to be serialized.
+	 */
+	public static void serialize(OutputStream stream, Object object) {
+		ObjectOutputStream out = null;
+		try {
+			out = new ObjectOutputStream(new BufferedOutputStream(stream));
+			out.writeObject(object);
+			out.close();
+		}
+		catch(Exception ex) {
+			logger.warn("Unable to serialize the object", ex);
 			if (out != null) {
 				try { out.close(); }
 				catch (Exception ignore) { }
