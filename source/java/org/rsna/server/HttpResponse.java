@@ -257,8 +257,8 @@ public class HttpResponse {
 
 	/**
 	 * Set the HttpResponse to trigger a redirect. This method sets
-	 * the HTTP response code to 302 and adds the Location header,
-	 * but it does <u>not</u> call the send() method.
+	 * the HTTP response code to 302, adds the Location header,
+	 * <b>and</b> calls the send() method.
 	 * @param url the destination
 	 */
 	public void redirect(String url) {

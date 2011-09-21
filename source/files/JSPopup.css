@@ -29,6 +29,7 @@ div.popup div.titlebar  p {
 	margin-top: 3px;
 	padding: 0;
 	cursor: default;
+	text-align: left;
 }
 
 div.popup p {
