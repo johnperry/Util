@@ -355,6 +355,7 @@ public class HttpResponse {
 			put("gif","image/gif");
 			put("htm","text/html;charset=UTF-8");
 			put("html","text/html;charset=UTF-8");
+			put("jar","application/java-archive");
 			put("jpeg","image/jpeg");
 			put("jpg","image/jpeg");
 			put("js","text/javascript;charset=UTF-8");

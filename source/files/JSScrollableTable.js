@@ -1,97 +1,180 @@
-/**
-*
-*  Scrollable HTML table
-*  http://www.webtoolkit.info/
-*  Usage: var table = new ScrollableTable( tableElement, tableHeight, tableWidth);
-*
-**/
+//*****************************************************************************
+// Filename: ScrollableTable.js
+// Description: This javascript file can be applied to convert record tables
+// in a HTML file to be scrollable.
+// Version: 1.1
+// Browser Compatibility: IE5.5+
+//
+// COPYRIGHT (C) 2002 WAGNER DOSANJOS
+// THIS PROGRAM IS FREE SOFTWARE; YOU CAN REDISTRIBUTE IT AND/OR MODIFY IT
+// UNDER THE TERMS OF THE GNU GENERAL PUBLIC LICENSE AS PUBLISHED BY THE FREE
+// SOFTWARE FOUNDATION; EITHER VERSION 2 OF THE LICENSE, OR (AT YOUR OPTION)
+// ANY LATER VERSION. THIS PROGRAM IS DISTRIBUTED IN THE HOPE THAT IT WILL BE
+// USEFUL, BUT WITHOUT ANY WARRANTY; WITHOUT EVEN THE IMPLIED WARRANTY OF
+// MERCHANTABILITY OF FITNESS FOR A PARTICULAR PURPOSE. SEE THE GNU GENERAL
+// PUBLIC LICENSE FOR MORE DETAILS.
+//
+// YOU SHOULD HAVE RECEIVED A COPY OF THE GNU GENERAL PUBLIC LICENSE ALONG
+// WITH THIS PROGRAM; IF NOT, WRITE TO:
+//
+// THE FREE SOFTWARE FOUNDATION, INC.,
+// 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+//
+// Bugs/Comments: wanjos@yahoo.com
+//
+// Change History:
+// 12-09-2002:
+//  o Release v1.0
+// 12-12-2002:
+//  o Fixed: tHead and tFoot attributes not properly set after changing parent node.
+//  o Fixed: Tables with 'width' attribute not properly handled.
+//  o Release v1.1
+//
+//*****************************************************************************
+// ScrollableTable.js
+//
+// This script contains useful functions that can be used to convert ordinary
+// tables into scrollable tables.
+//
+// Here is how one can do that. The following assumptions are required
+// for the tables to be sorted.
+//
+// 1. The table header should be defined in a TBODY.
+// 2. The table footer (if one exists) should be defined in a TFOOT.
+// 3. TD's in TBODY should not contain the width attribute.
+//
+// To enable the sorting, simply include this javascript source file and
+// add an onLoad event to the <body> like below:
+//
+// <body onLoad="makeScrollableTable('table1',false,'auto');makeScrollableTable('table2',false,100); ...">
+//
+// Parameters:
+//      - Table ID
+//      - Scroll Footer (true/false): Include footer in the scrollable area
+//      - Scrollable Area Height (# of pixels or 'auto'): Only the first table called can be set to 'auto'.
+//
+// Note that all the tables that need to be scrolled MUST contain an ID tag.
+// So, if they do not exist, you must create one for each table. Also, the
+// table names/ids MUST BE UNIQUE.
+//*****************************************************************************
+// Global variables
+var container = new Array();
+var onResizeHandler;
 
-function JSScrollableTable (tableEl, tableHeight, tableWidth) {
+function scrollbarWidth() {
+    var w;
 
-	this.initIEengine = function () {
+    if (! document.body.currentStyle)   document.body.currentStyle = document.body.style;
 
-		this.containerEl.style.overflowY = 'auto';
-		if (this.tableEl.parentElement.clientHeight - this.tableEl.offsetHeight < 0) {
-			this.tableEl.style.width = this.newWidth - this.scrollWidth +'px';
-		} else {
-			this.containerEl.style.overflowY = 'hidden';
-			this.tableEl.style.width = this.newWidth +'px';
-		}
+    if (document.body.currentStyle.overflowY == 'visible' || document.body.currentStyle.overflowY == 'scroll'){
+        w = document.body.offsetWidth - document.body.clientLeft - document.body.clientWidth;
+    }
+    else {
+        win = window.open("about:blank", "_blank", "top=0,left=0,width=100,height=100,scrollbars=yes");
+        win.document.writeln('scrollbar');
+        w = win.document.body.offsetWidth - win.document.body.clientLeft - win.document.body.clientWidth;
+        win.close();
+    }
+    return w;
+}
 
-		if (this.thead) {
-			var trs = this.thead.getElementsByTagName('tr');
-			for (x=0; x<trs.length; x++) {
-				trs[x].style.position ='relative';
-				trs[x].style.setExpression("top",  "this.parentElement.parentElement.parentElement.scrollTop + 'px'");
-			}
-		}
+function getActualWidth(e){
+    if (! e.currentStyle)   e.currentStyle = e.style;
+    return  e.clientWidth - parseInt(e.currentStyle.paddingLeft) - parseInt(e.currentStyle.paddingRight);
+}
 
-		if (this.tfoot) {
-			var trs = this.tfoot.getElementsByTagName('tr');
-			for (x=0; x<trs.length; x++) {
-				trs[x].style.position ='relative';
-				trs[x].style.setExpression("bottom",  "(this.parentElement.parentElement.offsetHeight - this.parentElement.parentElement.parentElement.clientHeight - this.parentElement.parentElement.parentElement.scrollTop) + 'px'");
-			}
-		}
+function findRowWidth(r) {
+    for (var i=0; i < r.length; i++){
+        r[i].actualWidth = getActualWidth(r[i]);
+    }
+}
 
-		eval("window.attachEvent('onresize', function () { document.getElementById('" + this.tableEl.id + "').style.visibility = 'hidden'; document.getElementById('" + this.tableEl.id + "').style.visibility = 'visible'; } )");
-	};
+function setRowWidth(r) {
+    for (var i=0; i < r.length; i++){
+        r[i].width = r[i].actualWidth;
+        r[i].innerHTML = '<span style="width:' + r[i].actualWidth + ';">' + r[i].innerHTML + '</span>';
+    }
+}
 
+function fixTableWidth(tbl) {
+    for (var i=0; i < tbl.tHead.rows.length; i++)   findRowWidth(tbl.tHead.rows[i].cells);
+    findRowWidth(tbl.tBodies[0].rows[0].cells);
+    if (tbl.tFoot)  for (var i=0; i < tbl.tFoot.rows.length; i++)   findRowWidth(tbl.tFoot.rows[i].cells);
+    for (var i=0; i < tbl.tHead.rows.length; i++)   setRowWidth(tbl.tHead.rows[i].cells);
+    setRowWidth(tbl.tBodies[0].rows[0].cells);
+    if (tbl.tFoot)  for (var i=0; i < tbl.tFoot.rows.length; i++)   setRowWidth(tbl.tFoot.rows[i].cells);
+}
 
-	this.initFFengine = function () {
-		this.containerEl.style.overflow = 'hidden';
-		this.tableEl.style.width = this.newWidth + 'px';
+function makeScrollableTable(tbl, scrollFooter, height) {
+    var c, pNode, hdr, ftr, wrapper, rect;
 
-		var headHeight = (this.thead) ? this.thead.clientHeight : 0;
-		var footHeight = (this.tfoot) ? this.tfoot.clientHeight : 0;
-		var bodyHeight = this.tbody.clientHeight;
-		var trs = this.tbody.getElementsByTagName('tr');
-		if (bodyHeight >= (this.newHeight - (headHeight + footHeight))) {
-			this.tbody.style.overflow = '-moz-scrollbars-vertical';
-			for (x=0; x<trs.length; x++) {
-				var tds = trs[x].getElementsByTagName('td');
-				tds[tds.length-1].style.paddingRight += this.scrollWidth + 'px';
-			}
-		} else {
-			this.tbody.style.overflow = '-moz-scrollbars-none';
-		}
+    if (typeof tbl == 'string') tbl = document.getElementById(tbl);
 
-		var cellSpacing = (this.tableEl.offsetHeight - (this.tbody.clientHeight + headHeight + footHeight)) / 4;
-		this.tbody.style.height = (this.newHeight - (headHeight + cellSpacing * 2) - (footHeight + cellSpacing * 2)) + 'px';
+    pNode = tbl.parentNode;
+    fixTableWidth(tbl);
 
-	};
+    c = container.length;
+    container[c] = document.createElement('<SPAN style="height: 100; overflow: auto;">');
+    container[c].id = tbl.id + "Container";
+    pNode.insertBefore(container[c], tbl);
+    container[c].appendChild(tbl);
+    container[c].style.width = tbl.clientWidth + 2 * tbl.clientLeft + scrollbarWidth();
 
-	this.tableEl = tableEl;
-	this.scrollWidth = 16;
+    hdr = tbl.cloneNode(false);
+    hdr.id += 'Header';
+    hdr.appendChild(tbl.tHead.cloneNode(true));
+    tbl.tHead.style.display = 'none';
 
-	this.originalHeight = this.tableEl.clientHeight;
-	this.originalWidth = this.tableEl.clientWidth;
+    if (!scrollFooter || !tbl.tFoot){
+        ftr = document.createElement('<SPAN style="width:1;height:1;clip: rect(0 1 1 0);background-color:transparent;">');
+        ftr.id = tbl.id + 'Footer';
+        ftr.style.border = tbl.style.border;
+        ftr.style.width = getActualWidth(tbl) + 2 * tbl.clientLeft;
+        ftr.style.borderBottom = ftr.style.borderLeft = ftr.style.borderRight = 'none';
+    }
+    else {
+        ftr = tbl.cloneNode(false);
+        ftr.id += 'Footer';
+        ftr.appendChild(tbl.tFoot.cloneNode(true));
+        ftr.style.borderTop = 'none';
+        tbl.tFoot.style.display = 'none';
+    }
 
-	this.newHeight = parseInt(tableHeight);
-	this.newWidth = tableWidth ? parseInt(tableWidth) : this.originalWidth;
+    wrapper = document.createElement('<table border=0 cellspacing=0 cellpadding=0>');
+    wrapper.id = tbl.id + 'Wrapper';
+    pNode.insertBefore(wrapper, container[c]);
 
-	this.tableEl.style.height = 'auto';
-	this.tableEl.removeAttribute('height');
+    wrapper.insertRow(0).insertCell(0).appendChild(hdr);
+    wrapper.insertRow(1).insertCell(0).appendChild(container[c]);
+    wrapper.insertRow(2).insertCell(0).appendChild(ftr);
 
-	this.containerEl = this.tableEl.parentNode.insertBefore(document.createElement('div'), this.tableEl);
-	this.containerEl.appendChild(this.tableEl);
-	this.containerEl.style.height = this.newHeight + 'px';
-	this.containerEl.style.width = this.newWidth + 'px';
+    wrapper.align = tbl.align;
+    tbl.align = hdr.align = ftr.align = 'left';
+    hdr.style.borderBottom = 'none';
+    tbl.style.borderTop = tbl.style.borderBottom = 'none';
 
+    // adjust page size
+    if (c == 0 && height == 'auto') {
+        onResizeAdjustTable();
+        onResizeHandler = window.onresize;
+        window.onresize = onResizeAdjustTable;
+    }
+    else {
+        container[c].style.height = height;
+    }
+}
 
-	var thead = this.tableEl.getElementsByTagName('thead');
-	this.thead = (thead[0]) ? thead[0] : null;
+function onResizeAdjustTable() {
+    if (onResizeHandler) onResizeHandler();
 
-	var tfoot = this.tableEl.getElementsByTagName('tfoot');
-	this.tfoot = (tfoot[0]) ? tfoot[0] : null;
+    var rect = container[0].getClientRects()(0);
+    var h = document.body.clientHeight - (rect.top + (document.body.scrollHeight - rect.bottom));
+    container[0].style.height = (h > 0) ? h : 1;
+}
 
-	var tbody = this.tableEl.getElementsByTagName('tbody');
-	this.tbody = (tbody[0]) ? tbody[0] : null;
-
-	if (!this.tbody) return;
-
-	if (document.all && document.getElementById && !window.opera) this.initIEengine();
-	if (!document.all && document.getElementById && !window.opera) this.initFFengine();
-
-
+function printPage() {
+    var tbs = document.getElementsByTagName('TABLE');
+    for (var i=0; i < container.length; i++) container[i].style.overflow = '';
+    window.print();
+    for (var i=0; i < container.length; i++) container[i].style.overflow = 'auto';
 }
