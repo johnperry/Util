@@ -229,6 +229,8 @@ public class StringUtil {
 	 * unmodified.
 	 * @param string the String to be processed.
 	 * @param table the replacement strings
+	 * @return a new string with the identifiers replaces with values
+	 * from the table.
 	 */
 	public static String replace(String string, Properties table) {
 		try {

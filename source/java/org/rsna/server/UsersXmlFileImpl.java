@@ -38,8 +38,9 @@ public class UsersXmlFileImpl extends Users {
 
 	/**
 	 * Constructor.
+	 * @param element ignored in this implementation of the Users class.
 	 */
-	public UsersXmlFileImpl() {
+	public UsersXmlFileImpl(Element element) {
 		//Load the roles table.
 		roles = new HashSet<String>();
 
@@ -155,9 +156,10 @@ public class UsersXmlFileImpl extends Users {
 	 * Check whether a set of credentials match a user in the system.
 	 * @return true if the credentials match a user; false otherwise.
 	 */
-	public boolean authenticate(String username, String password) {
+	public User authenticate(String username, String password) {
 		User user = getUser(username);
-		return ((user != null) && user.getPassword().equals(password));
+		if ((user != null) && user.getPassword().equals(password)) return user;
+		return null;
 	}
 
 	/**
@@ -172,7 +174,7 @@ public class UsersXmlFileImpl extends Users {
 	}
 
 	/**
-	 * Get the users in an XML Document, where the users are alphabetized by username.
+	 * Get the users in an XML Document.
 	 */
 	public Document getXML() {
 		try {

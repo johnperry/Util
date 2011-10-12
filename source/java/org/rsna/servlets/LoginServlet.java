@@ -126,13 +126,11 @@ public class LoginServlet extends Servlet {
 						HttpRequest req, HttpResponse res,
 						String username, String password) {
 
-		Authenticator authenticator = Authenticator.getInstance();
-
 		boolean passed = false;
+		Authenticator authenticator = Authenticator.getInstance();
 		if ((username != null) && (password != null)) {
-			User user = Users.getInstance().getUser(username);
-
-			if ((user != null) && user.getPassword().equals(password)) {
+			User user = Users.getInstance().authenticate(username, password);
+			if (user != null) {
 				passed = authenticator.createSession(user, req, res);
 			}
 		}

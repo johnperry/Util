@@ -9,8 +9,7 @@ package org.rsna.server;
 
 import java.lang.reflect.Constructor;
 import org.apache.log4j.Logger;
-import org.rsna.util.XmlUtil;
-import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  * A singleton class for managing users.
@@ -37,13 +36,14 @@ public abstract class Users {
 	 * @return the Users object or null if it cannot be instantiated from
 	 * the supplied className.
 	 */
-	public static Users getInstance(String className) {
+	public static Users getInstance(String className, Element element) {
 		if ((users == null) && (className != null) && !className.trim().equals("")) {
 			try {
 				Class theClass = Class.forName(className);
-				Class[] args = { };
-				Constructor constructor = theClass.getConstructor(args);
-				users = (Users)constructor.newInstance();
+				Class[] signature = { Element.class };
+				Constructor constructor = theClass.getConstructor(signature);
+				Object[] args = { element };
+				users = (Users)constructor.newInstance(args);
 
 				//Add the administrative roles
 				users.addRole("admin");
@@ -74,9 +74,9 @@ public abstract class Users {
 
 	/**
 	 * Check whether a set of credentials match a user in the system.
-	 * @return true if the credentials match a user; false otherwise.
+	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
-	public abstract boolean authenticate(String username, String password);
+	public abstract User authenticate(String username, String password);
 
 	/**
 	 * Get an alphabetized array of usernames.

@@ -78,10 +78,8 @@ public class Authenticator {
 		if (credentials != null) {
 			String[] up = credentials.trim().split(":");
 			if (up.length == 2) {
-				User user = users.getUser(up[0]);
-				if ((user != null) && user.getPassword().equals(up[1])) {
-					return user;
-				}
+				User user = users.authenticate(up[0], up[1]);
+				if (user != null) return user;
 			}
 		}
 		//Next try the Authorization header.
@@ -95,10 +93,8 @@ public class Authenticator {
 				catch (Exception ex) { credentials = ""; } //make it fail
 				String[] up = credentials.split(":");
 				if (up.length == 2) {
-					User user = users.getUser(up[0]);
-					if ((user != null) && user.getPassword().equals(up[1])) {
-						return user;
-					}
+					User user = users.authenticate(up[0], up[1]);
+					if (user != null) return user;
 				}
 			}
 		}

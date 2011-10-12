@@ -29,19 +29,25 @@ public class HttpService extends Thread {
 	boolean ssl;
 	int port;
 	Service service;
+	String name;
 
     public HttpService(boolean ssl, int port, Service service) throws Exception {
+		this(ssl, port, service, null);
+	}
+
+    public HttpService(boolean ssl, int port, Service service, String name) throws Exception {
 		this.ssl = ssl;
 		this.port = port;
+		this.name = name;
+		this.service = service;
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);//Use the default backlog
-		this.service = service;
 	}
 
 	// Start the HttpService and accept connections.
 	public void run() {
-		logger.info("HttpService open on port "+port);
+		logger.info("HttpService open on port "+port + ((name!=null)?" ("+name+")":"") );
 		while (!this.isInterrupted()) {
 			try {
 				//Wait for a connection
