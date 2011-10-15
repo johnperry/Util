@@ -1,0 +1,33 @@
+body {
+	background-color:#c6d8f9; 
+	margin:0; 
+	padding:0; 
+	overflow:auto;
+}
+
+h1 { padding-top:10; }
+
+.thv {
+	padding:5; 
+	font-family:monospace;
+	text-align:left;
+	layout-flow: vertical-ideographic;
+	/*writing-mode:tb-rl; */
+}
+
+.thl {
+	text-align:left; 
+	padding:5;
+}
+
+.tdl {
+	text-align:left; 
+	padding 5;
+}
+
+td {
+	text-align:center; 
+	padding:5;
+}
+
+td.tdl input { font-family:monospace }

@@ -417,7 +417,7 @@ public class HttpRequest {
 			if (k != -1) {
 				String headerName = line.substring(0,k).trim().toLowerCase();
 				String value = line.substring(k+1).trim();
-				headers.put(headerName,value);
+				headers.put(headerName, value);
 				if (headerName.equals("cookie")) addCookies(value);
 			}
 		}

@@ -200,7 +200,7 @@ public class UsersXmlFileImpl extends Users {
 	}
 
 	private String getUsersText() {
-		return XmlUtil.toString(getXML());
+		return XmlUtil.toPrettyString(getXML());
 	}
 
 	private String getEmptyUsersText() {

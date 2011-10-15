@@ -72,33 +72,55 @@ public class Authenticator {
 			return session.user;
 		}
 		//No session cookie, or cookie is not valid; check the headers.
-		//First try the RSNA header. This header is not encoded.
-		Users users = Users.getInstance();
-		String credentials = req.getHeader("RSNA");
-		if (credentials != null) {
-			String[] up = credentials.trim().split(":");
-			if (up.length == 2) {
-				User user = users.authenticate(up[0], up[1]);
-				if (user != null) return user;
-			}
-		}
-		//Next try the Authorization header.
-		credentials = req.getHeader("Authorization");
+		//First try the Authorization header.
+		String credentials = req.getHeader("Authorization");
 		if (credentials != null) {
 			String type = "basic";
 			credentials = credentials.trim();
 			if (credentials.toLowerCase().startsWith(type)) {
 				credentials = credentials.substring(type.length()).trim();
-				try { credentials = new String(Base64.decode(credentials), "UTF-8"); }
-				catch (Exception ex) { credentials = ""; } //make it fail
-				String[] up = credentials.split(":");
-				if (up.length == 2) {
-					User user = users.authenticate(up[0], up[1]);
+				try {
+					credentials = new String(Base64.decode(credentials), "UTF-8");
+					User user = getUserFromCredentials(credentials);
 					if (user != null) return user;
 				}
+				catch (Exception ex) { }
 			}
 		}
+		//Next try the RSNA header. This header is not encoded.
+		credentials = req.getHeader("RSNA");
+		if (credentials != null) {
+			User user = getUserFromCredentials(credentials);
+			if (user != null) return user;
+		}
 		//The user cannot be authenticated.
+		return null;
+	}
+
+	private User getUserFromCredentials(String credentials) {
+		Users users = Users.getInstance();
+		String[] up = credentials.split(":");
+		User user = null;
+		if (up.length == 2) {
+			user = users.authenticate(up[0], up[1]);
+		}
+		else if (up.length == 1) {
+			user = users.authenticate(up[0], "");
+		}
+		return user;
+	}
+
+	/**
+	 * Get the username for a session identified by a session ID.
+	 * @param id the ID of the session.
+	 * @return the username of the session owner, or null if the
+	 * session does not exist.
+	 */
+    public String getUsernameForSession(String id) {
+		if (id != null) {
+			Session session = sessions.get(id);
+			return session.user.getUsername();
+		}
 		return null;
 	}
 
@@ -135,10 +157,10 @@ public class Authenticator {
 	 */
     public void closeSession(HttpRequest req, HttpResponse res) {
 		//See if there is a cookie specifying an existing session.
-		String session = req.getCookie("RSNASESSION");
-		if (session != null) {
+		String id = req.getCookie("RSNASESSION");
+		if (id != null) {
 			//A session was specified. Remove it from the hashtable.
-			sessions.remove(session);
+			sessions.remove(id);
 			//Set a dummy session cookie that expires immediately.
 			res.setHeader("Set-Cookie","RSNASESSION=NONE; Max-Age=0");
 			res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");

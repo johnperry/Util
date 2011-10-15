@@ -233,7 +233,7 @@ public class UserManagerServlet extends Servlet {
 					+ " <tr>\n"
 					+ "  <th/>\n" );
 		for (int i=0; i<rolenames.length; i++) {
-			sb.append( "  <th class=\"thv\"><nobr>"+rolenames[i]+"</nobr>"
+			sb.append( "  <th class=\"thv\"><nobr>"+"<input type=\"checkbox\" onclick=\"toggleRoles("+i+",event)\"/>&nbsp;"+rolenames[i]+"</nobr>"
 				  	+  "<input name=\"r"+i+"\" type=\"hidden\" value=\""+rolenames[i]+"\"/></th>\n" );
 		}
 		sb.append( " </tr>\n" );
@@ -275,19 +275,11 @@ public class UserManagerServlet extends Servlet {
 			+	" <head>\n"
 			+	"  <title>User Manager</title>\n"
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/JSPopup.css\"></link>\n"
-			+	"   <style>\n"
-			+	"    body {background-color:#c6d8f9; margin:0; padding:0; overflow:auto;}\n"
-			+	"    h1 {padding-top:10;}\n"
-			+	"    .thv {layout-flow:vertical-ideographic; padding:5; font-family:monospace;}\n"
-			+	"    .thl {text-align:left; padding:5;}\n"
-			+	"    .tdl {text-align:left; padding 5;}\n"
-			+	"    td {text-align:center; padding:5;}\n"
-			+	"    td.tdl input {font-family:monospace}\n"
-			+	"   </style>\n"
-			+	"	<script> var home = \""+home+"\";</script>\n"
-			+	"   <script language=\"JavaScript\" type=\"text/javascript\" src=\"/JSUtil.js\">;</script>\n"
-			+	"   <script language=\"JavaScript\" type=\"text/javascript\" src=\"/JSPopup.js\">;</script>\n"
-			+	"   <script language=\"JavaScript\" type=\"text/javascript\" src=\"/UserManagerServlet.js\">;</script>\n"
+			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/UserManagerServlet.css\"></link>\n"
+			+	"  <script> var home = \""+home+"\";</script>\n"
+			+	"  <script language=\"JavaScript\" type=\"text/javascript\" src=\"/JSUtil.js\">;</script>\n"
+			+	"  <script language=\"JavaScript\" type=\"text/javascript\" src=\"/JSPopup.js\">;</script>\n"
+			+	"  <script language=\"JavaScript\" type=\"text/javascript\" src=\"/UserManagerServlet.js\">;</script>\n"
 			+	" </head>\n"
 			+	" <body>\n"
 
@@ -305,9 +297,10 @@ public class UserManagerServlet extends Servlet {
 
 			+	"  <center>\n"
 			+	"   <h1>User Manager</h1>\n"
+			+	"   <input type=\"button\" onclick=\"showHideColumns()\" id=\"shRoles\" value=\"Hide Unused Roles\"/>\n"
 			+	"   <form id=\"formID\" action=\"/users\" method=\"post\" accept-charset=\"UTF-8\" action=\"\">\n"
 			+	"    <input type=\"hidden\" name=\"home\" value=\""+home+"\">\n"
-			+	"    <table border=\"1\">\n"
+			+	"    <table id=\"userTable\" border=\"1\">\n"
 		);
 	}
 
