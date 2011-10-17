@@ -119,7 +119,7 @@ public class Authenticator {
     public String getUsernameForSession(String id) {
 		if (id != null) {
 			Session session = sessions.get(id);
-			return session.user.getUsername();
+			if (session != null) return session.user.getUsername();
 		}
 		return null;
 	}

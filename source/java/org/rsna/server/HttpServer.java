@@ -27,6 +27,7 @@ public class HttpServer extends Thread {
 
 	static final Logger logger = Logger.getLogger(HttpServer.class);
 
+	final int maxThreads = 6; //max concurrent threads
 	final int port;
 	final boolean ssl;
 	final ServletSelector selector;
@@ -48,7 +49,7 @@ public class HttpServer extends Thread {
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);
-		execSvc = Executors.newFixedThreadPool( 4 ); //max concurrent threads
+		execSvc = Executors.newFixedThreadPool( maxThreads );
 	}
 
 	/**

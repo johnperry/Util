@@ -88,12 +88,15 @@ function setStatusLine(text) {
 
 //Trim a string
 function trim(s) {
+	s = (s ? s : "");
 	return s.replace(/^\s+|\s+$/g,"");
 }
 function ltrim(s) {
+	s = (s ? s : "");
 	return s.replace(/^\s+/,"");
 }
 function rtrim(s) {
+	s = (s ? s : "");
 	return s.replace(/\s+$/,"");
 }
 String.prototype.trim = function() {
