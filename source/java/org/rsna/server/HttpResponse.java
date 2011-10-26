@@ -149,7 +149,7 @@ public class HttpResponse {
 	 */
 	public String setContentType(String ext) {
 		String contentType = contentTypes.get(ext);
-		if (contentType != null) setHeader("Content-Type",contentType);
+		if (contentType != null) setHeader("Content-Type", contentType);
 		return contentType;
 	}
 

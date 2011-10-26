@@ -1,6 +1,12 @@
 //*************************** Useful functions ***************************
 //
+var browserName = navigator.appName;
+var browserVersion = navigator.appVersion;
 var IE = document.all;
+var CHROME = !IE && (browserVersion.indexOf("Chrome") != -1);
+var FIREFOX = !IE && !CHROME && (browserName.indexOf("Netscape") != -1);
+var OTHER = !IE && !CHROME && !FIREFOX;
+
 //
 //Find an object and return its size and position.
 //If the object is the body, then return the visible
@@ -110,8 +116,9 @@ String.prototype.rtrim = function() {
 }
 
 function listNodeTree( node, margin ) {
+	if (node == null) return margin + "null";
 	if (margin == null) margin = "";
-	if (node.nodeType == 3) return margin + "TextNode\n";
+	if (node.nodeType == 3) return margin + "\"" + node.nodeValue + "\"\n";
 	if (node.nodeType == 1) {
 		var id = node.id;
 		var text = margin + node.tagName + (node.id ? " ["+node.id+"]" : "") + "\n";

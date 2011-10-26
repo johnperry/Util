@@ -70,6 +70,10 @@
 		<copy overwrite="true" file="${products}/${name}.jar" todir="../CTP/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="../Geneva/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="/JavaPrograms/CTP/libraries"/>
+		<tstamp>
+			<format property="end" pattern="HH:mm:ss"/>
+		</tstamp>
+		<echo message="Time now ${end}"/>
 	</target>
 
 </project>
