@@ -380,8 +380,10 @@ public class HttpRequest {
 		kk = path.indexOf("?");
 		if (kk >= 0) {
 			query = path.substring(kk+1);
-			path = path.substring(0,kk);
+			path = path.substring(0,kk).trim();
 		}
+		try { path = URLDecoder.decode(path,"UTF-8"); }
+		catch (Exception ex) { logger.warn("Undecodable path: \""+path+"\""); }
 		path = filterPath(path);
 		parsedPath = new Path(path);
 	}
