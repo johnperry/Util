@@ -4,12 +4,12 @@ function setCookie(name ,value) {
 	var nextyr = new Date();
 	nextyr.setFullYear(nextyr.getFullYear() + 1);
 	var expires = ";expires="+nextyr.toGMTString();
-	document.cookie = name + "=" + escape(value) + path + expires;
+	document.cookie = name + "=" + encodeURIComponent(value) + path + expires;
 }
 
 function setSessionCookie(name ,value) {
 	var path = ";path=/";
-	document.cookie = name + "=" + escape(value) + path;
+	document.cookie = name + "=" + encodeURIComponent(value) + path;
 }
 
 function getCookieObject() {
@@ -19,7 +19,7 @@ function getCookieObject() {
 	for (var i=0; i<cooks.length; i++) {
 		cooks[i] = cooks[i].replace(/\s/g,"");
 		var cook = cooks[i].split("=");
-		cookies[cook[0]] = unescape(cook[1]);
+		cookies[cook[0]] = decodeURIComponent(cook[1]);
 	}
 	return cookies;
 }
