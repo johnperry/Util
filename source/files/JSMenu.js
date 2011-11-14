@@ -138,9 +138,9 @@ SingleMenuBar.prototype.display = function() {
 		if (this.menu.enabled) {
 			var s = document.createElement("SPAN");
 			s.appendChild(document.createTextNode(this.menu.title));
-			s.onmouseover = highlight;
-			s.onmouseout = dehighlight;
-			s.onmouseenter = menuTitleClicked; //autodisplay
+			//s.onmouseover = highlight;
+			//s.onmouseout = dehighlight;
+			//s.onmouseenter = menuTitleClicked; //no autodisplay on single menus
 			s.onclick = menuTitleClicked;
 			s.item = this.menu;
 			div.appendChild(s);
@@ -278,8 +278,9 @@ function menuTitleClicked(event) {
 	var menu = source.item.parentMenu;
 	var pos = findObject(source);
 	removeMenus();
-	var x = pos.x - 15;
-	var y = pos.y + pos.h + (document.all ? 3 : 4);
+
+	var x = pos.x - 15 - pos.scrollLeft;
+	var y = pos.y + pos.h + (document.all ? 3 : 4) - pos.scrollTop;
 	menu.display(x, y, false, menuZIndexMax);
 }
 

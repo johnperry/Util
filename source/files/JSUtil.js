@@ -39,16 +39,22 @@ function findObject(obj) {
 	}
 	var curleft = 0;
 	var curtop = 0;
+	var scrollLeft = 0;
+	var scrollTop = 0;
 	if (obj.offsetParent) {
 		curleft = obj.offsetLeft;
 		curtop = obj.offsetTop;
 		while (obj = obj.offsetParent) {
 			curleft += obj.offsetLeft;
 			curtop += obj.offsetTop;
+			scrollLeft += obj.scrollLeft;
+			scrollTop += obj.scrollTop;
 		}
 	}
 	objPos.x = curleft;
 	objPos.y = curtop;
+	objPos.scrollLeft = scrollLeft;
+	objPos.scrollTop = scrollTop;
 	return objPos;
 }
 
