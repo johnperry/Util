@@ -10,8 +10,6 @@ var menuTimerRunning = false;
 
 //****** The MenuBar class ******
 //
-//There can be only one MenuBar instance in the window,
-//and it must be stored in a var named "menuBar".
 function MenuBar(id, menus, text) {
 	this.menus = menus;
 	this.id = id; 		//the id of the MenuBar div
@@ -91,6 +89,65 @@ MenuBar.prototype.setText = function(text) {
 	this.desc.appendChild(document.createTextNode(text));
 }
 //****** End of the MenuBar class ******
+
+//****** The SingleMenuBar class ******
+//
+//This class is a simplified MenuBar that manages a single menu.
+//It is intended for situations where multiple pull-down menus
+//appear in different places on the page. Each menu must have
+//its own SingleMenu instance to manage it. (Note: as in the
+//case of the MenuBar class, Menu objects can contain submenus.
+//
+//Note: In this class, the constructor argument is not an
+//array of Menu objects as it is in the MenuBar class; it
+//is just the single Menu object.
+//
+//Note: The underlying DIV for the SingleMenuBar should
+//have the display:inline style in order to have the proper
+//behavior when the cursor is moved out of the menu title.
+//(It is possible to use a SPAN instead, but then the pull-
+//down menu doesn't collapse unless the cursor is moved into
+//the menu and then out. A word to the wise.)
+function SingleMenuBar(id, menu) {
+	this.menu = menu;
+	this.id = id;
+
+	inMenu = false;
+	this.setPointers();
+}
+
+SingleMenuBar.prototype.setPointers = function() {
+	this.index = new Object();
+	this.menu.setPointers(this.index, this.menu);
+}
+
+SingleMenuBar.prototype.setEnable = function(name, enb) {
+	var object = this.index[name];
+	if (object) object.enabled = enb;
+}
+
+SingleMenuBar.prototype.display = function() {
+	var div = document.getElementById(this.id);
+	if (div) {
+		div.className = "MenuBar";
+		div.isMenuSystemDiv = true;
+		div.onmouseout = checkHideMenus;
+		div.onmousein = setInMenu;
+		while (div.firstChild) div.removeChild(div.firstChild);
+
+		if (this.menu.enabled) {
+			var s = document.createElement("SPAN");
+			s.appendChild(document.createTextNode(this.menu.title));
+			s.onmouseover = highlight;
+			s.onmouseout = dehighlight;
+			s.onmouseenter = menuTitleClicked; //autodisplay
+			s.onclick = menuTitleClicked;
+			s.item = this.menu;
+			div.appendChild(s);
+		}
+	}
+}
+//****** End of the SingleMenuBar class ******
 
 //****** The Menu class ******
 function Menu(title, items, name) {
