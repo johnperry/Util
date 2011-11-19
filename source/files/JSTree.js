@@ -140,7 +140,6 @@ TreeManager.prototype.expandAll = function() {
 	}
 }
 
-
 //Create a Tree from an XML element
 //
 //Notes about Trees:
@@ -355,6 +354,7 @@ Tree.prototype.display = function() {
 	}
 	var span = document.createElement("SPAN");
 	span.style.cursor = "pointer";
+	this.namespan = span;
 
 	if (this.sclickHandler) {
 		span.onmouseenter = highlight;
