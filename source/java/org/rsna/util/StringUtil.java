@@ -62,7 +62,7 @@ public class StringUtil {
 
 	/**
 	 * Make a datetime string for the current time in the form:
-	 * YYYY-MM-DD[sep]hh:mm:ss, where [sep] is the supplied separator string.
+	 * YYYY.MM.DD[sep]hh:mm:ss, where [sep] is the supplied separator string.
 	 * @param sep the separator string to insert between the date and the time.
 	 * @return the string.
 	 */
@@ -72,7 +72,7 @@ public class StringUtil {
 
 	/**
 	 * Make a datetime string for the specified time in the form:
-	 * YYYY-MM-DD[sep]hh:mm:ss, where [sep] is the supplied separator string.
+	 * YYYY.MM.DD[sep]hh:mm:ss, where [sep] is the supplied separator string.
 	 * @param time the time in milliseconds, or -1 to use the current time.
 	 * @param sep the separator string to insert between the date and the time.
 	 * @return the string.
@@ -81,9 +81,9 @@ public class StringUtil {
 		Calendar now = Calendar.getInstance();
 		if (time != -1) now.setTimeInMillis(time);
 		return intToString(now.get(Calendar.YEAR), 4)
-				 + "-"
+				 + "."
 				 + intToString(now.get(Calendar.MONTH) + 1, 2)
-				 + "-"
+				 + "."
 				 + intToString(now.get(Calendar.DAY_OF_MONTH), 2)
 				 + sep
 				 + intToString(now.get(Calendar.HOUR_OF_DAY), 2)

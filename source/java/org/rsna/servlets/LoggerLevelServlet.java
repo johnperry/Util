@@ -79,7 +79,7 @@ public class LoggerLevelServlet extends Servlet {
 		if (!req.userHasRole("admin")) { res.redirect(home); return; }
 
 		//Get the class and level
-		String theClass = req.getParameter("class", "");
+		String theClass = req.getParameter("class", "").trim();
 		String theLevel = req.getParameter("level", "INFO");
 		if (!theClass.equals("")) {
 			Logger.getLogger(theClass).setLevel( Level.toLevel(theLevel) );
