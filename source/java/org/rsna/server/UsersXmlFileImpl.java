@@ -167,10 +167,10 @@ public class UsersXmlFileImpl extends Users {
 	 * This method always updates the users.xml file.
 	 * @param user the user to add or update.
 	 */
-	public synchronized void addUser(User user) {
-		if (users == null) return;
+	public synchronized boolean addUser(User user) {
+		if (users == null) return false;
 		users.put(user.getUsername(), user);
-		FileUtil.setText(usersFile, getUsersText());
+		return FileUtil.setText(usersFile, getUsersText());
 	}
 
 	/**
