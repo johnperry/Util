@@ -26,18 +26,16 @@ public class LdapUtil {
 	 * @param initialContextFactory the factory class (e.g., "com.sun.jndi.ldap.LdapCtxFactory")
 	 * @param providerURL the URL of the provider (e.g., "ldap://ip:port/path")
 	 * @param securityAuthentication the authentication type (e.g., "simple")
-	 * @param securityPrincipal the username (e.g., "cn=S. User, ou=NewHires, o=JNDITutorial"
+	 * @param securityPrincipal the username (e.g., "cn=username, ou=NewHires, o=JNDITutorial"
 	 * @param securityCredentials the password (e.g., "mysecret")
-	 * @param lookup the lookup field (e.g., "ou=NewHires")
-	 * @return true if the lookup succeeds; false otherwise.
+	 * @return true if the authentication succeeds; false otherwise.
 	 */
     public static boolean authenticate(
 			String initialContextFactory,
 			String providerURL,
 			String securityAuthentication,
 			String securityPrincipal,
-			String securityCredentials,
-			String lookup) {
+			String securityCredentials) {
 
 		initialContextFactory = initialContextFactory.trim();
 		initialContextFactory = (initialContextFactory.equals("") ? defaultContextFactory : initialContextFactory);
@@ -55,12 +53,19 @@ public class LdapUtil {
 
 		DirContext ctx = null;
 		boolean result = true;
-		try { ctx = new InitialDirContext(env);}
-		catch (Exception ex) { result = false; }
+		try {
+			ctx = new InitialDirContext(env);
+			logger.debug("Got InitialDirContext: class = "+ctx.getClass().getName());
+		}
+		catch (Exception ex) {
+			result = false;
+			logger.debug("Unable to get InitialDirContext: "+ex.getMessage());
+		}
 		if (ctx != null) {
 			try { ctx.close(); }
 			catch (Exception ex) { }
 		}
+		logger.debug("Returning authentication result: "+result);
 		return result;
     }
 }

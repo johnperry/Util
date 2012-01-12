@@ -27,7 +27,6 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 	String providerURL = "";
 	String securityAuthentication = "simple";
 	String securityPrincipal = "";
-	String lookup = "";
 
 	/**
 	 * Constructor.
@@ -39,17 +38,18 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 		providerURL = element.getAttribute("providerURL");
 		securityAuthentication = element.getAttribute("securityAuthentication");
 		securityPrincipal = element.getAttribute("securityPrincipal");
-		lookup = element.getAttribute("lookup");
 
 		//Make sure we have an admin user who is known to LDAP
-		String ldapAdmin = element.getAttribute("ldapAdmin");
-		User admin = getUser(ldapAdmin);
-		if (admin == null) {
-			admin = new User(ldapAdmin, "");
-			logger.info("\""+ldapAdmin+"\" admin user created");
+		String ldapAdmin = element.getAttribute("ldapAdmin").trim();
+		if (!ldapAdmin.equals("")) {
+			User admin = getUser(ldapAdmin);
+			if (admin == null) {
+				admin = new User(ldapAdmin, "");
+				logger.info("\""+ldapAdmin+"\" admin user created");
+			}
+			admin.addRole("admin");
+			addUser(admin);
 		}
-		admin.addRole("admin");
-		addUser(admin);
 	}
 
 	/**
@@ -72,8 +72,7 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 							providerURL,
 							securityAuthentication,
 							principal,
-							password,
-							lookup) ) {
+							password) ) {
 				return user;
 			}
 		}
