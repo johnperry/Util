@@ -521,21 +521,23 @@ public class HttpRequest {
 	/**
 	 * Log the headers from this HttpRequest
 	 */
-	public void logHeaders() {
-		logger.debug("Headers:");
+	public String listHeaders() {
+		StringBuffer sb = new StringBuffer();
 		for (String key : headers.keySet()) {
-			logger.debug(key + ": " + headers.get(key));
+			sb.append(key + ": " + headers.get(key) + "\n");
 		}
+		return sb.toString();
 	}
 
 	/**
 	 * Log the cookies from this HttpRequest
 	 */
-	public void logCookies() {
-		logger.debug("Cookies:");
+	public String listCookies() {
+		StringBuffer sb = new StringBuffer();
 		for (String key : cookies.keySet()) {
-			logger.debug(key + ": " + cookies.get(key));
+			sb.append(key + ": " + cookies.get(key) + "\n");
 		}
+		return sb.toString();
 	}
 
 }
