@@ -515,28 +515,30 @@ public class HttpRequest {
 	public String toString() {
 		return method + " " + path
 				+ (query.equals("") ? "" : "?" + query)
-				+ (method.equals("POST") ? "\n" + content : "");
+				+ ( (method.equals("POST") && (content != null) && (content.length() > 0)) ? "\n" + content : "");
 	}
 
 	/**
-	 * Log the headers from this HttpRequest
+	 * List the headers from this HttpRequest
 	 */
-	public String listHeaders() {
+	public String listHeaders(String margin) {
 		StringBuffer sb = new StringBuffer();
 		for (String key : headers.keySet()) {
-			sb.append(key + ": " + headers.get(key) + "\n");
+			sb.append(margin + key + ": " + headers.get(key) + "\n");
 		}
+		if (sb.length() == 0) sb.append(margin + "none\n");
 		return sb.toString();
 	}
 
 	/**
-	 * Log the cookies from this HttpRequest
+	 * List the cookies from this HttpRequest
 	 */
-	public String listCookies() {
+	public String listCookies(String margin) {
 		StringBuffer sb = new StringBuffer();
 		for (String key : cookies.keySet()) {
-			sb.append(key + ": " + cookies.get(key) + "\n");
+			sb.append(margin + key + ": " + cookies.get(key) + "\n");
 		}
+		if (sb.length() == 0) sb.append(margin + "none\n");
 		return sb.toString();
 	}
 
