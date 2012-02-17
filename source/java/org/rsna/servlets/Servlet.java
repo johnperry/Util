@@ -77,8 +77,11 @@ public class Servlet {
 		File file = getRequestedFile(req);
 		String ct = res.setContentType(file);
 		if ((ct == null) || ct.startsWith("application/")) res.disableCaching();
-		long clientLMDate = req.getConditionalTime();
+
 		if (file.exists()) {
+			//The file exists in the root directory tree.
+			//Either serve it or return a notmodified code.
+			long clientLMDate = req.getConditionalTime();
 			long fileLMDate = file.lastModified();
 			if ((clientLMDate > 0) && (fileLMDate <= clientLMDate)) {
 				res.setResponseCode( res.notmodified );
@@ -90,13 +93,23 @@ public class Servlet {
 				res.setETag(fileLMDate);
 			}
 		}
-		else if ((url=getClass().getResource(req.path)) != null) {
-			//When serving from the jar, ignore the clientLMDate
-			//since we can't get a date, and the jar may have changed.
-			res.write(url);
-		}
 		else {
-			res.setResponseCode( res.notfound );
+			//The file does not exist in the root directory tree.
+			//If there is a cache. try to get the file from there.
+			Cache cache = Cache.getInstance();
+			if (cache != null) {
+				String p = req.path;
+				if (p.startsWith("/")) p = p.substring(1);
+				file = cache.getFile(p);
+				if (file != null) res.write(file);
+				else res.setResponseCode( res.notfound );
+			}
+			else {
+				//There is no cache, see if the file can
+				//be obtained from the classpath.
+				if ((url=getClass().getResource(req.path)) != null)  res.write(url);
+				else res.setResponseCode( res.notfound );
+			}
 		}
 		res.send();
 	}
@@ -122,7 +135,7 @@ public class Servlet {
 	public File getRequestedFile(HttpRequest req) {
 		String p = req.path;
 		if (p.startsWith("/")) p = p.substring(1);
-		File file = new File(root,p);
+		File file = new File(root, p);
 		if (file.exists() && file.isDirectory()) {
 			file = new File(file, "index.html");
 			if (!file.exists()) {

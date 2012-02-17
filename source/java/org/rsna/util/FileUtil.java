@@ -627,13 +627,14 @@ public class FileUtil {
 	/**
 	 * Delete a file or a directory. If the file is a directory, delete
 	 * the contents of the directory and all its child directories, then
-	 * delete the directory itself.
+	 * delete the directory itself. If the supplied file is null, nothing
+	 * is done and true is returned.
 	 * @param file the file to delete.
 	 * @return true if the operation succeeded completely; false otherwise.
 	 */
 	public static boolean deleteAll(File file) {
 		boolean b = true;
-		if (file.exists()) {
+		if ((file != null) && file.exists()) {
 			if (file.isDirectory()) {
 				try {
 					File[] files = file.listFiles();
