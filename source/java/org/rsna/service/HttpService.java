@@ -36,6 +36,7 @@ public class HttpService extends Thread {
 	}
 
     public HttpService(boolean ssl, int port, Service service, String name) throws Exception {
+		super("HttpService");
 		this.ssl = ssl;
 		this.port = port;
 		this.name = name;

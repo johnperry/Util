@@ -43,6 +43,7 @@ public class HttpServer extends Thread {
 	 * @throws Exception if the ServerSocket cannot be created.
 	 */
     public HttpServer(boolean ssl, int port, ServletSelector selector) throws Exception {
+		super("HttpServer");
 		this.ssl = ssl;
 		this.port = port;
 		this.selector = selector;

@@ -27,6 +27,7 @@ public class HttpHandler extends Thread {
 	 * @param socket the socket on which the connection was received.
 	 */
 	public HttpHandler(Socket socket, ServletSelector selector) {
+		super("HttpHandler");
 		this.socket = socket;
 		this.selector = selector;
 	}
