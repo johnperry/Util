@@ -534,6 +534,14 @@ public class FileUtil {
 	 */
 	public static InputStream getStream(String resourcePath) {
 		try {
+			//If there is a cache, then copy the resource into the cache
+			//and return a FileInputStream pointing to the file in the cache.
+			Cache cache = Cache.getInstance();
+			if (cache != null) {
+				File file = cache.getFile(resourcePath);
+				return new FileInputStream(file);
+			}
+			//If there is no cache, then serve the resource from the classpath.
 			if (!resourcePath.startsWith("/")) resourcePath = "/" + resourcePath;
 			return FileUtil.class.getResourceAsStream(resourcePath);
 		}
@@ -572,12 +580,15 @@ public class FileUtil {
 	 */
 	public static InputStream getStream(File primaryFile, String resourcePath) {
 		try {
+			//If the primaryFile exists use it
 			if ((primaryFile != null) && primaryFile.exists()) {
 				return new FileInputStream(primaryFile);
 			}
 			else if (resourcePath != null) {
-				if (!resourcePath.startsWith("/")) resourcePath = "/" + resourcePath;
-				return FileUtil.class.getResourceAsStream(resourcePath);
+				//The primaryFile didn't exist, but there is a resourcePath.
+				//In this case, copy the resource to the Cache if possible,
+				//so it can be served from there in the future.
+				return getStream(resourcePath);
 			}
 		}
 		catch (Exception ex) { }

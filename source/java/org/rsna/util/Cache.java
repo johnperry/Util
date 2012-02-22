@@ -5,11 +5,10 @@
 *  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
 *----------------------------------------------------------------*/
 
-package org.rsna.servlets;
+package org.rsna.util;
 
 import java.io.File;
 import org.apache.log4j.Logger;
-import org.rsna.util.FileUtil;
 
 /**
  * A singleton cache for files that are served from the classpath jars.
@@ -70,6 +69,7 @@ public class Cache {
 	 * the resource cannot be obtained from the classpath.
 	 */
     public synchronized File getFile(String path) {
+		if (path.startsWith("/")) path = path.substring(1);
 		File file = new File(dir, path);
 		return FileUtil.getFile(file, path);
 	}
