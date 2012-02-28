@@ -46,7 +46,7 @@ public class StringUtil {
 
 	/**
 	 * Make a string for the current time in the form: YYYYMMDDhhmmsssss.
-	 * This method is suitable for defining a filename..
+	 * This method is suitable for defining a filename.
 	 * @return the string.
 	 */
 	public static String makeNameFromDate() {
