@@ -280,6 +280,19 @@ public class StringUtil {
 	}
 
 	/**
+	 * Make an acceptable directory name from a String. This method
+	 * converts carets to underscores and removes all unacceptable characters.
+	 * @param name the string containing the proposed name of a directory.
+	 * @return an acceptable version of the name, or the empty string if
+	 * an acceptable version cannot be created.
+	 */
+	public static String filterName(String name) {
+		if (name == null) return "";
+		name = name.replaceAll("\\^", "_"); //for DICOM name elements
+		return name.replaceAll("[~\\\\/\\s]", "");
+	}
+
+	/**
 	 * Make a tag string readable when rendered in HTML. This method
 	 * escapes all the angle brackets and inserts spaces before and
 	 * after tags so a browser will wrap the text.
