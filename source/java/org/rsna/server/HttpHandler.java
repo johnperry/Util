@@ -63,19 +63,24 @@ public class HttpHandler extends Thread {
 			}
 		}
 		catch (Exception ex) {
-			logger.error("Internal server error ("+req.toString()+")",ex);
-			try {
-				StringWriter sw = new StringWriter();
-				ex.printStackTrace(new PrintWriter(sw));
-				res = new HttpResponse(socket);
-				res.setResponseCode(res.ok); //so the browser will display the page
-				res.write("<html>");
-				res.write("<head><title>ERROR</title></head>");
-				res.write("<body><h1>Internal Server Error (HTTP 500)</h1><pre>"+sw.toString()+"</pre></body>");
-				res.write("</html>");
-				res.send();
+			if (req != null) {
+				logger.error("Internal server error ("+req.toString()+")",ex);
+				try {
+					StringWriter sw = new StringWriter();
+					ex.printStackTrace(new PrintWriter(sw));
+					res = new HttpResponse(socket);
+					res.setResponseCode(res.ok); //so the browser will display the page
+					res.write("<html>");
+					res.write("<head><title>ERROR</title></head>");
+					res.write("<body><h1>Internal Server Error (HTTP 500)</h1><pre>"+sw.toString()+"</pre></body>");
+					res.write("</html>");
+					res.send();
+				}
+				catch (Exception ignore) { /*Don't log this; the real problem has been logged above.*/ }
 			}
-			catch (Exception ignore) { /*Don't log this; the real problem has been logged above.*/ }
+			else {
+				logger.error("Internal server error (req==null)",ex);
+			}
 		}
 		//Close everything.
 		if (req != null) req.close();

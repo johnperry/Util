@@ -27,7 +27,7 @@ public class HttpServer extends Thread {
 
 	static final Logger logger = Logger.getLogger(HttpServer.class);
 
-	final int maxThreads = 4; //max concurrent threads
+	final int maxThreads = 20; //max concurrent threads
 	final int port;
 	final boolean ssl;
 	final ServletSelector selector;

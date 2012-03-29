@@ -51,7 +51,8 @@ public class HttpResponse {
 		headers = new Hashtable<String,String> ();
 		responseContent = new LinkedList<ResponseItem>();
 		responseLength = 0;
-		setHeader( "Date", getHttpDate(-1 ));
+		String date = getHttpDate(-1);
+		if (date != null) setHeader( "Date", date );
 	}
 
 	/**
@@ -96,7 +97,8 @@ public class HttpResponse {
 	 * Set headers that disable caching.
 	 */
 	public void disableCaching() {
-		headers.put("Expires", getHttpDate(-1));
+		String date = getHttpDate(-1);
+		if (date != null) headers.put("Expires", date);
 		headers.put("Pragma","no-cache");
 		headers.put("Cache-Control","no-cache");
 	}
@@ -169,7 +171,8 @@ public class HttpResponse {
 	 * @param time the last modified date in milliseconds.
 	 */
 	public void setLastModified(long time) {
-		setHeader("Last-Modified", getHttpDate(time));
+		String date = getHttpDate(time);
+		if (date != null) setHeader("Last-Modified", date);
 	}
 
 	/**
@@ -191,7 +194,8 @@ public class HttpResponse {
 			dateFormat.setTimeZone( TimeZone.getTimeZone("GMT") );
 		}
 		Date date = (time == -1) ? new Date() : new Date(time);
-		return dateFormat.format(date);
+		try { return dateFormat.format(date); }
+		catch (Exception ex) { return null; }
 	}
 
 	/**
