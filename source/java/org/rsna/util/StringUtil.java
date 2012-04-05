@@ -175,6 +175,30 @@ public class StringUtil {
 	}
 
 	/**
+	 * Parse a string into a base-10 long, returning 0 if an error occurs.
+	 * @param theString the string to be parsed.
+	 * @return the parsed value, or zero if an error occurred in parsing.
+	 */
+	public static long getLong(String theString) {
+		return getLong(theString, 0);
+	}
+
+	/**
+	 * Parse a string into a base-10 long, returning a default value
+	 * if an error occurs.
+	 * @param theString the string to be parsed.
+	 * @param defaultValue the value to be returned if the string does not parse.
+	 * @return the parsed value, or the default value if an error occurred in parsing.
+	 */
+	public static long getLong(String theString, long defaultValue) {
+		if (theString == null) return defaultValue;
+		theString = theString.trim();
+		if (theString.equals("")) return defaultValue;
+		try { return Long.parseLong(theString); }
+		catch (NumberFormatException e) { return defaultValue; }
+	}
+
+	/**
 	 * Parse a string into a base-10 int, returning 0 if an error occurs.
 	 * @param theString the string to be parsed.
 	 * @return the parsed value, or zero if an error occurred in parsing.
