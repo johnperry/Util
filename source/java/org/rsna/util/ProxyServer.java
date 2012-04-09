@@ -43,7 +43,7 @@ public class ProxyServer {
 	 * @param element the element specifying the proxy parameters.
 	 * @return the singleton instance of the proxy server.
 	 */
-	public static ProxyServer getInstance(Element element) {
+	public static synchronized ProxyServer getInstance(Element element) {
 		return getInstance(
 					element.getAttribute("proxyIPAddress"),
 					element.getAttribute("proxyPort"),
@@ -63,7 +63,7 @@ public class ProxyServer {
 	 * server if proxy authentication is required.
 	 * @return the singleton instance of the proxy server.
 	 */
-	public static ProxyServer getInstance(String proxyIPAddress, String proxyPort,
+	public static synchronized ProxyServer getInstance(String proxyIPAddress, String proxyPort,
 						  			  String proxyUsername, String proxyPassword) {
 		if (proxyServer == null) {
 			proxyServer =
@@ -77,7 +77,7 @@ public class ProxyServer {
 	 * Get the singleton instance of the ProxyServer, or null if one doesn't exist.
 	 * @return the singleton instance of the proxy server.
 	 */
-	public static ProxyServer getInstance() {
+	public static synchronized ProxyServer getInstance() {
 		return proxyServer;
 	}
 

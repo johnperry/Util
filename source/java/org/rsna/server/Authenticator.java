@@ -38,7 +38,7 @@ public class Authenticator {
 	/**
 	 * Get the Authenticator instance, creating it if it does not exist.
 	 */
-	public synchronized static Authenticator getInstance() {
+	public static synchronized Authenticator getInstance() {
 		if (authenticator == null) authenticator = new Authenticator();
 		return authenticator;
 	}

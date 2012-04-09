@@ -56,17 +56,7 @@
 		</jar>
 	</target>
 
-	<target name="javadocs">
-		<mkdir dir="${documentation}"/>
-		<javadoc destdir="${documentation}" sourcepath="${java}" classpathref="classpath"
-				 doctitle="${title}" windowtitle="${title}" bottom="${copyright}">
-			<package name="org.*"/>
-		</javadoc>
-	</target>
-
-	<target name="all" depends="clean, jar, javadocs"/>
-
-	<target name="deploy" depends="all">
+	<target name="deploy">
 		<copy overwrite="true" file="${products}/${name}.jar" todir="../CTP/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="../Geneva/libraries"/>
 		<copy overwrite="true" file="${products}/${name}.jar" todir="/JavaPrograms/CTP/libraries"/>
@@ -75,5 +65,15 @@
 		</tstamp>
 		<echo message="Time now ${end}"/>
 	</target>
+
+	<target name="javadocs">
+		<mkdir dir="${documentation}"/>
+		<javadoc destdir="${documentation}" sourcepath="${java}" classpathref="classpath"
+				 doctitle="${title}" windowtitle="${title}" bottom="${copyright}">
+			<package name="org.*"/>
+		</javadoc>
+	</target>
+
+	<target name="all" depends="clean, jar, deploy, javadocs"/>
 
 </project>

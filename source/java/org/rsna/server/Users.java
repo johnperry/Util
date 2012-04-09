@@ -36,7 +36,7 @@ public abstract class Users {
 	 * @return the Users object or null if it cannot be instantiated from
 	 * the supplied className.
 	 */
-	public static Users getInstance(String className, Element element) {
+	public static synchronized Users getInstance(String className, Element element) {
 		if ((users == null) && (className != null) && !className.trim().equals("")) {
 			try {
 				Class theClass = Class.forName(className);
@@ -62,7 +62,7 @@ public abstract class Users {
 	 * is returned.
 	 * @return the Users object or null if no Users instance exists.
 	 */
-	public static Users getInstance() {
+	public static synchronized Users getInstance() {
 		return users;
 	}
 
