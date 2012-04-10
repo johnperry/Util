@@ -44,7 +44,7 @@ public class Path {
 
 	/**
 	 * Get the full path of this Path.
-	 * This is a convenience method that just calls getSubpath(0).
+	 * This is a convenience method that just calls <code>subpath(0)</code>.
 	 * @return the full path.
 	 */
 	public String path() {
