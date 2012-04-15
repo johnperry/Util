@@ -241,8 +241,22 @@ public class StringUtil {
 	public static int getHexInt(String theString, int defaultValue) {
 		if (theString == null) return defaultValue;
 		if (theString.equals("")) return defaultValue;
-		try { return Integer.parseInt(theString, 16); }
-		catch (NumberFormatException e) { return defaultValue; }
+
+		//Note: Integer.parseInt(s, 16) throws a NumberFormatException
+		//if s denotes a 32-bit value with a leading 1, so we treat
+		//the 8-character case separately.
+		try {
+			Integer i;
+			if (theString.length() < 8) {
+				return new Integer( Integer.parseInt(theString, 16) );
+			}
+			else {
+				int high = Integer.parseInt(theString.substring(0,4), 16);
+				int low = Integer.parseInt(theString.substring(4), 16);
+				return new Integer( (high << 16) | low);
+			}
+		}
+		catch (Exception e) { return defaultValue; }
 	}
 
 	/**
