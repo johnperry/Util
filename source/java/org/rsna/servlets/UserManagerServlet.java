@@ -135,14 +135,14 @@ public class UserManagerServlet extends Servlet {
 			if (!username.equals("")) {
 				//Get the old user or create a new one if the old one doesn't exist.
 				User user = usersXmlFileImpl.getUser(username);
-				if (user == null) user = new User(username,"");
+				if (user == null) user = new User(username, "");
 
 				//(Only process existing users with the shutdown
 				//role if the current user has the shutdown role.)
 				if (canShutdown || !user.hasRole("shutdown")) {
 					//Update the password and roles.
 					String pw = getValue(params,values,"p",i).trim();
-					if (!pw.equals("")) user.setPassword(pw);
+					if (!pw.equals("")) user.setPassword( usersXmlFileImpl.convertPassword(pw) );
 					for (int j=0; j<nRoles; j++) {
 						String role = getValue(params,values,"cb",i,j);
 						if (canShutdown || !roleNames[j].equals("shutdown")) {

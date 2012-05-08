@@ -89,7 +89,7 @@ HorizontalSplit.prototype.toString = function() {
 }
 
 HorizontalSplit.prototype.setSlider = function(position) {
-	leftWidth = position;
+	this.leftWidth = position;
 	this.positionSlider();
 }
 

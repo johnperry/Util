@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
+import org.rsna.util.DigestUtil;
 import org.rsna.util.FileUtil;
 import org.rsna.util.XmlUtil;
 import org.w3c.dom.Document;
@@ -51,11 +52,9 @@ public class UsersXmlFileImpl extends Users {
 		users = getUsers();
 	}
 
-	/**
-	 * Get all the User objects in a Hashtable indexed by username.
-	 * @return the User objects or null if unable to get them.
-	 */
-	public synchronized Hashtable<String,User> getUsers() {
+	//Get all the User objects in a Hashtable indexed by username.
+	//This method converts the file to digest mode if it is not
+	private synchronized Hashtable<String,User> getUsers() {
 		Hashtable<String,User> hashtable = new Hashtable<String,User>();
 
 		Document usersXML;
@@ -66,13 +65,15 @@ public class UsersXmlFileImpl extends Users {
 		}
 
 		Element root = usersXML.getDocumentElement();
+		boolean isHashed = root.getAttribute("mode").equals("digest");
 		Node userChild = root.getFirstChild();
 		while (userChild != null) {
 			if ((userChild instanceof Element) && userChild.getNodeName().equals("user")) {
 				Element userElement = (Element)userChild;
 				String username = userElement.getAttribute("username");
 				String password = userElement.getAttribute("password");
-				User user = new User(username,password);
+				if (!isHashed) password = convertPassword(password);
+				User user = new User(username, password);
 				Node roleChild = userElement.getFirstChild();
 				while (roleChild != null) {
 					if ((roleChild instanceof Element) && roleChild.getNodeName().equals("role")) {
@@ -84,6 +85,7 @@ public class UsersXmlFileImpl extends Users {
 			}
 			userChild = userChild.getNextSibling();
 		}
+		if (!isHashed) resetUsers(hashtable);
 		return hashtable;
 	}
 
@@ -97,6 +99,15 @@ public class UsersXmlFileImpl extends Users {
 		usernames = users.keySet().toArray(usernames);
 		Arrays.sort(usernames);
 		return usernames;
+	}
+
+	/**
+	 * Convert a plaintext password to the form used by this users implementation.
+	 * @param password the password in plaintext
+	 * @return the converted password.
+	 */
+	public String convertPassword(String password) {
+		return DigestUtil.hash(password);
 	}
 
 	/**
@@ -153,12 +164,27 @@ public class UsersXmlFileImpl extends Users {
 	}
 
 	/**
+	 * Create a user.
+	 * @param username the username in plaintext.
+	 * @param password the password in plaintext.
+	 * @return the user.
+	 */
+	public User createUser(String username, String password) {
+		return new User(username, convertPassword(password));
+	}
+
+	/**
 	 * Check whether a set of credentials match a user in the system.
+	 * @param username the username in plaintext.
+	 * @param password the password in plaintext.
 	 * @return true if the credentials match a user; false otherwise.
 	 */
 	public User authenticate(String username, String password) {
 		User user = getUser(username);
-		if ((user != null) && user.getPassword().equals(password)) return user;
+		if (user != null) {
+			String pw = convertPassword(password);
+			if (user.getPassword().equals(pw)) return user;
+		}
 		return null;
 	}
 
@@ -180,14 +206,15 @@ public class UsersXmlFileImpl extends Users {
 		try {
 			Document doc = XmlUtil.getDocument();
 			Element root = doc.createElement("users");
+			root.setAttribute("mode", "digest");
 			doc.appendChild(root);
 			String[] names = getUsernames();
 			for (String name : names) {
 				User user = users.get(name);
 				Element userElement = doc.createElement("user");
 				root.appendChild(userElement);
-				userElement.setAttribute("username",user.getUsername());
-				userElement.setAttribute("password",user.getPassword());
+				userElement.setAttribute("username", user.getUsername());
+				userElement.setAttribute("password", user.getPassword());
 				for (String role : user.getRoles()) {
 					Element roleElement = doc.createElement("role");
 					roleElement.setTextContent(role);

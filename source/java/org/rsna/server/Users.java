@@ -73,6 +73,13 @@ public abstract class Users {
 	public abstract User getUser(String username);
 
 	/**
+	 * Convert a plaintext password to the form used by this implementation.
+	 * @param password the plaintext password
+	 * @return the password converted to the form used by this implementation.
+	 */
+	public abstract String convertPassword(String password);
+
+	/**
 	 * Check whether a set of credentials match a user in the system.
 	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
@@ -85,7 +92,7 @@ public abstract class Users {
 	public abstract String[] getUsernames();
 
 	/**
-	 * Add a role.
+	 * Add a role to the list of standard roles.
 	 * @param role the name of the role.
 	 */
 	public abstract void addRole(String role);
