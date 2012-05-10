@@ -46,11 +46,9 @@ public class ServletSelector {
 	 * @param servlet the class to be instantiated for the servlet.
 	 */
 	public void addServlet(String path, Class servlet) {
-		//See if this path is already in use
+		//Check for a duplicate path
 		if (servlets.get(path) != null) {
-			logger.warn("Installing a servlet on a path already in use:");
-			logger.warn("   path:  "+path);
-			logger.warn("   class: "+servlet.getName());
+			logger.debug("Installing "+servlet.getName()+" on an existing context ("+path+")");
 		}
 
 		//Put the servlet in the table, even if it is a duplicate.

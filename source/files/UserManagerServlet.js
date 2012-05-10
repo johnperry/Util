@@ -60,7 +60,7 @@ function showHideColumns() {
 				var tds = rows[k].getElementsByTagName("TD");
 				for (var kk=0; kk<tds.length; kk++) {
 					var inp = tds[kk].firstChild;
-					if ((inp.type != "checkbox") || inp.checked) used[kk] = true;
+					if ((inp != null) && ((inp.type != "checkbox") || inp.checked)) used[kk] = true;
 				}
 			}
 

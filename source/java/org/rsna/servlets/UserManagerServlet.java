@@ -63,7 +63,7 @@ public class UserManagerServlet extends Servlet {
 		}
 
 		//Make the page and return it.
-		res.write(getPage ( (UsersXmlFileImpl)users, home ));
+		res.write( getPage( (UsersXmlFileImpl)users, home ) );
 		res.setContentType("html");
 		res.disableCaching();
 		res.send();
