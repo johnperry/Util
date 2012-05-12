@@ -31,3 +31,5 @@ td {
 }
 
 td.tdl input { font-family:monospace }
+
+table { empty-cells: hide; }

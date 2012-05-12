@@ -128,6 +128,33 @@ public class HttpRequest {
 	}
 
 	/**
+	 * Determine whether the request was initiated by a specific User-Agent.
+	 * This method searches the User-Agent header for the specified string.
+	 * Examples of useful strings are:
+	 * <ul>
+	 * <li>msie
+	 * <li>firefox
+	 * <li>chrome
+	 * <li>safari
+	 * </ul>
+	 * Note: some browsers return User-Agents that include multiple names.
+	 * <ul>
+	 * <lip>Internet Explorer returns "msie", and it doesn't return "chrome", "firefox", or "safari".
+	 * <li>Firefox return "firefox", and it doesn't return "msie", "chrome", or "safari".
+	 * <li>Chrome returns "chrome", and it doesn't return "msie" or "firefox", but it does return "safari".
+	 * <li>I have no idea what Safari does.
+	 * </ul>
+	 * @param agent the name of the agent
+	 * @return true if the request was initiated by the specified agent; false if the specified
+	 * agent does not appear in the User-Agent header or if the User-Agent header is not present in the request.
+	 */
+	public boolean isFromUserAgent(String agent) {
+		String ua = getHeader("User-Agent");
+		if (ua == null) return false;
+		return ua.toLowerCase().contains(agent.toLowerCase());
+	}
+
+	/**
 	 * Get the User associated with this request.
 	 * @return the User.
 	 */

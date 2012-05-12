@@ -4,13 +4,7 @@ function loaded() {
 	tools[tools.length] = new PopupTool("/icons/home.png", "Return to the home page", home, null);
 	setPopupToolPanel( tools );
 
-	if (IE) {
-		showHideColumns();
-	}
-	else {
-		var shRoles = document.getElementById("shRoles");
-		shRoles.parentNode.removeChild(shRoles);
-	}
+	showHideColumns();
 }
 window.onload = loaded;
 
@@ -35,22 +29,20 @@ function toggleRoles(n, event) {
 
 function showHideColumns() {
 
-	if (IE) {
 		var button = document.getElementById("shRoles");
 		var show = (button.value.indexOf("Show") != -1);
 		var table = document.getElementById("userTable");
+		var thead = table.tHead;
+		var tbody = table.tBodies[0];
 		if (show) {
 			var cells = table.getElementsByTagName("TH");
-			for (var i=0; i<cells.length; i++) cells[i].style.display = "block";
-			var cells = table.getElementsByTagName("Td");
-			for (var i=0; i<cells.length; i++) cells[i].style.display = "block";
+			for (var i=0; i<cells.length; i++) cells[i].style.display = "table-cell";
+			var cells = tbody.getElementsByTagName("TD");
+			for (var i=0; i<cells.length; i++) cells[i].style.display = "table-cell";
 			button.value = "Hide Unused Roles";
 		}
 		else {
-			var thead = table.tHead;
-			var tbody = table.tBodies[0];
 			var rows = tbody.getElementsByTagName("TR");
-
 			//see what roles are in use
 			var len = rows[0].getElementsByTagName("TD").length;
 			var used = new Array();
@@ -69,7 +61,6 @@ function showHideColumns() {
 			hideColumns(tbody, "TD", used);
 			button.value = "Show All Roles"
 		}
-	}
 }
 
 function hideColumns(part, name, used) {
