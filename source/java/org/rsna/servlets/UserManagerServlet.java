@@ -247,7 +247,7 @@ public class UserManagerServlet extends Servlet {
 					String[] rolenames) {
 		for (int i=0; i<usernames.length; i++) {
 			sb.append( "<tr>\n" );
-			sb.append( " <td class=\"tdl\">"
+			sb.append( " <td class=\"tdu\">"
 					 	+  "<input name=\"u"+i+"\" value=\""+usernames[i]+"\"/>"
 					 	+  "</td>\n" );
 			for (int j=0; j<rolenames.length; j++) {
@@ -255,17 +255,17 @@ public class UserManagerServlet extends Servlet {
 				if ((users.getUser(usernames[i]).hasRole(rolenames[j]))) sb.append( " checked=\"true\"" );
 				sb.append( "/></td>\n" );
 			}
-			sb.append( " <td class=\"tdl\">"
+			sb.append( " <td class=\"tdp\">"
 					 +  "<input name=\"p"+i+"\" type=\"password\" value=\"\"/>"
 					 +  "</td>\n" );
 			sb.append( " </tr>\n" );
 		}
 		sb.append( "<tr>\n" );
-		sb.append( "<td class=\"tdl\"><input name=\"u"+usernames.length+"\"/></td>\n" );
+		sb.append( "<td class=\"tdu\"><input name=\"u"+usernames.length+"\"/></td>\n" );
 		for (int j=0; j<rolenames.length; j++) {
 			sb.append( "<td><input name=\"cbu"+usernames.length+"r"+j+"\" type=\"checkbox\"/></td>\n" );
 		}
-		sb.append( " <td class=\"tdl\"><input name=\"p"+usernames.length+"\"/></td>\n" );
+		sb.append( " <td class=\"tdp\"><input name=\"p"+usernames.length+"\"/></td>\n" );
 		sb.append( " </tr>\n" );
 	}
 

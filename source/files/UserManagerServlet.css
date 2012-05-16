@@ -20,16 +20,29 @@ h1 { padding-top:10; }
 	padding:5;
 }
 
-.tdl {
-	text-align:left; 
-	padding 5;
-}
-
 td {
 	text-align:center; 
 	padding:5;
 }
 
-td.tdl input { font-family:monospace }
+.tdu {
+	text-align:left; 
+	padding 5;
+}
 
-table { empty-cells: hide; }
+td.tdu input { 
+	font-family:monospace;
+	width:220px;
+}
+
+.tdp {
+	text-align:left; 
+	padding 5;
+}
+
+td.tdp input { 
+	font-family:monospace;
+	width:150px;
+}
+
+table { empty-cells:hide; }

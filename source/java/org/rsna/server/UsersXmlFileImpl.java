@@ -164,7 +164,9 @@ public class UsersXmlFileImpl extends Users {
 	}
 
 	/**
-	 * Create a user.
+	 * Create a user, converting the password. This method does
+	 * not add the user to the database. Call addUser if you
+	 * want to do that.
 	 * @param username the username in plaintext.
 	 * @param password the password in plaintext.
 	 * @return the user.
@@ -193,10 +195,23 @@ public class UsersXmlFileImpl extends Users {
 	 * This method always updates the users.xml file.
 	 * @param user the user to add or update.
 	 */
-	public synchronized boolean addUser(User user) {
-		if (users == null) return false;
-		users.put(user.getUsername(), user);
-		return FileUtil.setText(usersFile, getUsersText());
+	public synchronized void addUser(User user) {
+		if ((user != null) && (users != null)) {
+			users.put(user.getUsername(), user);
+			FileUtil.setText(usersFile, getUsersText());
+		}
+	}
+
+	/**
+	 * Remove a user from the database and update the users.xml file.
+	 * @param username the user to remove.
+	 */
+	public synchronized void removeUser(String username) {
+		if ((username != null) && (users != null)) {
+			if (users.remove(username) != null) {
+				FileUtil.setText(usersFile, getUsersText());
+			}
+		}
 	}
 
 	/**

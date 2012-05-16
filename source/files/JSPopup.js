@@ -6,8 +6,10 @@ var popupZIndex = 40;
 function showPopup(popupDivId, w, h, title, closeboxFile, hide) {
 	hidePopups();
 	var bodyPos = findObject(document.body);
-	var x = (bodyPos.w - w) / 2;
-	var y = (bodyPos.h - h) * 2 / 5;
+	var scrollX = getHorizontalScrollPosition();
+	var scrollY = getVerticalScrollPosition();
+	var x = (bodyPos.w - w) / 2 + scrollX;
+	var y = (bodyPos.h - h) * 2 / 5 + scrollY;
 	if (y < 0) y = 0;
 	var popup = document.getElementById(popupDivId);
 	setPopupTitleBar(popup, title, closeboxFile);

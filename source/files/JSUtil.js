@@ -90,6 +90,18 @@ function getObjectHeight(obj) {
 	return obj.offsetHeight;
 }
 
+//Get the vertical scroll position
+function getVerticalScrollPosition() {
+	var p = (document.all ? document.body.scrollTop : window.pageYOffset);
+	return (p ? p : 0);
+}
+
+//Get the vertical scroll position
+function getHorizontalScrollPosition() {
+	var p = (document.all ? document.body.scrollLeft : window.pageXOffset);
+	return (p ? p : 0);
+}
+
 function openURL(url, target) {
 	window.open(url, target);
 }
