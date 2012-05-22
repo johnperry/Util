@@ -23,14 +23,23 @@ public class DateUtil {
 	 */
 	public static GregorianCalendar getCalendar(String date) throws Exception {
 		//do a little filtering to protect against the most common booboos
-		date = date.replaceAll("\\D","");
-		if (date.length() != 8) throw new Exception("Illegal date: "+date);
+		date = date.replaceAll("[@:\\s]","");
 		if (date.startsWith("00")) date = "19" + date.substring(2);
-		//now make the calendar
 		int year = Integer.parseInt(date.substring(0,4));
 		int month = Integer.parseInt(date.substring(4,6));
 		int day = Integer.parseInt(date.substring(6,8));
-		return new GregorianCalendar(year,month-1,day);
+		int hour = 0;
+		int min = 0;
+		int sec = 0;
+		if (date.length() > 8) {
+			String time = date.substring(8);
+			//get rid of the zone if present
+			if (time.contains("&")) time = time.substring(0, time.indexOf("&"));
+			hour = Integer.parseInt(time.substring(0, 2));
+			min = Integer.parseInt(time.substring(2, 4));
+			if (time.length() > 4) sec = (int)Float.parseFloat(time.substring(4));
+		}
+		return new GregorianCalendar(year, month-1, day, hour, min, sec);
 	}
 
 	/**
@@ -43,7 +52,8 @@ public class DateUtil {
 		time.replaceAll(":", "");
 		long hr = Long.parseLong(time.substring(0, 2));
 		long min = Long.parseLong(time.substring(2, 4));
-		long sec = (long)Float.parseFloat(time.substring(4));
+		long sec = 0;
+		if (time.length() > 4) sec = (long)Float.parseFloat(time.substring(4));
 		return sec + (60 * min) + (60 * 60 * hr);
 	}
 
