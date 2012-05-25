@@ -121,16 +121,19 @@ public class HttpResponse {
 	 * Set the Content-Type header that corresponds to a String.
 	 * <br>
 	 * <table border="1">
+	 *	<tr><td>application</td><td>application/x-ms-application</td></td>
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></td>
 	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></td>
 	 *	<tr><td>csv</td><td>text/csv;charset=UTF-8</td></td>
 	 *	<tr><td>dcm</td><td>application/dicom</td></td>
+	 *	<tr><td>deploy</td><td>application/octet-stream</td></td>
 	 *	<tr><td>gif</td><td>image/gif</td></td>
 	 *	<tr><td>htm</td><td>text/html;charset=UTF-8</td></td>
 	 *	<tr><td>html</td><td>text/html;charset=UTF-8</td></td>
 	 *	<tr><td>jpeg</td><td>image/jpeg</td></td>
 	 *	<tr><td>jpg</td><td>image/jpeg</td></td>
 	 *	<tr><td>js</td><td>text/javascript;charset=UTF-8</td></td>
+	 *	<tr><td>manifest</td><td>application/x-ms-manifest</td></td>
 	 *	<tr><td>md</td><td>application/unknown</td></td>
 	 *	<tr><td>mp4</td><td>video/mp4</td></td>
 	 *	<tr><td>mpeg</td><td>video/mpeg</td></td>
@@ -353,9 +356,11 @@ public class HttpResponse {
 		public ContentTypes() {
 			super();
 			put("avi","video/x-msvideo");
+			put("application", "application/x-ms-application");
 			put("css","text/css;charset=UTF-8");
 			put("csv","text/csv;charset=UTF-8");
 			put("dcm","application/dicom");
+			put("deploy","application/octet-stream");
 			put("gif","image/gif");
 			put("htm","text/html;charset=UTF-8");
 			put("html","text/html;charset=UTF-8");
@@ -363,6 +368,7 @@ public class HttpResponse {
 			put("jpeg","image/jpeg");
 			put("jpg","image/jpeg");
 			put("js","text/javascript;charset=UTF-8");
+			put("manifest", "application/x-ms-manifest");
 			put("md","application/unknown");
 			put("mp4","video/mp4");
 			put("mpeg","video/mpg");
