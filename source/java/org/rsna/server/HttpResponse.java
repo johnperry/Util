@@ -121,33 +121,40 @@ public class HttpResponse {
 	 * Set the Content-Type header that corresponds to a String.
 	 * <br>
 	 * <table border="1">
-	 *	<tr><td>application</td><td>application/x-ms-application</td></td>
-	 *	<tr><td>avi</td><td>video/x-msvideo</td></td>
-	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></td>
-	 *	<tr><td>csv</td><td>text/csv;charset=UTF-8</td></td>
-	 *	<tr><td>dcm</td><td>application/dicom</td></td>
-	 *	<tr><td>deploy</td><td>application/octet-stream</td></td>
-	 *	<tr><td>gif</td><td>image/gif</td></td>
-	 *	<tr><td>htm</td><td>text/html;charset=UTF-8</td></td>
-	 *	<tr><td>html</td><td>text/html;charset=UTF-8</td></td>
-	 *	<tr><td>jpeg</td><td>image/jpeg</td></td>
-	 *	<tr><td>jpg</td><td>image/jpeg</td></td>
-	 *	<tr><td>js</td><td>text/javascript;charset=UTF-8</td></td>
-	 *	<tr><td>manifest</td><td>application/x-ms-manifest</td></td>
-	 *	<tr><td>md</td><td>application/unknown</td></td>
-	 *	<tr><td>mp4</td><td>video/mp4</td></td>
-	 *	<tr><td>mpeg</td><td>video/mpeg</td></td>
-	 *	<tr><td>mpg</td><td>video/mpg</td></td>
-	 *	<tr><td>oga</td><td>audio/oga</td></td>
-	 *	<tr><td>ogg</td><td>video/ogg</td></td>
-	 *	<tr><td>ogv</td><td>video/ogg</td></td>
-	 *	<tr><td>pdf</td><td>application/pdf</td></td>
-	 *	<tr><td>png</td><td>image/png</td></td>
-	 *	<tr><td>swf</td><td>application/x-shockwave-flash</td></td>
-	 *	<tr><td>txt</td><td>text/plain;charset=UTF-8</td></td>
-	 *	<tr><td>wav</td><td>audio/wav</td></td>
-	 *	<tr><td>xml</td><td>text/xml;charset=UTF-8</td></td>
-	 *	<tr><td>zip</td><td>application/zip</td></td>
+	 *	<tr><td>application</td><td>application/x-ms-application</td></tr>
+	 *	<tr><td>avi</td><td>video/x-msvideo</td></tr>
+	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></tr>
+	 *	<tr><td>csv</td><td>text/csv;charset=UTF-8</td></tr>
+	 *	<tr><td>dcm</td><td>application/dicom</td></tr>
+	 *	<tr><td>deploy</td><td>application/octet-stream</td></tr>
+	 *	<tr><td>docx</td><td>application/vnd.openxmlformats-officedocument.wordprocessingml.document</td></tr>
+	 *	<tr><td>dotx</td><td>application/vnd.openxmlformats-officedocument.wordprocessingml.template</td></tr>
+	 *	<tr><td>gif</td><td>image/gif</td></tr>
+	 *	<tr><td>htm</td><td>text/html;charset=UTF-8</td></tr>
+	 *	<tr><td>html</td><td>text/html;charset=UTF-8</td></tr>
+	 *	<tr><td>jpeg</td><td>image/jpeg</td></tr>
+	 *	<tr><td>jpg</td><td>image/jpeg</td></tr>
+	 *	<tr><td>js</td><td>text/javascript;charset=UTF-8</td></tr>
+	 *	<tr><td>manifest</td><td>application/x-ms-manifest</td></tr>
+	 *	<tr><td>md</td><td>application/unknown</td></tr>
+	 *	<tr><td>mp4</td><td>video/mp4</td></tr>
+	 *	<tr><td>mpeg</td><td>video/mpeg</td></tr>
+	 *	<tr><td>mpg</td><td>video/mpg</td></tr>
+	 *	<tr><td>oga</td><td>audio/oga</td></tr>
+	 *	<tr><td>ogg</td><td>video/ogg</td></tr>
+	 *	<tr><td>ogv</td><td>video/ogg</td></tr>
+	 *	<tr><td>pdf</td><td>application/pdf</td></tr>
+	 *	<tr><td>png</td><td>image/png</td></tr>
+	 *	<tr><td>potx</td><td>application/vnd.openxmlformats-officedocument.presentationml.template</td></tr>
+	 *	<tr><td>ppsx</td><td>application/vnd.openxmlformats-officedocument.presentationml.slideshow</td></tr>
+	 *	<tr><td>pptx</td><td>application/vnd.openxmlformats-officedocument.presentationml.presentation</td></tr>
+	 *	<tr><td>swf</td><td>application/x-shockwave-flash</td></tr>
+	 *	<tr><td>txt</td><td>text/plain;charset=UTF-8</td></tr>
+	 *	<tr><td>wav</td><td>audio/wav</td></tr>
+	 *	<tr><td>xlsx</td><td>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</td></tr>
+	 *	<tr><td>xltx</td><td>application/vnd.openxmlformats-officedocument.spreadsheetml.template</td></tr>
+	 *	<tr><td>xml</td><td>text/xml;charset=UTF-8</td></tr>
+	 *	<tr><td>zip</td><td>application/zip</td></tr>
 	 * </table>
 	 * @param ext the name of a Content-Type (e.g. "html", "xml", etc.).
 	 * @return the Content-Type.
@@ -355,12 +362,14 @@ public class HttpResponse {
 	static class ContentTypes extends Hashtable<String,String> {
 		public ContentTypes() {
 			super();
-			put("avi","video/x-msvideo");
 			put("application", "application/x-ms-application");
+			put("avi","video/x-msvideo");
 			put("css","text/css;charset=UTF-8");
 			put("csv","text/csv;charset=UTF-8");
 			put("dcm","application/dicom");
 			put("deploy","application/octet-stream");
+			put("docx","application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+			put("dotx","application/vnd.openxmlformats-officedocument.wordprocessingml.template");
 			put("gif","image/gif");
 			put("htm","text/html;charset=UTF-8");
 			put("html","text/html;charset=UTF-8");
@@ -378,11 +387,18 @@ public class HttpResponse {
 			put("ogv","video/ogg");
 			put("pdf","application/pdf");
 			put("png","image/png");
+			put("potx","application/vnd.openxmlformats-officedocument.presentationml.template");
+			put("ppsx","application/vnd.openxmlformats-officedocument.presentationml.slideshow");
+			put("pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation");
 			put("swf","application/x-shockwave-flash");
 			put("txt","text/plain;charset=UTF-8");
 			put("wav","audio/wav");
+			put("xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			put("xltx","application/vnd.openxmlformats-officedocument.spreadsheetml.template");
 			put("xml","text/xml;charset=UTF-8");
 			put("zip","application/zip");
 		}
 	}
 }
+
+
