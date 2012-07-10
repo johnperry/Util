@@ -18,6 +18,7 @@ h1 { padding-top:10; }
 .thl {
 	text-align:left; 
 	padding:5;
+	vertical-align:bottom;
 }
 
 td {

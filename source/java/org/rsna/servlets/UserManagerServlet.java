@@ -229,15 +229,17 @@ public class UserManagerServlet extends Servlet {
 	}
 
 	private void makeTableHeader(StringBuffer sb, String[] rolenames) {
-		sb.append( "<thead>\n"
-					+ " <tr>\n"
-					+ "  <th/>\n" );
+		sb.append("<thead>\n");
+		sb.append(" <tr>\n");
+		sb.append("  <th class=\"thl\">Username</th>\n" );
 		for (int i=0; i<rolenames.length; i++) {
-			sb.append( "  <th class=\"thv\"><nobr>"+"<input type=\"checkbox\" onclick=\"toggleRoles("+i+",event)\"/>&nbsp;"+rolenames[i]+"</nobr>"
-				  	+  "<input name=\"r"+i+"\" type=\"hidden\" value=\""+rolenames[i]+"\"/></th>\n" );
+			sb.append("<th class=\"thv\"><nobr>");
+			sb.append("<input type=\"checkbox\" onclick=\"toggleRoles("+i+",event)\"/>&nbsp;"+rolenames[i]+"</nobr>");
+			sb.append("<input name=\"r"+i+"\" type=\"hidden\" value=\""+rolenames[i]+"\"/></th>\n" );
 		}
-		sb.append( " </tr>\n" );
-		sb.append( "</thead>\n" );
+		sb.append("  <th class=\"thl\">Password</th>\n" );
+		sb.append(" </tr>\n" );
+		sb.append("</thead>\n" );
 	}
 
 	private void makeTableRows(
