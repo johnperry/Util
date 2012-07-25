@@ -93,6 +93,14 @@ public class UsersXmlFileImpl extends Users {
 	 * Get all the usernames in an alphabetized array.
 	 * @return the array of usernames or a zero-length array if unable.
 	 */
+	public synchronized int getNumberOfUsers() {
+		return users.size();
+	}
+
+	/**
+	 * Get all the usernames in an alphabetized array.
+	 * @return the array of usernames or a zero-length array if unable.
+	 */
 	public synchronized String[] getUsernames() {
 		if (users == null) return new String[0];
 		String[] usernames = new String[users.size()];
