@@ -38,6 +38,7 @@ public class HttpRequest {
 
 	public final Socket socket;
 	public final InputStream inputStream;
+	public String protocol;
 	public String method;
 	public String path;
 	public String query;
@@ -185,6 +186,27 @@ public class HttpRequest {
 	 */
 	public boolean userHasRole(String role) {
 		return (user != null) && user.hasRole(role);
+	}
+
+	/**
+	 * Get the Host header associated with this request, or get the IP address
+	 * of the server if the Host header is missing.
+	 * @return the path.
+	 */
+	public String getHost() {
+		String host = getHeader("host");
+		if (host == null) {
+			host = IPUtil.getIPAddress() + ":" + socket.getPort();
+		}
+		return host;
+	}
+
+	/**
+	 * Get the protocol associated with this request.
+	 * @return the protocol.
+	 */
+	public String getProtocol() {
+		return protocol;
 	}
 
 	/**
@@ -396,19 +418,29 @@ public class HttpRequest {
 		path = "";
 		method = "";
 		parsedPath = new Path("");
+
 		String line = getLine();
+
+		//get the method
 		line = line.trim();
-		int k = line.indexOf(" ");
-		if (k < 0) return;
-		method = line.substring(0,k).toUpperCase();
-		int kk = line.indexOf(" HTTP");
-		if (kk < 0) return;
-		path = line.substring(k,kk).trim();
-		kk = path.indexOf("?");
-		if (kk >= 0) {
-			query = path.substring(kk+1);
-			path = path.substring(0,kk).trim();
+		int methodEnd = line.indexOf(" ");
+		if (methodEnd < 0) return;
+		method = line.substring(0, methodEnd).toUpperCase();
+
+		//get the path and the query string
+		int protocolStart = line.indexOf(" HTTP");
+		if (protocolStart < 0) return;
+		path = line.substring(methodEnd, protocolStart).trim();
+		int queryStringStart = path.indexOf("?");
+		if (queryStringStart >= 0) {
+			query = path.substring(queryStringStart + 1); //skip the '?'
+			path = path.substring(0, queryStringStart).trim();
 		}
+		int protocolVersionStart = line.indexOf("/", protocolStart);
+		if (protocolVersionStart > 0) protocol = line.substring(protocolStart, protocolVersionStart);
+		else protocol = line.substring(protocolStart);
+		protocol = protocol.trim().toLowerCase(); //note: trim is necessary
+
 		try { path = URLDecoder.decode(path,"UTF-8"); }
 		catch (Exception ex) { logger.warn("Undecodable path: \""+path+"\""); }
 		path = filterPath(path);

@@ -132,6 +132,8 @@ public class HttpResponse {
 	 *	<tr><td>gif</td><td>image/gif</td></tr>
 	 *	<tr><td>htm</td><td>text/html;charset=UTF-8</td></tr>
 	 *	<tr><td>html</td><td>text/html;charset=UTF-8</td></tr>
+	 *	<tr><td>jar</td><td>application/java-archive</td></tr>
+	 *	<tr><td>jnlp</td><td>application/x-java-jnlp-file;charset=UTF-8</td></tr>
 	 *	<tr><td>jpeg</td><td>image/jpeg</td></tr>
 	 *	<tr><td>jpg</td><td>image/jpeg</td></tr>
 	 *	<tr><td>js</td><td>text/javascript;charset=UTF-8</td></tr>
@@ -374,6 +376,7 @@ public class HttpResponse {
 			put("htm","text/html;charset=UTF-8");
 			put("html","text/html;charset=UTF-8");
 			put("jar","application/java-archive");
+			put("jnlp","application/x-java-jnlp-file;charset=UTF-8");
 			put("jpeg","image/jpeg");
 			put("jpg","image/jpeg");
 			put("js","text/javascript;charset=UTF-8");
