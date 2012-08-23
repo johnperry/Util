@@ -103,7 +103,7 @@ public class LoginServlet extends Servlet {
 				res.send();
 			}
 			else {
-				Authenticator.getInstance().closeSession(req,res);
+				Authenticator.getInstance().closeSession(req, res);
 				redirect(req, res);
 			}
 		}

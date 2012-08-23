@@ -7,13 +7,11 @@
 
 package org.rsna.server;
 
-import java.math.BigInteger;
-import java.security.*;
 import java.util.Arrays;
 import java.util.Hashtable;
 import org.apache.log4j.Logger;
-import org.rsna.util.FileUtil;
 import org.rsna.util.Base64;
+import org.rsna.util.FileUtil;
 
 /**
  * The standard authenticator singleton class for the server.
@@ -49,6 +47,13 @@ public class Authenticator {
 	 */
 	public synchronized void setSessionTimeout(long timeout) {
 		this.timeout = timeout;
+	}
+
+	/**
+	 * Get the Session timeout.
+	 */
+	public synchronized long getSessionTimeout() {
+		return timeout;
 	}
 
 	/**
@@ -167,40 +172,4 @@ public class Authenticator {
 		}
 	}
 
-	//Class to encapsulate a session
-	class Session {
-		public long lastAccess;
-		public final User user;
-		public final String ipAddress;
-		public final String id;
-
-		//Construct a Session
-		public Session(User user, String ipAddress) throws Exception {
-			lastAccess = System.currentTimeMillis();
-			this.user = user;
-			this.ipAddress = ipAddress;
-			id = getSessionID(user.getUsername(), ipAddress);
-		}
-
-		public boolean appliesTo(HttpRequest req) {
-			boolean ok = req.getRemoteAddress().equals(ipAddress);
-			if (ok && (timeout > 0)) {
-				ok &= ((System.currentTimeMillis() - lastAccess) < timeout);
-			}
-			return ok;
-		}
-
-		public void recordAccess() {
-			lastAccess = System.currentTimeMillis();
-		}
-
-		//Make a session ID by hashing the username, the IP address and the current time.
-		private String getSessionID(String username, String ipAddress) throws Exception {
-			String string = username + ":" + ipAddress + ":" + System.currentTimeMillis();
-			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-			byte[] hashed = messageDigest.digest(string.getBytes("UTF-8"));
-			BigInteger bi = new BigInteger(1, hashed);
-			return bi.toString();
-		}
-	}
 }

@@ -71,30 +71,30 @@ public class PasswordServlet extends Servlet {
 	}
 
 	/**
-	 * The POST handler: authenticate the user
+	 * The POST handler: change the user's password
 	 * if both supplied passwords match.
 	 * @param req the request object
 	 * @param res the response object
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) {
-		String pw1 = req.getParameter("pw1");
-		String pw2 = req.getParameter("pw2");
-		if ((pw1 != null) && (pw2 != null) && pw1.equals(pw2) && !pw1.trim().equals("")) {
-			Users users = Users.getInstance();
-			User user = req.getUser();
-			if (user != null) {
-				user.setPassword(pw1.trim());
-				if (users instanceof UsersXmlFileImpl) {
-					UsersXmlFileImpl uxml = (UsersXmlFileImpl)users;
-					uxml.addUser(user);
-					File usersXmlFile = new File("users.xml");
-					String usersString = XmlUtil.toString(uxml.getXML());
-					FileUtil.setText(usersXmlFile, usersString);
+		if (req.isReferredFrom(context)) {
+			String pw1 = req.getParameter("pw1", "").trim();
+			String pw2 = req.getParameter("pw2", "").trim();
+			if (pw1.equals(pw2) && !pw1.equals("")) {
+				Users users = Users.getInstance();
+				User user = req.getUser();
+				if (user != null) {
+					user.setPassword(pw1.trim());
+					if (users instanceof UsersXmlFileImpl) {
+						UsersXmlFileImpl uxml = (UsersXmlFileImpl)users;
+						uxml.addUser(user);
+						File usersXmlFile = new File("users.xml");
+						String usersString = XmlUtil.toString(uxml.getXML());
+						FileUtil.setText(usersXmlFile, usersString);
+					}
+					res.redirect("/");
+					return;
 				}
-				res.setResponseCode(res.found);
-				res.setHeader("Location", "/");
-				res.send();
-				return;
 			}
 		}
 		res.setResponseCode(res.forbidden);
