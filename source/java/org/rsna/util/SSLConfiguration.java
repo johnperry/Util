@@ -15,6 +15,11 @@ import org.w3c.dom.Element;
  */
 public class SSLConfiguration {
 
+	static final String keystoreProp			= "javax.net.ssl.keyStore";
+	static final String keystorePasswordProp	= "javax.net.ssl.keyStorePassword";
+	static final String truststoreProp			= "javax.net.ssl.trustStore";
+	static final String truststorePasswordProp	= "javax.net.ssl.trustStorePassword";
+
 	String keystore			= "";
 	String keystorePassword	= "";
 	String truststore		= "";
@@ -86,11 +91,23 @@ public class SSLConfiguration {
 	 * Set the System properties based on the parameters in the SSLConfiguration.
 	 */
 	public void setSystemParameters() {
-        System.setProperty("javax.net.ssl.keyStore", keystore);
-        System.setProperty("javax.net.ssl.keyStorePassword", keystorePassword);
+		if (!keystore.equals("")) {
+			System.setProperty(keystoreProp, keystore);
+			System.setProperty(keystorePasswordProp, keystorePassword);
+		}
+		else {
+			System.clearProperty(keystoreProp);
+			System.clearProperty(keystorePasswordProp);
+		}
 
-        System.setProperty("javax.net.ssl.trustStore", truststore);
-        System.setProperty("javax.net.ssl.trustStorePassword", truststorePassword);
+        if (!truststore.equals("")) {
+			System.setProperty(truststoreProp, truststore);
+			System.setProperty(truststorePasswordProp, truststorePassword);
+		}
+		else {
+			System.clearProperty(truststoreProp);
+			System.clearProperty(truststorePasswordProp);
+		}
 	}
 }
 
