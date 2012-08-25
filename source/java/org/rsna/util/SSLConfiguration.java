@@ -36,8 +36,8 @@ public class SSLConfiguration {
 		this.truststore = StringUtil.trim(truststore);
 		this.truststorePassword = StringUtil.trim(truststorePassword);
 
-		if (keystore.equals("")) keystore = "keystore";
-		if (keystorePassword.equals("")) keystorePassword = "ctpstore";
+		if (keystore.equals("")) this.keystore = "keystore";
+		if (keystorePassword.equals("")) this.keystorePassword = "ctpstore";
 	}
 
 
