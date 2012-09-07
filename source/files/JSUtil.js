@@ -139,7 +139,12 @@ function listNodeTree( node, margin ) {
 	if (node.nodeType == 3) return margin + "\"" + node.nodeValue + "\"\n";
 	if (node.nodeType == 1) {
 		var id = node.id;
-		var text = margin + node.tagName + (node.id ? " ["+node.id+"]" : "") + "\n";
+		var text = margin + node.tagName;
+		var attrs = node.attributes;
+		for (var k=0; k<attrs.length; k++) {
+			text += "\n"+margin+"  ["+attrs[k].name+"=\""+attrs[k].value+"\"]";
+		}
+		text += "\n";
 		for (var q=0; q<node.childNodes.length; q++) {
 			text += listNodeTree( node.childNodes[q], margin + "      " );
 		}
