@@ -49,6 +49,35 @@ public class JdbmUtil {
 	}
 
 	/**
+	 * See if a database contains an object with a specified name. The name
+	 * can be that of an HTree or BTree.
+	 * @param recman the RecordManager of the database in which to find the object.
+	 * @param name the name of the object.
+	 * @return true if the database contains the object, false otherwise.
+	 */
+	public static boolean containsNamedObject(RecordManager recman, String name) {
+		try {
+			long recid = recman.getNamedObject(name);
+			return (recid != 0);
+		}
+		catch (Exception notThere) { return false; }
+	}
+
+	/**
+	 * Delete a named object from a database, ignoring any errors. The name
+	 * can be that of an HTree or BTree.
+	 * @param recman the RecordManager of the database in which to remove the object.
+	 * @param name the name of the object to delete.
+	 */
+	public static void deleteNamedObject(RecordManager recman, String name) {
+		try {
+			long recid = recman.getNamedObject(name);
+			if (recid != 0) recman.delete(recid);
+		}
+		catch (Exception ignore) { }
+	}
+
+	/**
 	 * Get a named HTree, or create it if it doesn't exist.
 	 * @param recman the RecordManager of the database in which to get the HTree.
 	 * @param name the name of the HTree.
