@@ -366,7 +366,9 @@ public class XmlUtil {
 				break;
 
 			case Node.ELEMENT_NODE:
-				String name = node.getNodeName();
+				String namespace = node.getNamespaceURI();
+				namespace = (namespace == null) ? "" : namespace+":";
+				String name = namespace + node.getNodeName();
 				NamedNodeMap attributes = node.getAttributes();
 				if (attributes.getLength() == 0) {
 					sb.append("<" + name + ">");
@@ -376,7 +378,9 @@ public class XmlUtil {
 					int attrlen = attributes.getLength();
 					for (int i=0; i<attrlen; i++) {
 						Node current = attributes.item(i);
-						sb.append(current.getNodeName() + "=\"" +
+						String ns = current.getNamespaceURI();
+						ns = (ns == null) ? "" : ns+":";
+						sb.append(ns+current.getNodeName() + "=\"" +
 							escapeChars(current.getNodeValue()));
 						if (i < attrlen-1)
 							sb.append("\" ");
@@ -466,7 +470,9 @@ public class XmlUtil {
 				break;
 
 			case Node.ELEMENT_NODE:
-				String name = node.getNodeName();
+				String namespace = node.getNamespaceURI();
+				namespace = (namespace == null) ? "" : namespace+":";
+				String name = namespace + node.getNodeName();
 				NodeList children = node.getChildNodes();
 				int nChildren = children.getLength();
 				NamedNodeMap attributes = node.getAttributes();
@@ -485,8 +491,10 @@ public class XmlUtil {
 				}
 				else if (nAttrs == 1) {
 					Node attr = attributes.item(0);
+					String ns = attr.getNamespaceURI();
+					ns = (ns == null) ? "" : ns+":";
 					sb.append(margin + lab + name +  " "
-								+ attr.getNodeName() + "=\"" + escapeChars(attr.getNodeValue()) + "\""
+								+ ns+attr.getNodeName() + "=\"" + escapeChars(attr.getNodeValue()) + "\""
 								+ ((nChildren == 0) ? "/" : "")
 								+ rab + nl);
 				}
@@ -494,7 +502,9 @@ public class XmlUtil {
 					sb.append(margin + lab + name + nl);
 					for (int i=0; i<nAttrs; i++) {
 						Node attr = attributes.item(i);
-						sb.append(margin + indent + attr.getNodeName()
+						String ns = attr.getNamespaceURI();
+						ns = (ns == null) ? "" : ns+":";
+						sb.append(margin + indent + ns+attr.getNodeName()
 							+ "=\"" + escapeChars(attr.getNodeValue()));
 						if (i < nAttrs - 1)
 							sb.append("\"" + nl);
