@@ -25,7 +25,8 @@ function getCookieObject() {
 }
 
 function clearCookie(name, cookies) {
-	if (cookies[name] != null) {
+	var cooks = (cookies != null) ? cookies : getCookieObject();
+	if (cooks[name] != null) {
 		var date = new Date();
 		date.setFullYear(1980);
 		var expires = ";expires="+date.toGMTString();

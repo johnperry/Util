@@ -367,6 +367,7 @@ public class XmlUtil {
 
 			case Node.ELEMENT_NODE:
 				String namespace = node.getNamespaceURI();
+				if (namespace != null) namespace = node.lookupPrefix(namespace);
 				namespace = (namespace == null) ? "" : namespace+":";
 				String name = namespace + node.getNodeName();
 				NamedNodeMap attributes = node.getAttributes();
@@ -379,6 +380,7 @@ public class XmlUtil {
 					for (int i=0; i<attrlen; i++) {
 						Node current = attributes.item(i);
 						String ns = current.getNamespaceURI();
+						if (ns != null) ns = node.lookupPrefix(ns);
 						ns = (ns == null) ? "" : ns+":";
 						sb.append(ns+current.getNodeName() + "=\"" +
 							escapeChars(current.getNodeValue()));
@@ -471,6 +473,7 @@ public class XmlUtil {
 
 			case Node.ELEMENT_NODE:
 				String namespace = node.getNamespaceURI();
+				if (namespace != null) namespace = node.lookupPrefix(namespace);
 				namespace = (namespace == null) ? "" : namespace+":";
 				String name = namespace + node.getNodeName();
 				NodeList children = node.getChildNodes();
@@ -492,6 +495,7 @@ public class XmlUtil {
 				else if (nAttrs == 1) {
 					Node attr = attributes.item(0);
 					String ns = attr.getNamespaceURI();
+					if (ns != null) ns = node.lookupPrefix(ns);
 					ns = (ns == null) ? "" : ns+":";
 					sb.append(margin + lab + name +  " "
 								+ ns+attr.getNodeName() + "=\"" + escapeChars(attr.getNodeValue()) + "\""
@@ -503,6 +507,7 @@ public class XmlUtil {
 					for (int i=0; i<nAttrs; i++) {
 						Node attr = attributes.item(i);
 						String ns = attr.getNamespaceURI();
+						if (ns != null) ns = node.lookupPrefix(ns);
 						ns = (ns == null) ? "" : ns+":";
 						sb.append(margin + indent + ns+attr.getNodeName()
 							+ "=\"" + escapeChars(attr.getNodeValue()));
@@ -677,7 +682,6 @@ public class XmlUtil {
 			popOperator(ops, toks);
 		ops.push(op);
 	}
-
 
 	//The rest of the code is for parsing the script and evaluating the result.
 	static class Tokenizer {
