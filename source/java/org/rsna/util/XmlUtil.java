@@ -378,12 +378,9 @@ public class XmlUtil {
 					sb.append("<" + name + " ");
 					int attrlen = attributes.getLength();
 					for (int i=0; i<attrlen; i++) {
-						Node current = attributes.item(i);
-						String ns = current.getNamespaceURI();
-						if (ns != null) ns = node.lookupPrefix(ns);
-						ns = (ns == null) ? "" : ns+":";
-						sb.append(ns+current.getNodeName() + "=\"" +
-							escapeChars(current.getNodeValue()));
+						Node attr = attributes.item(i);
+						String attrName = getAttrNameWithNamespace(attr);
+						sb.append(attrName + "=\"" + escapeChars(attr.getNodeValue()));
 						if (i < attrlen-1)
 							sb.append("\" ");
 						else
@@ -494,11 +491,9 @@ public class XmlUtil {
 				}
 				else if (nAttrs == 1) {
 					Node attr = attributes.item(0);
-					String ns = attr.getNamespaceURI();
-					if (ns != null) ns = node.lookupPrefix(ns);
-					ns = (ns == null) ? "" : ns+":";
+					String attrName = getAttrNameWithNamespace(attr);
 					sb.append(margin + lab + name +  " "
-								+ ns+attr.getNodeName() + "=\"" + escapeChars(attr.getNodeValue()) + "\""
+								+ attrName + "=\"" + escapeChars(attr.getNodeValue()) + "\""
 								+ ((nChildren == 0) ? "/" : "")
 								+ rab + nl);
 				}
@@ -506,11 +501,8 @@ public class XmlUtil {
 					sb.append(margin + lab + name + nl);
 					for (int i=0; i<nAttrs; i++) {
 						Node attr = attributes.item(i);
-						String ns = attr.getNamespaceURI();
-						if (ns != null) ns = node.lookupPrefix(ns);
-						ns = (ns == null) ? "" : ns+":";
-						sb.append(margin + indent + ns+attr.getNodeName()
-							+ "=\"" + escapeChars(attr.getNodeValue()));
+						String attrName = getAttrNameWithNamespace(attr);
+						sb.append(margin + indent + attrName + "=\"" + escapeChars(attr.getNodeValue()));
 						if (i < nAttrs - 1)
 							sb.append("\"" + nl);
 						else
@@ -567,6 +559,16 @@ public class XmlUtil {
 				break;
 		}
 		return;
+	}
+
+	private static String getAttrNameWithNamespace(Node attr) {
+		String name = attr.getNodeName();
+		String ns = attr.getNamespaceURI();
+		String prefix = (ns != null) ? attr.lookupPrefix(ns) : null;
+		if ((prefix != null) && !name.startsWith(prefix+":")) {
+			name = prefix + ":" + name;
+		}
+		return name;
 	}
 
 	/**
