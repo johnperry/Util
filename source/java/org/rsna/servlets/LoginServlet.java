@@ -94,7 +94,9 @@ public class LoginServlet extends Servlet {
 
 				//Set the redirect URL for the post.
 				Properties props = new Properties();
-				props.put("url", req.getParameter("url", ""));
+				String url = req.getParameter("url", "");
+				if (isAttack(req, url)) url = "";
+				props.put("url", url);
 				loginPage = StringUtil.replace(loginPage, props);
 
 				res.write(loginPage);
@@ -144,25 +146,27 @@ public class LoginServlet extends Servlet {
 	//the context, go to the parent of the last path element.
 	//If the path does not end at the context, go to the full path.
 	private void redirect(HttpRequest req, HttpResponse res) {
-
-		String path = req.getParameter("url");
-
-		if (path == null) {
-			path = req.getPath();
-			if (path.endsWith("/"+context)) {
-				path = path.substring(0, path.length() - context.length());
+		String url = req.getParameter("url");
+		if (url == null) {
+			url = req.getPath();
+			if (url.endsWith("/"+context)) {
+				url = url.substring(0, url.length() - context.length());
 			}
 		}
+		if (url.equals("") || isAttack(req, url)) url = "/";
+		res.redirect(url);
+	}
 
-		if (path.equals("")) path = "/";
-
-		else if (path.contains("\n") || path.contains("\r") ||
-				 path.contains("<")  || path.contains(">") ||
-				 path.contains("javascript") ) {
-			logger.debug("Attack thwarted from "+req.getRemoteAddress());
-			path = "/";
+	//Check a path for characters that indicate a cross-site scripting attack
+	private boolean isAttack(HttpRequest req, String path) {
+		boolean attack =  path.contains("\n")
+							|| path.contains("\r")
+							|| path.contains("<")
+							|| path.contains(">")
+							|| path.contains("javascript");
+		if (attack) {
+			logger.info("Attack detected from "+req.getRemoteAddress());
 		}
-
-		res.redirect(path);
+		return attack;
 	}
 }
