@@ -156,7 +156,9 @@ public class LoginServlet extends Servlet {
 
 		if (path.equals("")) path = "/";
 
-		else if (path.contains("\n") || path.contains("\r")) {
+		else if (path.contains("\n") || path.contains("\r") ||
+				 path.contains("<")  || path.contains(">") ||
+				 path.contains("javascript") ) {
 			logger.debug("Attack thwarted from "+req.getRemoteAddress());
 			path = "/";
 		}
