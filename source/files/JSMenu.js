@@ -96,7 +96,7 @@ MenuBar.prototype.setText = function(text) {
 //It is intended for situations where multiple pull-down menus
 //appear in different places on the page. Each menu must have
 //its own SingleMenu instance to manage it. (Note: as in the
-//case of the MenuBar class, Menu objects can contain submenus.
+//case of the MenuBar class, Menu objects can contain submenus.)
 //
 //Note: In this class, the constructor argument is not an
 //array of Menu objects as it is in the MenuBar class; it

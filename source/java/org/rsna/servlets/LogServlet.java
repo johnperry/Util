@@ -112,10 +112,10 @@ public class LogServlet extends Servlet {
 			+	" <head>\n"
 			+	"  <title>LogViewer</title>\n"
 			+	"   <style>\n"
-			+	"    body {background-color:#c6d8f9; margin:0; padding:0;}\n"
+			+	"    body {background-color:white; margin:0; padding:0;}\n"
 			+	"    iframe {height:100; width:100%}\n"
-			+	"    td {text-align:left; padding:5; padding-right:20}\n"
-			+	"    .logdir {height:150; background-color:white; overflow:auto}\n"
+			+	"    td {text-align:left; padding:5; padding-right:20; background:white}\n"
+			+	"    .logdir {height:150; background:white; overflow:auto}\n"
 			+	"    h1 {text-align:center; margin-top:5; margin-bottom:5;}\n"
 			+	"   </style>\n"
 			+	script()
