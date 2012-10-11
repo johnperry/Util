@@ -5,14 +5,14 @@
 	margin:0;
 	padding:0;
 	overflow:auto;
-	background:#A8C7FF;
+	background:#eeeeee;
 }
 .centerpane {
 	position:absolute;
 	border:0;
 	margin:0;
 	padding:0;
-	background:#6495ED;
+	background:#2977b9;
 	cursor:col-resize;
 }
 .rightpane {
@@ -20,7 +20,7 @@
 	border:0;
 	margin:0;
 	overflow:auto;
-	background:#C6D8F9;
+	background:#f8f8f8;
 }
 
 .w0  { padding-left:0px; }
@@ -44,7 +44,7 @@
 	border:0;
 	margin:0;
 	padding:0;
-	background:#6495ED;
+	background:#2977b9;
 	cursor:row-resize;
 }
 .bottompane {

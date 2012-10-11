@@ -357,13 +357,13 @@ Tree.prototype.display = function() {
 	this.namespan = span;
 
 	if (this.sclickHandler) {
-		span.onmouseenter = highlight;
-		span.onmouseleave = dehighlight;
+		span.onmouseenter = highlightTreeNode;
+		span.onmouseleave = dehighlightTreeNode;
 		span.onclick = eval(this.sclickHandler);
 	}
 	if (this.dclickHandler) {
-		span.onmouseenter = highlight;
-		span.onmouseleave = dehighlight;
+		span.onmouseenter = highlightTreeNode;
+		span.onmouseleave = dehighlightTreeNode;
 		span.ondblclick = eval(this.dclickHandler);
 	}
 
@@ -376,8 +376,8 @@ Tree.prototype.display = function() {
 		this.trees[i].display();
 	}
 
-	function highlight() { span.className = "highlight"; }
-	function dehighlight() { span.className = "dehighlight"; }
+	function highlightTreeNode() { span.className = "highlightTreeNode"; }
+	function dehighlightTreeNode() { span.className = "dehighlightTreeNode"; }
 }
 
 //Collapse this Tree so that the Tree name is visible

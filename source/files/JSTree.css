@@ -1,8 +1,8 @@
-span.highlight {
+span.highlightTreeNode {
 	background: white;
 }
 
-span.dehighlight {
+span.dehighlightTreeNode {
 	background: #eeeeee;
 }
 
