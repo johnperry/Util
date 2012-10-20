@@ -1,5 +1,4 @@
 body {
-	background-color:white; 
 	margin:0; 
 	padding:0; 
 	overflow:auto;
@@ -12,15 +11,17 @@ h1 { padding-top:10; }
 	font-family:monospace;
 	text-align:left;
 	layout-flow: vertical-ideographic;
-	background:#d0d0d0;
+	background:#2977b9;
+	color: white;
 	/*writing-mode:tb-rl; */
 }
 
 .thl {
 	text-align:left; 
-	padding:5;
+	padding: 5;
 	vertical-align:bottom;
-	background:#d0d0d0;
+	background:#2977b9;
+	color:white
 }
 
 td {

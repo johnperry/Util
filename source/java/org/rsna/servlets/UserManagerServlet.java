@@ -279,6 +279,7 @@ public class UserManagerServlet extends Servlet {
 				"<html>\n"
 			+	" <head>\n"
 			+	"  <title>User Manager</title>\n"
+			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/BaseStyles.css\"></link>\n"
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/JSPopup.css\"></link>\n"
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/UserManagerServlet.css\"></link>\n"
 			+	"  <script> var home = \""+home+"\";</script>\n"

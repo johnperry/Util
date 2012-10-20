@@ -8,6 +8,7 @@
 	<html>
 		<head>
 			<title>Set Logger Level</title>
+			<link rel="Stylesheet" type="text/css" media="all" href="/BaseStyles.css"></link>
 			<link rel="Stylesheet" type="text/css" media="all" href="/LoggerLevelServlet.css"></link>
 			<link rel="Stylesheet" type="text/css" media="all" href="/JSPopup.css"></link>
 			<script> var home = '<xsl:value-of select="$home"/>';</script>
@@ -26,7 +27,7 @@
 				 title="Set the logger level"/>
 		</div>
 
-		<h1>Set the Logger Level</h1>
+		<h1>Set Logger Level</h1>
 
 		<form id="formID" method="post" action="" accept-charset="UTF-8">
 		<input type="hidden" name="home" value="{$home}"/>
