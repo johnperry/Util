@@ -326,6 +326,15 @@ public class HttpRequest {
 	}
 
 	/**
+	 * Get the method associated with this request.
+	 * @return the method associated with this request,
+	 * converted to upper case.
+	 */
+	public String getMethod() {
+		return method;
+	}
+
+	/**
 	 * Get the query string associated with this request.
 	 * @return the query string associated with this request,
 	 * or the empty string if no query string is present.
