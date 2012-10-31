@@ -108,6 +108,7 @@ function openURL(url, target) {
 
 function setStatusLine(text) {
 	window.status = text;
+	return true;
 }
 
 //Trim a string
