@@ -3,7 +3,7 @@
 var popupZIndex = 40;
 
 //Display a popup, more or less centered in the visible area.
-function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeHandler) {
+function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeboxHandler) {
 	hidePopups();
 	var bodyPos = findObject(document.body);
 	var scrollX = getHorizontalScrollPosition();
@@ -12,7 +12,7 @@ function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeHandler) {
 	var y = (bodyPos.h - h) * 2 / 5 + scrollY;
 	if (y < 0) y = 0;
 	var popup = document.getElementById(popupDivId);
-	setPopupTitleBar(popup, title, closeboxFile, closeHandler);
+	setPopupTitleBar(popup, title, closeboxFile, closeboxHandler);
 	popup.style.width = w;
 	popup.style.height = h;
 	popup.style.left = x;
@@ -51,7 +51,7 @@ function hidePopups() {
 }
 
 //Insert a titlebar if a popup doesn't already have one
-function setPopupTitleBar(popup, title, closeboxFile, closeHandler) {
+function setPopupTitleBar(popup, title, closeboxFile, closeboxHandler) {
 	//find the first non-TextNode child
 	var child = popup.firstChild;
 	while ((child != null) && (child.nodeType == 3)) child = child.nextSibling;
@@ -64,7 +64,7 @@ function setPopupTitleBar(popup, title, closeboxFile, closeHandler) {
 		var img = document.createElement("IMG");
 		img.setAttribute("src", closeboxFile);
 		img.setAttribute("title", "Close");
-		if (closeHandler) img.onclick = closeHandler;
+		if (closeboxHandler) img.onclick = closeboxHandler;
 		else img.onclick = hidePopups;
 		closebox.appendChild(img);
 		titlebar.appendChild(closebox);
@@ -150,7 +150,7 @@ function showTextDialog(popupDivId, w, h, title, closeboxFile, heading, text, ok
 	else showPopup(popupDivId, w, h, title, closeboxFile);
 }
 
-function showDialog(popupDivId, w, h, title, closeboxFile, heading, div, okHandler, cancelHandler, hide) {
+function showDialog(popupDivId, w, h, title, closeboxFile, heading, div, okHandler, cancelHandler, hide, closeboxHandler) {
 	var popup = document.getElementById(popupDivId);
 	if (!popup) {
 
@@ -202,7 +202,7 @@ function showDialog(popupDivId, w, h, title, closeboxFile, heading, div, okHandl
 
 		document.body.appendChild(popup);
 	}
-	showPopup(popupDivId, w, h, title, closeboxFile, hide, cancelHandler);
+	showPopup(popupDivId, w, h, title, closeboxFile, hide, closeboxHandler);
 }
 
 //************************* Tool Panel Popup Functions **************************
