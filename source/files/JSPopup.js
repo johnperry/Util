@@ -64,7 +64,7 @@ function setPopupTitleBar(popup, title, closeboxFile, closeHandler) {
 		var img = document.createElement("IMG");
 		img.setAttribute("src", closeboxFile);
 		img.setAttribute("title", "Close");
-		if (closeHandler) img.onclick = closeHandler)
+		if (closeHandler) img.onclick = closeHandler;
 		else img.onclick = hidePopups;
 		closebox.appendChild(img);
 		titlebar.appendChild(closebox);
