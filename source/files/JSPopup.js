@@ -3,7 +3,7 @@
 var popupZIndex = 40;
 
 //Display a popup, more or less centered in the visible area.
-function showPopup(popupDivId, w, h, title, closeboxFile, hide) {
+function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeHandler) {
 	hidePopups();
 	var bodyPos = findObject(document.body);
 	var scrollX = getHorizontalScrollPosition();
@@ -12,7 +12,7 @@ function showPopup(popupDivId, w, h, title, closeboxFile, hide) {
 	var y = (bodyPos.h - h) * 2 / 5 + scrollY;
 	if (y < 0) y = 0;
 	var popup = document.getElementById(popupDivId);
-	setPopupTitleBar(popup, title, closeboxFile);
+	setPopupTitleBar(popup, title, closeboxFile, closeHandler);
 	popup.style.width = w;
 	popup.style.height = h;
 	popup.style.left = x;
@@ -51,7 +51,7 @@ function hidePopups() {
 }
 
 //Insert a titlebar if a popup doesn't already have one
-function setPopupTitleBar(popup, title, closeboxFile) {
+function setPopupTitleBar(popup, title, closeboxFile, closeHandler) {
 	//find the first non-TextNode child
 	var child = popup.firstChild;
 	while ((child != null) && (child.nodeType == 3)) child = child.nextSibling;
@@ -64,7 +64,8 @@ function setPopupTitleBar(popup, title, closeboxFile) {
 		var img = document.createElement("IMG");
 		img.setAttribute("src", closeboxFile);
 		img.setAttribute("title", "Close");
-		img.onclick = hidePopups;
+		if (closeHandler) img.onclick = closeHandler)
+		else img.onclick = hidePopups;
 		closebox.appendChild(img);
 		titlebar.appendChild(closebox);
 		title = ( (title == null) || (title == "")) ? "\u00A0" : title;
