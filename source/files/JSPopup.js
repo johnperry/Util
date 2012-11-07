@@ -202,7 +202,7 @@ function showDialog(popupDivId, w, h, title, closeboxFile, heading, div, okHandl
 
 		document.body.appendChild(popup);
 	}
-	showPopup(popupDivId, w, h, title, closeboxFile, hide);
+	showPopup(popupDivId, w, h, title, closeboxFile, hide, cancelHandler);
 }
 
 //************************* Tool Panel Popup Functions **************************
