@@ -659,22 +659,46 @@ public class FileUtil {
 	}
 
 	/**
-	 * Zip a directory and its subdirectories.
+	 * Zip a directory and its subdirectories, preserving the name of
+	 * the root directory (dir) in all paths in the zip file.
 	 * @param dir the directory to zip.
 	 * @param zipFile the output zip file.
 	 * @return true if the operation succeeded completely; false otherwise.
 	 */
 	public static synchronized boolean zipDirectory(File dir, File zipFile) {
-		try {
-			//Get the parent and find out how long it is
-			File parent = dir.getParentFile();
-			int rootLength = parent.getAbsolutePath().length() + 1;
+		return zipDirectory(dir, zipFile, false);
+	}
 
-			//Get the various streams and buffers
+	/**
+	 * Zip a directory and its subdirectories.
+	 * @param dir the directory to zip.
+	 * @param zipFile the output zip file.
+	 * @param suppressRoot true if the path to the root directory (dir) is
+	 * to be suppressed; false if all paths in the zip file are to start
+	 * with the name of the root directory.
+	 * @return true if the operation succeeded completely; false otherwise.
+	 */
+	public static synchronized boolean zipDirectory(File dir, File zipFile, boolean suppressRoot) {
+		try {
+			dir = dir.getCanonicalFile();
+
+			int rootLength;
+			if (suppressRoot) {
+				//Get the length of the dir path
+				rootLength = dir.getAbsolutePath().length();
+			}
+			else {
+				//Get the length of the parent path
+				File parent = dir.getParentFile();
+				rootLength = parent.getAbsolutePath().length();
+			}
+			rootLength++; //allow for the slash that will appear in files that are zipped
+
+			//Get the streams
 			FileOutputStream fout = new FileOutputStream(zipFile);
 			ZipOutputStream zout = new ZipOutputStream(fout);
 
-			zipDirectory(zout,dir,rootLength);
+			zipDirectory(zout, dir, rootLength);
 			zout.close();
 			return true;
 		}
