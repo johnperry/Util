@@ -711,6 +711,13 @@ public class FileUtil {
 	private static synchronized void zipDirectory(ZipOutputStream zout, File dir, int rootLength)
 												throws Exception {
 		if (dir.isDirectory()) {
+			String name = dir.getAbsolutePath() + "/";
+			if (name.length() > rootLength) {
+				name = name.substring(rootLength);
+				if (!name.endsWith("/")) name += "/";
+				ZipEntry ze = new ZipEntry(name);
+				zout.putNextEntry(ze);
+			}
 			File[] files = dir.listFiles();
 			for (File file : files) {
 				if (file.isDirectory()) zipDirectory(zout, file, rootLength);
@@ -756,6 +763,7 @@ public class FileUtil {
 		byte[] buffer = new byte[10000];
 		int bytesread;
 		String entryname = file.getAbsolutePath().substring(rootLength);
+		entryname = entryname.replaceAll("\\\\", "/");
 		ze = new ZipEntry(entryname);
 		if (file.exists()) {
 			fin = new FileInputStream(file);

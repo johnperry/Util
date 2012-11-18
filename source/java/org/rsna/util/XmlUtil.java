@@ -366,10 +366,7 @@ public class XmlUtil {
 				break;
 
 			case Node.ELEMENT_NODE:
-				String namespace = node.getNamespaceURI();
-				if (namespace != null) namespace = node.lookupPrefix(namespace);
-				namespace = (namespace == null) ? "" : namespace+":";
-				String name = namespace + node.getNodeName();
+				String name = getNodeNameWithNamespace(node);
 				NamedNodeMap attributes = node.getAttributes();
 				if (attributes.getLength() == 0) {
 					sb.append("<" + name + ">");
@@ -379,7 +376,7 @@ public class XmlUtil {
 					int attrlen = attributes.getLength();
 					for (int i=0; i<attrlen; i++) {
 						Node attr = attributes.item(i);
-						String attrName = getAttrNameWithNamespace(attr);
+						String attrName = getNodeNameWithNamespace(attr);
 						sb.append(attrName + "=\"" + escapeChars(attr.getNodeValue()));
 						if (i < attrlen-1)
 							sb.append("\" ");
@@ -469,10 +466,7 @@ public class XmlUtil {
 				break;
 
 			case Node.ELEMENT_NODE:
-				String namespace = node.getNamespaceURI();
-				if (namespace != null) namespace = node.lookupPrefix(namespace);
-				namespace = (namespace == null) ? "" : namespace+":";
-				String name = namespace + node.getNodeName();
+				String name = getNodeNameWithNamespace(node);
 				NodeList children = node.getChildNodes();
 				int nChildren = children.getLength();
 				NamedNodeMap attributes = node.getAttributes();
@@ -491,7 +485,7 @@ public class XmlUtil {
 				}
 				else if (nAttrs == 1) {
 					Node attr = attributes.item(0);
-					String attrName = getAttrNameWithNamespace(attr);
+					String attrName = getNodeNameWithNamespace(attr);
 					sb.append(margin + lab + name +  " "
 								+ attrName + "=\"" + escapeChars(attr.getNodeValue()) + "\""
 								+ ((nChildren == 0) ? "/" : "")
@@ -501,7 +495,7 @@ public class XmlUtil {
 					sb.append(margin + lab + name + nl);
 					for (int i=0; i<nAttrs; i++) {
 						Node attr = attributes.item(i);
-						String attrName = getAttrNameWithNamespace(attr);
+						String attrName = getNodeNameWithNamespace(attr);
 						sb.append(margin + indent + attrName + "=\"" + escapeChars(attr.getNodeValue()));
 						if (i < nAttrs - 1)
 							sb.append("\"" + nl);
@@ -561,10 +555,10 @@ public class XmlUtil {
 		return;
 	}
 
-	private static String getAttrNameWithNamespace(Node attr) {
-		String name = attr.getNodeName();
-		String ns = attr.getNamespaceURI();
-		String prefix = (ns != null) ? attr.lookupPrefix(ns) : null;
+	private static String getNodeNameWithNamespace(Node node) {
+		String name = node.getNodeName();
+		String ns = node.getNamespaceURI();
+		String prefix = (ns != null) ? node.lookupPrefix(ns) : null;
 		if ((prefix != null) && !name.startsWith(prefix+":")) {
 			name = prefix + ":" + name;
 		}
