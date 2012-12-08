@@ -73,9 +73,18 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 							securityAuthentication,
 							principal,
 							password) ) {
+				if (logger.isDebugEnabled()) {
+					String xml = XmlUtil.toPrettyString(user.getXML(false)); //don't log the password
+					logger.debug("LDAP has authenticated user \""+username+"\"\n"+xml);
+				}
 				return user;
 			}
+			else {
+				logger.debug("LDAP failed to authenticate user \""+username+"\".");
+				return null;
+			}
 		}
+		logger.debug("Unable to find user \""+username+"\" in the users.xml file.");
 		return null;
 	}
 
