@@ -363,5 +363,19 @@ public class StringUtil {
 		return sw.toString();
 	}
 
+	/**
+	 * Remove double quotes if they enclose a string
+	 * @param s the string.
+	 * @return the string, without the enclosing double quotes.
+	 */
+	public static String removeEnclosingQuotes(String s) {
+		if (s == null) return "";
+		if (s.length() == 1) return "";
+		if (s.startsWith("\"") && s.endsWith("\"")) {
+			return s.substring(1, s.length() - 1);
+		}
+		return s;
+	}
+
 }
 

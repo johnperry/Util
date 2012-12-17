@@ -75,7 +75,7 @@ public class HttpServer extends Thread {
 	/**
 	 * Stop the HttpServer.
 	 */
-	public void stopServer() {
+	public void shutdown() {
 		execSvc.shutdown();
 		this.interrupt();
 		selector.shutdown();
