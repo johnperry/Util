@@ -62,6 +62,8 @@ public class ApplicationServer extends Servlet {
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
 
+		logger.debug("Webstart request:\n"+req.toString());
+
 		Path path = req.getParsedPath();
 		String protocol = req.getProtocol();
 		String host = req.getHost();
