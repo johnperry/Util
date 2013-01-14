@@ -33,7 +33,7 @@ public class SerializerUtil {
 	 * @return the deserialized instance.
 	 */
 	public static Object deserialize(File file) {
-		if (!file.exists()) return null;
+		if ((file == null) || !file.exists()) return null;
 		ObjectInputStream in = null;
 		try {
 			in = new ObjectInputStream(new FileInputStream(file));
