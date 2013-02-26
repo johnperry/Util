@@ -43,6 +43,13 @@ public class LogServlet extends Servlet {
 	public void doGet( HttpRequest req, HttpResponse res ) {
 		res.disableCaching();
 
+		//Require that the user have the admin role
+		if (!req.userHasRole("admin")) {
+			res.setResponseCode(res.notfound);
+			res.send();
+			return;
+		}
+
 		//Get the closebox URL
 		String home = req.getParameter("home", "/");
 
