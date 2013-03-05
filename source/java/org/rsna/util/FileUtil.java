@@ -774,6 +774,45 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Unpack a zip file into a root directory, preserving the directory structure of the zip file.
+	 * @param root the directory into which to unpack the zip file.
+	 * @param file the zip file to unpack.
+	 * @param filterNames true if characters that would cause a problem
+	 * in URLs are to be replaced with underscores; false if file names
+	 * are to be preserved.
+	 * @throws Exception if anything goes wrong.
+	 */
+	public static void unpackZipFile(File root, File file, boolean filterNames) throws Exception {
+		if (!file.exists()) throw new Exception("Zip file does not exist ("+file+")");
+		ZipFile zipFile = new ZipFile(file);
+		Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+		while (zipEntries.hasMoreElements()) {
+			ZipEntry entry = zipEntries.nextElement();
+			String name = entry.getName().replace('/', File.separatorChar);
+
+			//Make sure that the directory is present
+			File outFile = new File(root, name);
+			outFile.getParentFile().mkdirs();
+
+			if (!entry.isDirectory()) {
+				//Clean up any file names that might cause a problem in a URL.
+				name = outFile.getName();
+				if (filterNames) {
+					name = name.trim()
+								.replaceAll("[\\s]+","_")
+								 .replaceAll("[*\"&'><#;:@/?=]","_");
+				}
+				outFile = new File(outFile.getParentFile(), name);
+
+				//Now write the file with the corrected name.
+				OutputStream out = new FileOutputStream(outFile);
+				InputStream in = zipFile.getInputStream(entry);
+				FileUtil.copy( in, out, -1 );
+			}
+		}
+		FileUtil.close(zipFile);
+	}
 
 	/**
 	 * Send a file to an output stream, closing the streams when done.
