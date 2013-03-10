@@ -135,8 +135,8 @@ String.prototype.rtrim = function() {
 }
 
 function listNodeTree( node, margin ) {
-	if (node == null) return margin + "null";
 	if (margin == null) margin = "";
+	if (node == null) return margin + "null";
 	if (node.nodeType == 3) return margin + "\"" + node.nodeValue + "\"\n";
 	if (node.nodeType == 1) {
 		var id = node.id;
