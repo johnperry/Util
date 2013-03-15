@@ -546,13 +546,13 @@ public class HttpRequest {
 	private void addCookies(String value) {
 		String[] parts = value.split(";");
 		for (int i=0; i<parts.length; i++) {
-			String[] cookie = parts[i].split("=");
-			if (cookie.length > 0) {
-				String name = cookie[0].trim().toLowerCase();
+			String part = parts[i];
+			int k = part.indexOf("=");
+			if (k > 0) {
+				String name = part.substring(0,k);
 				if (!name.startsWith("$")) {
-					String val = "";
-					if (cookie.length > 1) val = cookie[1].trim();
-					cookies.put(name,val);
+					String val = part.substring(k+1).trim();
+					cookies.put(name, val);
 				}
 			}
 		}
