@@ -38,12 +38,23 @@ public class UserServlet extends Servlet {
 	}
 
 	/**
-	 * The GET handler: return the username followed by the user's roles,
-	 * separated by semicolons.
+	 * The GET handler: return an XML structure containing:
+	 * <ul>
+	 * <li>user's name (username)
+	 * <li>user's location (local or remote)
+	 * <li>client IP address
+	 * <li>server's Users class ("xml" or "")
+	 * <li>user's roles (multiple role elements)
+ 	 * </ul>
 	 * @param req the request object
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		if (logger.isDebugEnabled()) {
+			logger.info(req.toString()
+						+"\nHeaders:\n"+req.listHeaders("      ")
+						+"Cookies:\n"+req.listCookies("      "));
+		}
 		String name = "";
 		String[] roles = new String[0];
 		User user = req.getUser();

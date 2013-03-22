@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------
-*  Copyright 2005 by the Radiological Society of North America
+*  Copyright 2013 by the Radiological Society of North America
 *
 *  This source software is released under the terms of the
 *  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
@@ -11,7 +11,7 @@ import java.util.*;
 import javax.swing.*;
 
 /**
- * Encapsulates static methods for creating HTML elements.
+ * Static methods for creating HTML elements.
  */
 public class HtmlUtil {
 

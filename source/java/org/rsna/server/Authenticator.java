@@ -69,13 +69,14 @@ public class Authenticator {
 	 */
     public User authenticate(HttpRequest req) {
 
-		Session session;
 		//First try the session cookie
+		Session session;
 		String id = req.getCookie("RSNASESSION");
 		if ( (id != null) && ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
 			session.recordAccess();
 			return session.user;
 		}
+
 		//No session cookie, or cookie is not valid; check the headers.
 		//First try the Authorization header.
 		String credentials = req.getHeader("Authorization");

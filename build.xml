@@ -73,6 +73,12 @@
 		</javadoc>
 	</target>
 
-	<target name="all" depends="clean, jar, deploy, javadocs"/>
+	<target name="all" depends="clean, jar, deploy, javadocs">
+		<tstamp>
+			<format property="today" pattern="yyyy.MM.dd"/>
+			<format property="now" pattern="HH:mm:ss z"/>
+		</tstamp>
+		<echo message="Time now ${now}"/>
+	</target>
 
 </project>

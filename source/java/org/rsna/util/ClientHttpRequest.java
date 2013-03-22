@@ -60,7 +60,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * Creates a new multipart POST HTTP request on a freshly opened URLConnection
+   * Create a new multipart POST HTTP request on a freshly opened URLConnection
    * @param connection an already open URL connection
    * @throws IOException
    */
@@ -72,7 +72,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * Creates a new multipart POST HTTP request for a specified URL
+   * Create a new multipart POST HTTP request for a specified URL
    * @param url the URL to send request to
    * @throws IOException
    */
@@ -81,7 +81,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * Creates a new multipart POST HTTP request for a specified URL string
+   * Create a new multipart POST HTTP request for a specified URL string
    * @param urlString the string representation of the URL to send request to
    * @throws IOException
    */
@@ -105,7 +105,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * adds a cookie to the requst
+   * Add a cookie to the request
    * @param name cookie name
    * @param value cookie value
    * @throws IOException
@@ -122,7 +122,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * adds a string parameter to the request
+   * Add a string parameter to the request
    * @param name parameter name
    * @param value parameter value
    * @throws IOException
@@ -149,7 +149,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * adds a file parameter to the request
+   * Add a file parameter to the request
    * @param name parameter name
    * @param filename the name of the file
    * @param is input stream to read the contents of the file from
@@ -172,7 +172,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * adds a file parameter to the request
+   * Add a file parameter to the request
    * @param name parameter name
    * @param file the file to upload
    * @throws IOException
@@ -184,7 +184,7 @@ public class ClientHttpRequest {
   }
 
   /**
-   * posts the request to the server
+   * Post the request to the server
    * @return input stream with the server response
    * @throws IOException
    */

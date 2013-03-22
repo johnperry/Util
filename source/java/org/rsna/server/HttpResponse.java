@@ -147,8 +147,11 @@ public class HttpResponse {
 	 *	<tr><td>ogv</td><td>video/ogg</td></tr>
 	 *	<tr><td>pdf</td><td>application/pdf</td></tr>
 	 *	<tr><td>png</td><td>image/png</td></tr>
+	 *	<tr><td>pot</td><td>application/vnd.ms-powerpoint</td></tr>
 	 *	<tr><td>potx</td><td>application/vnd.openxmlformats-officedocument.presentationml.template</td></tr>
+	 *	<tr><td>pps</td><td>application/vnd.ms-powerpoint</td></tr>
 	 *	<tr><td>ppsx</td><td>application/vnd.openxmlformats-officedocument.presentationml.slideshow</td></tr>
+	 *	<tr><td>ppt</td><td>application/vnd.ms-powerpoint</td></tr>
 	 *	<tr><td>pptx</td><td>application/vnd.openxmlformats-officedocument.presentationml.presentation</td></tr>
 	 *	<tr><td>swf</td><td>application/x-shockwave-flash</td></tr>
 	 *	<tr><td>txt</td><td>text/plain;charset=UTF-8</td></tr>
@@ -289,7 +292,6 @@ public class HttpResponse {
 	 */
 	public boolean send() {
 		try {
-			//System.out.println(getHeadersString());
 			String preamble =
 				"HTTP/1.1 " + responseCode + "\r\n" +
 				getHeadersString() +
@@ -316,6 +318,18 @@ public class HttpResponse {
 			String value = headers.get(key);
 			sb.append(key + ": " + value + "\r\n");
 		}
+		return sb.toString();
+	}
+
+	/**
+	 * List the headers for this HttpResponse
+	 */
+	public String listHeaders(String margin) {
+		StringBuffer sb = new StringBuffer();
+		for (String key : headers.keySet()) {
+			sb.append(margin + key + ": " + headers.get(key) + "\n");
+		}
+		if (sb.length() == 0) sb.append(margin + "none\n");
 		return sb.toString();
 	}
 
@@ -390,8 +404,11 @@ public class HttpResponse {
 			put("ogv","video/ogg");
 			put("pdf","application/pdf");
 			put("png","image/png");
+			put("pot","application/vnd.ms-powerpoint");
 			put("potx","application/vnd.openxmlformats-officedocument.presentationml.template");
+			put("pps","application/vnd.ms-powerpoint");
 			put("ppsx","application/vnd.openxmlformats-officedocument.presentationml.slideshow");
+			put("ppt","application/vnd.ms-powerpoint");
 			put("pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation");
 			put("swf","application/x-shockwave-flash");
 			put("txt","text/plain;charset=UTF-8");

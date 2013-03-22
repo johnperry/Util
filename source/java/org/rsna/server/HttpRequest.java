@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Date;
 import java.util.Hashtable;
@@ -183,26 +184,23 @@ public class HttpRequest {
 	 * was referred by a specific servlet.
 	 */
 	public boolean isReferredFrom(String context) {
-		String referringPage = getHeader("referer"); //[sic]
-		if (referringPage == null) return false; //no referer header
+		try {
+			//Get the referrer
+			String referringPage = getHeader("referer"); //[sic]
 
-		//Remove the protocol from the referring page URL
-		int k = referringPage.indexOf("://");
-		if (k == -1) return false; //something is wrong with the header
-		referringPage = referringPage.substring(k+3);
+			//See if there is a match on the host
+			URL refURL = new URL(referringPage);
+			String host = getHost();
+			if (!refURL.getHost().equals(getHost())) return false;
 
-		//Remove any query string from the referring pageURL
-		k = referringPage.indexOf("?");
-		if (k >= 0) referringPage = referringPage.substring(0, k);
-
-		//See if there is a match on the host
-		String host = getHost();
-		if (!referringPage.startsWith(host)) return false;
-
-		//Now check the servlet
-		String[] s = referringPage.split("/");
-		if (s.length < 2) return false;
-		return context.equals(s[1]);
+			//Now check the servlet
+			String[] s = refURL.getPath().split("/");
+/**/		logger.info("s.length = "+s.length);
+			if (s.length < 2) return false;
+/**/		logger.info("...s[1] = "+s[1]);
+			return context.equals(s[1]);
+		}
+		catch (Exception failed) { return false; }
 	}
 
 	/**
@@ -549,7 +547,7 @@ public class HttpRequest {
 			String part = parts[i];
 			int k = part.indexOf("=");
 			if (k > 0) {
-				String name = part.substring(0,k);
+				String name = part.substring(0,k).trim().toLowerCase();
 				if (!name.startsWith("$")) {
 					String val = part.substring(k+1).trim();
 					cookies.put(name, val);

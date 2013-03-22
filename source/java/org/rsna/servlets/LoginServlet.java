@@ -165,7 +165,7 @@ public class LoginServlet extends Servlet {
 							|| path.contains(">")
 							|| path.contains("javascript");
 		if (attack) {
-			logger.info("Attack detected from "+req.getRemoteAddress());
+			logger.warn("Attack detected from "+req.getRemoteAddress());
 		}
 		return attack;
 	}
