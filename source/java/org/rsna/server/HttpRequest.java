@@ -187,11 +187,20 @@ public class HttpRequest {
 		try {
 			//Get the referrer
 			String referringPage = getHeader("referer"); //[sic]
+			URL refURL = new URL(referringPage);
+			int refPort = refURL.getPort();
+			if (refPort == -1) refPort = 80;
+
+			//Get the host
+			String host = getHost();
+			URL hostURL = new URL("http://"+host);
+			int hostPort = hostURL.getPort();
+			if (hostPort == -1) hostPort = 80;
 
 			//See if there is a match on the host
-			URL refURL = new URL(referringPage);
-			String host = getHost();
-			if (!refURL.getHost().equals(getHost())) return false;
+			if (!refURL.getHost().equals(hostURL.getHost())) return false;
+			if (refPort != hostPort) return false;
+
 
 			//Now check the servlet
 			String[] s = refURL.getPath().split("/");

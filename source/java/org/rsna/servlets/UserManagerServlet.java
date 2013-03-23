@@ -80,6 +80,16 @@ public class UserManagerServlet extends Servlet {
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) {
 
+		if (logger.isDebugEnabled()) {
+			String username = null;
+			if (req.isFromAuthenticatedUser()) {
+				username = req.getUser().getUsername();
+			}
+			logger.debug("POST received from "+username+" at "+req.getRemoteAddress()+"\n"+req.toString()+"\n");
+			logger.debug("Headers:\n"+req.listHeaders(""));
+			logger.debug("Cookies:\n"+req.listCookies(""));
+		}
+
 		//Make sure the user is authorized to do this.
 		String home = req.getParameter("home", "/");
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
