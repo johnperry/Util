@@ -195,9 +195,7 @@ public class HttpRequest {
 
 			//Now check the servlet
 			String[] s = refURL.getPath().split("/");
-/**/		logger.info("s.length = "+s.length);
 			if (s.length < 2) return false;
-/**/		logger.info("...s[1] = "+s[1]);
 			return context.equals(s[1]);
 		}
 		catch (Exception failed) { return false; }
