@@ -74,9 +74,12 @@ public class UserServlet extends Servlet {
 			root.setAttribute("location", (local ? "local" : "remote"));
 			root.setAttribute("usersImpl", (usersImplIsXML ? "xml" : ""));
 			for (String role : roles) {
-				Element r = doc.createElement("role");
-				r.setTextContent(role);
-				root.appendChild(r);
+				role = role.trim();
+				if (!role.equals("")) {
+					Element r = doc.createElement("role");
+					r.setTextContent(role);
+					root.appendChild(r);
+				}
 			}
 			doc.appendChild(root);
 			res.write(XmlUtil.toPrettyString(doc));

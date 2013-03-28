@@ -21,7 +21,10 @@ function User() {
 
 		var roleElements = root.getElementsByTagName("role");
 		for (var i=0; i<roleElements.length; i++) {
-			var roleName = roleElements[i].firstChild.nodeValue.replace(/^\s+|\s+$/g,"");
+			var role = roleElements[i].firstChild;
+			if (role) {
+				var roleName = role.nodeValue.replace(/^\s+|\s+$/g,"");
+			}
 			this.roles[roleName] = true;
 		}
 	}
