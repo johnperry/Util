@@ -5,7 +5,7 @@
 *  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
 *----------------------------------------------------------------*/
 
-package org.rsna.util;
+package org.rsna.ui;
 
 import java.awt.AWTEvent;
 
