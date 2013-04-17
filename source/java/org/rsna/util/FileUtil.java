@@ -519,6 +519,7 @@ public class FileUtil {
 			try {
 				createParentDirectory(file);
 				InputStream in = FileUtil.class.getResourceAsStream(resourcePath);
+				if (in == null) return null;
 				FileOutputStream out = new FileOutputStream(file);
 				if (!copy(in, out, -1)) return null;
 			}
