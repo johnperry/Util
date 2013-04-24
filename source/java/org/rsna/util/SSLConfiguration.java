@@ -30,10 +30,10 @@ public class SSLConfiguration {
 	protected SSLConfiguration(String keystore, String keystorePassword,
 							   String truststore, String truststorePassword) {
 
-		this.keystore = StringUtil.trim(keystore);
+		this.keystore = StringUtil.replace( StringUtil.trim(keystore), System.getProperties() ).trim();
 		this.keystorePassword = StringUtil.trim(keystorePassword);
 
-		this.truststore = StringUtil.trim(truststore);
+		this.truststore = StringUtil.replace( StringUtil.trim(truststore), System.getProperties() ).trim();
 		this.truststorePassword = StringUtil.trim(truststorePassword);
 
 		if (keystore.equals("")) this.keystore = "keystore";
