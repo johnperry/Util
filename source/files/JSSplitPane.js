@@ -37,7 +37,7 @@ HorizontalSplit.prototype.positionSlider = function() {
 		//of the parent and the top of the footer.
 		var uncle = this.parent.nextSibling;
 		while (uncle && (uncle.nodeType != 1)) uncle = uncle.nextSibling;
-		if (uncle) {
+		if (uncle && ( !uncle.style || !uncle.style.zIndex || (uncle.style.zIndex < 10) )) {
 			var unclePos = findObject(uncle);
 			height = bodyPos.h - parentPos.y - unclePos.h;
 		}
