@@ -89,14 +89,14 @@ public class ApplicationServer extends Servlet {
 					String[] paramNames = req.getParameterNames();
 					Element params = doc.createElement("params");
 					for (String paramName : paramNames) {
-						params.appendChild(getCDATATextElement(doc, paramName, req.getParameter(paramName)));
+						params.appendChild(getParamElement(doc, paramName, req.getParameter(paramName)));
 					}
 					root.appendChild(params);
 
 					//Do the transform and get the jnlp document.
+					logger.debug("Application: "+appname+" params document\n"+XmlUtil.toPrettyString(doc));
 					Document jnlp = XmlUtil.getTransformedDocument(doc, xslFile, null);
-
-					logger.debug("Application: "+appname+"\n"+XmlUtil.toPrettyString(jnlp));
+					logger.debug("Application: "+appname+" JNLP document\n"+XmlUtil.toPrettyString(jnlp));
 
 					//Send the jnlp
 					res.setContentType("jnlp");
@@ -117,9 +117,9 @@ public class ApplicationServer extends Servlet {
 		return e;
 	}
 
-	private Element getCDATATextElement(Document doc, String name, String value) {
-		Element e = doc.createElement(name);
-		CDATASection cdata = doc.createCDATASection(value);
+	private Element getParamElement(Document doc, String name, String value) {
+		Element e = doc.createElement("param");
+		CDATASection cdata = doc.createCDATASection(name.trim() + "=" + value);
 		e.appendChild(cdata);
 		return e;
 	}
