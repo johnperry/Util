@@ -21,7 +21,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -35,7 +35,7 @@ import org.xml.sax.InputSource;
  */
 public class XmlUtil {
 
-	static final Logger logger = Logger.getLogger(XmlUtil.class);
+//	static final Logger logger = Logger.getLogger(XmlUtil.class);
 
 	/**
 	 * Get a DocumentBuilder that is namespace aware.
@@ -602,7 +602,7 @@ public class XmlUtil {
 			return unstack(tokens);
 		}
 		catch (Exception ex) {
-			logger.error("",ex);
+			ex.printStackTrace();
 		}
 		return false;
 	}
