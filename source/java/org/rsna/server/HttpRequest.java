@@ -157,6 +157,24 @@ public class HttpRequest {
 	}
 
 	/**
+	 * Determine whether the request was initiated by a mobile device.
+	 * This method searches the User-Agent header for:
+	 * <ul>
+	 * <li>android
+	 * <li>ipad
+	 * <li>iphone
+	 * </ul>
+	 * @return true if the request contains a User-Agent header indicating
+	 * that it originated from a mobile device; false otherwise.
+	 */
+	public boolean isFromMobileDevice() {
+		String ua = getHeader("User-Agent");
+		if (ua == null) return false;
+		ua = ua.toLowerCase();
+		return ua.contains("android") || ua.contains("ipad") || ua.contains("iphone");
+	}
+
+	/**
 	 * Get the User associated with this request.
 	 * @return the User.
 	 */
