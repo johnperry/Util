@@ -11,14 +11,11 @@ import java.io.File;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.jar.*;
-import org.apache.log4j.Logger;
 
 /**
  * A class encapsulating methods to access a JAR file.
  */
 public class JarUtil {
-
-	static final Logger logger = Logger.getLogger(JarUtil.class);
 
 	/**
 	 * Get all the main attributes from the manifest of

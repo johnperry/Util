@@ -11,14 +11,11 @@ import java.net.InetAddress;
 import java.net.Inet4Address;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-import org.apache.log4j.Logger;
 
 /**
  * A class for getting the IP address of the host computer.
  */
 public class IPUtil {
-
-	static final Logger logger = Logger.getLogger(IPUtil.class);
 
 	static final String def = "127.0.0.1";
 
@@ -43,11 +40,8 @@ public class IPUtil {
 					}
 				}
 			}
-			logger.error("Unable to find a non-loopback address, returning "+def);
 		}
-		catch (Exception ex) {
-			logger.error("Unable to obtain the IP address, returning "+def, ex);
-		}
+		catch (Exception ignore) { }
 		return def;
 	}
 

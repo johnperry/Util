@@ -8,14 +8,11 @@
 package org.rsna.util;
 
 import java.io.File;
-import org.apache.log4j.Logger;
 
 /**
  * A singleton cache for files that are served from the classpath jars.
  */
 public class Cache {
-
-	static final Logger logger = Logger.getLogger(Cache.class);
 
 	static Cache cache = null;
 	static File dir = null;
@@ -57,7 +54,6 @@ public class Cache {
 	 */
 	public synchronized void clear() {
 		FileUtil.deleteAll(dir);
-		logger.info("Cache cleared");
 	}
 
 	/**

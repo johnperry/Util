@@ -12,15 +12,12 @@ import java.util.Calendar;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.log4j.Logger;
 
 /**
  * Encapsulates static methods for working with strings. String methods
  * specifically for working with XML strings are found in XmlStringUtil.
  */
 public class StringUtil {
-
-	static final Logger logger = Logger.getLogger(StringUtil.class);
 
 	/**
 	 * Make a string that defines a path from the root of the
@@ -285,10 +282,7 @@ public class StringUtil {
 			matcher.appendTail(sb);
 			return sb.toString();
 		}
-		catch (Exception ex) {
-			logger.warn(ex);
-			return string;
-		}
+		catch (Exception ex) { return string; }
 	}
 
 	/**

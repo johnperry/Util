@@ -16,14 +16,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
-import org.apache.log4j.Logger;
 
 /**
  * A class to encapsulate HTTP utilities.
  */
 public class HttpUtil {
-
-	static final Logger logger = Logger.getLogger(HttpUtil.class);
 
 	/**
 	 * Get an HttpURLConnection for a specified URL String. The

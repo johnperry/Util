@@ -10,14 +10,11 @@ package org.rsna.util;
 import java.security.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
-import org.apache.log4j.*;
 
 /**
  * A class providing a decoder for encrypted elements in a DICOM file.
  */
 public class CipherUtil {
-
-	static final Logger logger = Logger.getLogger(CipherUtil.class);
 
 	Cipher cipher;
 
