@@ -314,7 +314,7 @@ public class FileUtil {
 	 * @param outDir the copy.
 	 * @return true if the operation succeeded completely; false otherwise.
 	 */
-	public synchronized boolean copyDir(File inDir, File outDir) {
+	public static synchronized boolean copyDirectory(File inDir, File outDir) {
 		outDir.mkdirs();
 		File[] files = inDir.listFiles();
 		for (File inFile : files) {
@@ -323,7 +323,7 @@ public class FileUtil {
 				if (!copy(inFile, outFile)) return false;
 			}
 			else {
-				if (!copyDir(inFile, outFile)) return false;
+				if (!copyDirectory(inFile, outFile)) return false;
 			}
 		}
 		return true;
