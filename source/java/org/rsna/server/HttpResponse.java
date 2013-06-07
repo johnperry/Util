@@ -156,6 +156,8 @@ public class HttpResponse {
 	 *	<tr><td>swf</td><td>application/x-shockwave-flash</td></tr>
 	 *	<tr><td>txt</td><td>text/plain;charset=UTF-8</td></tr>
 	 *	<tr><td>wav</td><td>audio/wav</td></tr>
+	 *	<tr><td>webm</td><td>video/webm</td></tr>
+	 *	<tr><td>wmv</td><td>video/x-ms-wmv</td></tr>
 	 *	<tr><td>xlsx</td><td>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</td></tr>
 	 *	<tr><td>xltx</td><td>application/vnd.openxmlformats-officedocument.spreadsheetml.template</td></tr>
 	 *	<tr><td>xml</td><td>text/xml;charset=UTF-8</td></tr>
@@ -413,6 +415,8 @@ public class HttpResponse {
 			put("swf","application/x-shockwave-flash");
 			put("txt","text/plain;charset=UTF-8");
 			put("wav","audio/wav");
+			put("webm","video/webm");
+			put("wmv","video/x-ms-wmv");
 			put("xlsx","application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			put("xltx","application/vnd.openxmlformats-officedocument.spreadsheetml.template");
 			put("xml","text/xml;charset=UTF-8");
