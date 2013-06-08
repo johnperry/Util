@@ -119,7 +119,9 @@ public class HttpResponse {
 
 	/**
 	 * Set the Content-Type header that corresponds to a String.
-	 * <br>
+	 * If the string doesn't correspond to a known Content-Type,
+	 * the header is not set.
+	 * <br><br>
 	 * <table border="1">
 	 *	<tr><td>application</td><td>application/x-ms-application</td></tr>
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></tr>
