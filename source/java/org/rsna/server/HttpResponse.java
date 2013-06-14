@@ -155,6 +155,7 @@ public class HttpResponse {
 	 *	<tr><td>ppsx</td><td>application/vnd.openxmlformats-officedocument.presentationml.slideshow</td></tr>
 	 *	<tr><td>ppt</td><td>application/vnd.ms-powerpoint</td></tr>
 	 *	<tr><td>pptx</td><td>application/vnd.openxmlformats-officedocument.presentationml.presentation</td></tr>
+	 *	<tr><td>svg</td><td>image/xvg+xml</td></tr>
 	 *	<tr><td>swf</td><td>application/x-shockwave-flash</td></tr>
 	 *	<tr><td>txt</td><td>text/plain;charset=UTF-8</td></tr>
 	 *	<tr><td>wav</td><td>audio/wav</td></tr>
@@ -414,6 +415,7 @@ public class HttpResponse {
 			put("ppsx","application/vnd.openxmlformats-officedocument.presentationml.slideshow");
 			put("ppt","application/vnd.ms-powerpoint");
 			put("pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation");
+			put("svg","image/svg+xml");
 			put("swf","application/x-shockwave-flash");
 			put("txt","text/plain;charset=UTF-8");
 			put("wav","audio/wav");
