@@ -13,12 +13,11 @@ import java.io.*;
 import java.util.*;
 
 /**
- * An extension of java.util.Properties that provides PropertyEvents
+ * An extension of PropertiesFile that provides PropertyEvents
  * to listeners.
  */
-public class ApplicationProperties extends Properties {
+public class ApplicationProperties extends PropertiesFile {
 
-	File file;
 	EventListenerList listenerList;
 	boolean notifyOnChange = false;
 
@@ -43,64 +42,10 @@ public class ApplicationProperties extends Properties {
 	 * to generate PropertyEvents; false otherwise.
 	 */
 	public ApplicationProperties(File file, boolean notifyOnChange) {
-		super();
-		this.file = file;
+		super(file);
 		this.notifyOnChange = notifyOnChange;
 		listenerList = new EventListenerList();
 		load();
-	}
-
-	/**
-	 * Get the file.
-	 * @return the file.
-	 */
-	public File getFile() {
-		return file;
-	}
-
-	/**
-	 * Load the properties file, and if notifyOnChange is set,
-	 * notify the listeners.
-	 * @return true if the load was successful; false otherwise.
-	 */
-	public boolean load() {
-		FileInputStream stream = null;
-		try {
-			stream = new FileInputStream(file);
-			super.load(stream);
-			stream.close();
-			if (notifyOnChange) notifyListeners();
-			return true;
-		}
-		catch (Exception e) {
-			if (stream != null) {
-				try { stream.close(); }
-				catch (Exception ignore) { }
-			}
-			return false;
-		}
-	}
-
-	/**
-	 * Save the properties file.
-	 * @return true if the save was successful; false otherwise.
-	 */
-	public boolean store() {
-		FileOutputStream stream = null;
-		try {
-			stream = new FileOutputStream(file);
-			super.store(stream, file.getName());
-			stream.flush();
-			stream.close();
-			return true;
-		}
-		catch (Exception e) {
-			if (stream != null) {
-				try { stream.close(); }
-				catch (Exception ignore) { }
-			}
-			return false;
-		}
 	}
 
 	/**
