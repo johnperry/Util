@@ -65,42 +65,19 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Append a string with the current color, and add a newline. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
+	 * Set the text with the current color. This method is thread safe.
 	 */
-	public void appendln(String s) {
-		append(s + "\n");
+	public void setText(String s) {
+		clear();
+		print(s);
 	}
 
 	/**
-	 * Append a string with the specified color, and add a newline. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
+	 * Set the text with the specified color. This method is thread safe.
 	 */
-	public void appendln(Color c, String s) {
-		append(c, s + "\n");
-	}
-
-	/**
-	 * Append a string with the current color. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
-	 */
-	public synchronized void append(String s) {
-		int len = getDocument().getLength(); // same value as getText().length();
-		setCaretPosition(len);  // place caret at the end (with no selection)
-		replaceSelection(s); // there is no selection, so inserts at caret
-	}
-
-	/**
-	 * Append a string with the specified color. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
-	 */
-	public synchronized void append(Color c, String s) {
-		StyleContext sc = StyleContext.getDefaultStyleContext();
-		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-		int len = getDocument().getLength();
-		setCaretPosition(len);
-		setCharacterAttributes(aset, false);
-		replaceSelection(s);
+	public void setText(Color c, String s) {
+		clear();
+		print(c, s);
 	}
 
 	/**
@@ -154,4 +131,42 @@ public class ColorPane extends JTextPane {
 		print(c, s + "\n");
 	}
 
+	/**
+	 * Append a string with the current color, and add a newline. This method is not thread safe.
+	 * This method is public only for backward compatibility; use println instead.
+	 */
+	public void appendln(String s) {
+		append(s + "\n");
+	}
+
+	/**
+	 * Append a string with the specified color, and add a newline. This method is not thread safe.
+	 * This method is public only for backward compatibility; use println instead.
+	 */
+	public void appendln(Color c, String s) {
+		append(c, s + "\n");
+	}
+
+	/**
+	 * Append a string with the current color. This method is not thread safe.
+	 * This method is public only for backward compatibility; use println instead.
+	 */
+	public synchronized void append(String s) {
+		int len = getDocument().getLength(); // same value as getText().length();
+		setCaretPosition(len);  // place caret at the end (with no selection)
+		replaceSelection(s); // there is no selection, so inserts at caret
+	}
+
+	/**
+	 * Append a string with the specified color. This method is not thread safe.
+	 * This method is public only for backward compatibility; use println instead.
+	 */
+	public synchronized void append(Color c, String s) {
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
+		int len = getDocument().getLength();
+		setCaretPosition(len);
+		setCharacterAttributes(aset, false);
+		replaceSelection(s);
+	}
 }
