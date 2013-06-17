@@ -48,10 +48,20 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Remove all the text from the pane.
+	 * Remove all the text from the pane. This method is thread safe.
 	 */
 	public void clear() {
-		setText("");
+		if (SwingUtilities.isEventDispatchThread()) {
+			setText("");
+		}
+		else {
+			Runnable r = new Runnable() {
+				public void run() {
+					setText("");
+				}
+			};
+			SwingUtilities.invokeLater(r);
+		}
 	}
 
 	/**
@@ -102,17 +112,17 @@ public class ColorPane extends JTextPane {
 		}
 		else {
 			final String ss = s;
-			Runnable display = new Runnable() {
+			Runnable r = new Runnable() {
 				public void run() {
 					append(ss);
 				}
 			};
-			SwingUtilities.invokeLater(display);
+			SwingUtilities.invokeLater(r);
 		}
 	}
 
 	/**
-	 * Append a string with the specified color. This method is not thread safe.
+	 * Append a string with the specified color. This method is thread safe.
 	 */
 	public void print(Color c, String s) {
 		if (SwingUtilities.isEventDispatchThread()) {
@@ -121,12 +131,12 @@ public class ColorPane extends JTextPane {
 		else {
 			final Color cc = c;
 			final String ss = s;
-			Runnable display = new Runnable() {
+			Runnable r = new Runnable() {
 				public void run() {
 					append(cc, ss);
 				}
 			};
-			SwingUtilities.invokeLater(display);
+			SwingUtilities.invokeLater(r);
 		}
 	}
 
