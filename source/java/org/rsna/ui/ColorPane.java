@@ -52,12 +52,13 @@ public class ColorPane extends JTextPane {
 	 */
 	public void clear() {
 		if (SwingUtilities.isEventDispatchThread()) {
-			setText("");
+			super.setText("");
 		}
 		else {
+			final JTextPane jtp = this;
 			Runnable r = new Runnable() {
 				public void run() {
-					setText("");
+					jtp.setText("");
 				}
 			};
 			SwingUtilities.invokeLater(r);
@@ -65,7 +66,7 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Set the text with the current color. This method is thread safe.
+	 * Set text with the current color. This method is thread safe.
 	 */
 	public void setText(String s) {
 		clear();
@@ -73,7 +74,7 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Set the text with the specified color. This method is thread safe.
+	 * Set text with the specified color. This method is thread safe.
 	 */
 	public void setText(Color c, String s) {
 		clear();
