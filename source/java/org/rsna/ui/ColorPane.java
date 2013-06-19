@@ -16,7 +16,7 @@ import javax.swing.text.*;
  */
 public class ColorPane extends JTextPane {
 
-	public int lineHeight;
+	int lineHeight;
 	boolean trackWidth = true;
 
 	/**
@@ -24,11 +24,24 @@ public class ColorPane extends JTextPane {
 	 */
 	public ColorPane() {
 		super();
-		Font font = new Font("Monospaced",Font.PLAIN,12);
+		setFont(new Font("Monospaced",Font.PLAIN,12));
+		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+	}
+
+	/**
+	 * Set the font and update the line height.
+	 */
+	public void setFont(Font font) {
 		FontMetrics fm = getFontMetrics(font);
 		lineHeight = fm.getHeight();
-		setFont(font);
-		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		super.setFont(font);
+	}
+
+	/**
+	 * Get the line height of the default font.
+	 */
+	public int getLineHeight() {
+		return lineHeight;
 	}
 
 	/**
