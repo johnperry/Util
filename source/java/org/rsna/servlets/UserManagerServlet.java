@@ -88,6 +88,8 @@ public class UserManagerServlet extends Servlet {
 			logger.debug("POST received from "+username+" at "+req.getRemoteAddress()+"\n"+req.toString()+"\n");
 			logger.debug("Headers:\n"+req.listHeaders(""));
 			logger.debug("Cookies:\n"+req.listCookies(""));
+			logger.debug("User has shutdown role: "+req.userHasRole("shutdown"));
+			logger.debug("Request is from localhost: "+req.isFromLocalHost());
 		}
 
 		//Make sure the user is authorized to do this.
@@ -103,7 +105,7 @@ public class UserManagerServlet extends Servlet {
 		Users users = Users.getInstance();
 
 		//Make sure that this system is using the XML implementation.
-		if (!(users instanceof UsersXmlFileImpl)) {;
+		if (!(users instanceof UsersXmlFileImpl)) {
 			res.setResponseCode(404);
 			res.send();
 			return;

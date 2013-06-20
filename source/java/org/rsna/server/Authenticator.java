@@ -61,9 +61,9 @@ public class Authenticator {
 	 * This method tests for the session cookie.
 	 * If the session cookie is present, it uses it to find
 	 * the session. If the session exists and applies to the
-	 * request (e.g., it is from the same IP address, the same MAC
-	 * address, and hasn't timed out), it sets the User to the User
-	 * of the session. In all other cases, it sets the User to null.
+	 * request (e.g., it is from the same IP address, and it
+	 * hasn't timed out), it sets the User to the User of the
+	 * session. In all other cases, it sets the User to null.
 	 * @param req the request.
 	 * @return the authenticated user, or null if the user cannot be authenticated.
 	 */

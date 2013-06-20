@@ -122,10 +122,10 @@ public class HttpRequest {
 	 * @return true if the request was initiated by the LocalHost; false otherwise.
 	 */
 	public boolean isFromLocalHost() {
-		String remoteAddress = getRemoteAddress();
-		String localAddress = IPUtil.getIPAddress();
-		if (remoteAddress.equals(localAddress)) return true;
-		if (remoteAddress.equals("127.0.0.1")) return true;
+		SocketAddress rsa = socket.getRemoteSocketAddress();
+		if ((rsa != null) && (rsa instanceof InetSocketAddress)) {
+			return ((InetSocketAddress)rsa).getAddress().isLoopbackAddress();
+		}
 		return false;
 	}
 
@@ -218,7 +218,6 @@ public class HttpRequest {
 			//See if there is a match on the host
 			if (!refURL.getHost().equals(hostURL.getHost())) return false;
 			if (refPort != hostPort) return false;
-
 
 			//Now check the servlet
 			String[] s = refURL.getPath().split("/");
