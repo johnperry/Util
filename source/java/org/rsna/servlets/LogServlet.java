@@ -51,7 +51,7 @@ public class LogServlet extends Servlet {
 		}
 
 		//Get the closebox URL
-		String home = req.getParameter("home", "/");
+		String home = filter(req.getParameter("home", "/"));
 
 		//Get the logs directory
 		File dir = new File("logs");

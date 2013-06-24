@@ -49,7 +49,7 @@ public class LoggerLevelServlet extends Servlet {
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
 
 		//Make sure the user is authorized to do this.
-		String home = req.getParameter("home", "/");
+		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin")) { res.redirect(home); return; }
 
 		//Make the page and return it.
@@ -75,7 +75,7 @@ public class LoggerLevelServlet extends Servlet {
 	public void doPost(HttpRequest req, HttpResponse res) throws Exception {
 
 		//Make sure the user is authorized to do this.
-		String home = req.getParameter("home", "/");
+		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
 			res.redirect(home);
 			return;

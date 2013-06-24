@@ -147,4 +147,13 @@ public class Servlet {
 		return file;
 	}
 
+	/**
+	 * Filter a string for cross-site scripting characters (<&>).
+	 */
+	public String filter(String s) {
+		return s.replaceAll("<[^>]*>","").replaceAll("[<%>]","");
+	}
+
+
+
 }

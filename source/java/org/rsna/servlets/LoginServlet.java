@@ -163,6 +163,7 @@ public class LoginServlet extends Servlet {
 							|| path.contains("\r")
 							|| path.contains("<")
 							|| path.contains(">")
+							|| path.contains("%")
 							|| path.contains("javascript");
 		if (attack) {
 			logger.warn("Attack detected from "+req.getRemoteAddress());
