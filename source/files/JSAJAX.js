@@ -47,14 +47,14 @@ function getXmlHttp() {
 function AJAX() {
 	this.req = null;
 
-	if (!this.req && window.XMLHttpRequest) {
-		try { this.req = new XMLHttpRequest(); }
-		catch (unableXMLHttpRequest) { }
-	}
-
 	if (!this.req && window.ActiveXObject) {
 		try { this.req = new ActiveXObject("Microsoft.XMLHTTP"); }
 		catch (unableMicrosoft) { }
+	}
+
+	if (!this.req && window.XMLHttpRequest) {
+		try { this.req = new XMLHttpRequest(); }
+		catch (unableXMLHttpRequest) { }
 	}
 
 	if (this.req) {

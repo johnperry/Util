@@ -17,6 +17,8 @@ function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeboxHandler)
 	popup.style.height = h;
 	popup.style.left = x;
 	popup.style.top = y;
+	popup.style.overflow = "hidden";
+	popup.style.zIndex = popupZIndex;
 	if (hide) {
 		popup.style.visibility = "hidden";
 		popup.style.display = "none";
@@ -25,8 +27,6 @@ function showPopup(popupDivId, w, h, title, closeboxFile, hide, closeboxHandler)
 		popup.style.visibility = "visible";
 		popup.style.display = "block";
 	}
-	popup.style.overflow = "hidden";
-	popup.style.zIndex = popupZIndex;
 }
 
 //Display a popup frame and load it from a URL
