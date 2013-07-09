@@ -14,6 +14,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.rsna.util.FileUtil;
+import org.rsna.util.XmlUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * A simple HTTP text response in UTF-8.
@@ -425,6 +429,28 @@ public class HttpResponse {
 			put("xltx","application/vnd.openxmlformats-officedocument.spreadsheetml.template");
 			put("xml","text/xml;charset=UTF-8");
 			put("zip","application/zip");
+
+			File file = new File("ContentTypes.xml");
+			if (file.exists()) {
+				try {
+					Document doc = XmlUtil.getDocument(file);
+					Element root = doc.getDocumentElement();
+					Node child = root.getFirstChild();
+					while (child != null) {
+						if ((child instanceof Element) && child.getNodeName().toLowerCase().equals("file")) {
+							Element filetype = (Element)child;
+							String ext = filetype.getAttribute("ext").toLowerCase();
+							if (ext.startsWith(".")) ext = ext.substring(1);
+							String type = filetype.getAttribute("type");
+							put(ext, type);
+						}
+						child = child.getNextSibling();
+					}
+				}
+				catch (Exception skip) {
+					logger.warn("Unable to load ContentType extensions ("+file+")");
+				}
+			}
 		}
 	}
 }
