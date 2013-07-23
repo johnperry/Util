@@ -371,5 +371,58 @@ public class StringUtil {
 		return s;
 	}
 
+	private static Pattern[] patterns = new Pattern[]{
+		// Script fragments
+		Pattern.compile("<script>(.*?)</script>", Pattern.CASE_INSENSITIVE),
+		// src='...'
+		Pattern.compile("src\\s*=\\s*\\\'(.*?)\\\'", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+		Pattern.compile("src\\s*=\\s*\\\"(.*?)\\\"", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+		// lonely script tags
+		Pattern.compile("</script>", Pattern.CASE_INSENSITIVE),
+		Pattern.compile("<script(.*?)>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+		// eval(...)
+		Pattern.compile("eval\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+		// expression(...)
+		Pattern.compile("expression\\((.*?)\\)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL),
+		// javascript:...
+		Pattern.compile("javascript:", Pattern.CASE_INSENSITIVE),
+		// vbscript:...
+		Pattern.compile("vbscript:", Pattern.CASE_INSENSITIVE),
+		// onload(...)=...
+		Pattern.compile("onload(.*?)=", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL)
+	};
+
+	/**
+	 * Filter a string to remove cross-site scripting attacks
+	 * @param string the string to filter.
+	 * @return the filtered string.
+	 */
+	public static String filterXSS(String string) {
+		if (string != null) {
+			// NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
+			// avoid encoded attacks.
+			// string = ESAPI.encoder().canonicalize(string);
+
+			// Avoid null characters
+			string = string.replaceAll("\0", "");
+
+			// Remove all sections that match a pattern
+			for (Pattern scriptPattern : patterns){
+				string = scriptPattern.matcher(string).replaceAll("");
+			}
+		}
+		return string;
+	}
+
+	/**
+	 * Filter a string to remove blocks surrounded by non-word characters
+	 * @param string the string to filter.
+	 * @return the filtered string.
+	 */
+    public static String filterNonWordBlocks(String string) {
+		Pattern nwb = Pattern.compile("\\W\\w*\\W?", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
+		return nwb.matcher(string).replaceAll("");
+	}
+
 }
 

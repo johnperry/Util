@@ -14,6 +14,7 @@ import org.rsna.server.HttpRequest;
 import org.rsna.server.HttpResponse;
 import org.rsna.util.Cache;
 import org.rsna.util.FileUtil;
+import org.rsna.util.StringUtil;
 
 /**
  * The base class for servlets.
@@ -148,12 +149,10 @@ public class Servlet {
 	}
 
 	/**
-	 * Filter a string for cross-site scripting characters (<&>).
+	 * Filter a string for cross-site scripting attacks.
 	 */
 	public String filter(String s) {
-		return s.replaceAll("<[^>]*>","").replaceAll("[<%>]","");
+		return StringUtil.filterXSS(s).replaceAll("<[^>]*>","").replaceAll("[<%>]","");
 	}
-
-
 
 }

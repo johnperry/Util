@@ -17,6 +17,7 @@ import org.rsna.server.Users;
 import org.rsna.server.UsersXmlFileImpl;
 import org.rsna.util.FileUtil;
 import org.rsna.util.HtmlUtil;
+import org.rsna.util.StringUtil;
 
 /**
  * The User Manager Servlet.
@@ -112,6 +113,9 @@ public class UserManagerServlet extends Servlet {
 		}
 		UsersXmlFileImpl usersXmlFileImpl = (UsersXmlFileImpl)users;
 
+		//Get the roles known to the system
+		java.util.HashSet<java.lang.String> systemRoles = usersXmlFileImpl.getRoles();
+
 		//Get the parameter names and values
 		String[] params = req.getParameterNames();
 		String[] values = new String[params.length];
@@ -159,10 +163,18 @@ public class UserManagerServlet extends Servlet {
 					String pw = getValue(params,values,"p",i).trim();
 					if (!pw.equals("")) user.setPassword( usersXmlFileImpl.convertPassword(pw) );
 					for (int j=0; j<nRoles; j++) {
-						String role = getValue(params,values,"cb",i,j);
-						if (canShutdown || !roleNames[j].equals("shutdown")) {
-							if (!role.equals("")) user.addRole(roleNames[j]);
-							else user.removeRole(roleNames[j]);
+						String roleName = roleNames[j];
+						boolean roleEnabled = !getValue(params,values,"cb",i,j).equals("");
+						if (canShutdown || !roleName.equals("shutdown")) {
+							//Only assign roles that are known to the system.
+							//This prevents an attack that creates roles.
+							//Such an attack doesn't do any harm, but the
+							//IBM security suite complains about it.
+
+							logger.info("user: "+username+"; role: "+roleName+"; exists: "+systemRoles.contains(roleName));
+
+							if (roleEnabled && systemRoles.contains(roleName)) user.addRole(roleName);
+							else user.removeRole(roleName);
 						}
 					}
 					newUserTable.put(username,user);
@@ -198,7 +210,7 @@ public class UserManagerServlet extends Servlet {
 			if (params[i].equals(name)) {
 				String value = values[i];
 				if (value == null) return "";
-				return filter(value.trim());
+				return StringUtil.filterNonWordBlocks(filter(value.trim()));
 			}
 		}
 		return "";
