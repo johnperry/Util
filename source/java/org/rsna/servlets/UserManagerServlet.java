@@ -159,9 +159,10 @@ public class UserManagerServlet extends Servlet {
 				//(Only process existing users with the shutdown
 				//role if the current user has the shutdown role.)
 				if (canShutdown || !user.hasRole("shutdown")) {
-					//Update the password and roles.
+					//Update the password, if present.
 					String pw = getValue(params,values,"p",i).trim();
 					if (!pw.equals("")) user.setPassword( usersXmlFileImpl.convertPassword(pw) );
+					//Update the roles
 					for (int j=0; j<nRoles; j++) {
 						String roleName = roleNames[j];
 						boolean roleEnabled = !getValue(params,values,"cb",i,j).equals("");
@@ -170,9 +171,6 @@ public class UserManagerServlet extends Servlet {
 							//This prevents an attack that creates roles.
 							//Such an attack doesn't do any harm, but the
 							//IBM security suite complains about it.
-
-							logger.info("user: "+username+"; role: "+roleName+"; exists: "+systemRoles.contains(roleName));
-
 							if (roleEnabled && systemRoles.contains(roleName)) user.addRole(roleName);
 							else user.removeRole(roleName);
 						}
