@@ -63,7 +63,7 @@ function getEvent(theEvent) {
 }
 
 function stopEvent(theEvent) {
-	if(document.all) theEvent.cancelBubble = true;
+	if (document.all) theEvent.cancelBubble = true;
 	else theEvent.stopPropagation();
 }
 
