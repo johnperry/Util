@@ -21,6 +21,8 @@ import org.rsna.server.HttpResponse;
  */
 public class LogServlet extends Servlet {
 
+	String home = "/";
+
 	/**
 	 * Construct a LogServlet.
 	 * @param root the root directory of the server.
@@ -49,9 +51,6 @@ public class LogServlet extends Servlet {
 			res.send();
 			return;
 		}
-
-		//Get the closebox URL
-		String home = filter(req.getParameter("home", "/"));
 
 		//Get the logs directory
 		File dir = new File("logs");

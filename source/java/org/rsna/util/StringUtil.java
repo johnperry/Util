@@ -399,8 +399,8 @@ public class StringUtil {
 	 */
 	public static String filterXSS(String string) {
 		if (string != null) {
-			// NOTE: It's highly recommended to use the ESAPI library and uncomment the following line to
-			// avoid encoded attacks.
+			// NOTE: It's highly recommended to use the ESAPI library and
+			// uncomment the following line to avoid encoded attacks.
 			// string = ESAPI.encoder().canonicalize(string);
 
 			// Avoid null characters

@@ -27,6 +27,7 @@ import org.rsna.util.StringUtil;
 public class UserManagerServlet extends Servlet {
 
 	static final Logger logger = Logger.getLogger(UserManagerServlet.class);
+	String home = "/";
 
 	/**
 	 * Construct a UserManagerServlet.
@@ -50,7 +51,6 @@ public class UserManagerServlet extends Servlet {
 	public void doGet(HttpRequest req, HttpResponse res) {
 
 		//Make sure the user is authorized to do this.
-		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin")) { res.redirect(home); return; }
 
 		//Get the Users object.
@@ -94,7 +94,6 @@ public class UserManagerServlet extends Servlet {
 		}
 
 		//Make sure the user is authorized to do this.
-		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
 			res.redirect(home);
 			return;
@@ -208,7 +207,7 @@ public class UserManagerServlet extends Servlet {
 			if (params[i].equals(name)) {
 				String value = values[i];
 				if (value == null) return "";
-				return StringUtil.filterNonWordBlocks(filter(value.trim()));
+				return StringUtil.filterXSS(filter(value.trim()));
 			}
 		}
 		return "";
@@ -322,7 +321,6 @@ public class UserManagerServlet extends Servlet {
 			+	"   <h1>User Manager</h1>\n"
 			+	"   <input type=\"button\" onclick=\"showHideColumns()\" id=\"shRoles\" value=\"Hide Unused Roles\"/>\n"
 			+	"   <form id=\"formID\" action=\"/users\" method=\"post\" accept-charset=\"UTF-8\" action=\"\">\n"
-			+	"    <input type=\"hidden\" name=\"home\" value=\""+home+"\">\n"
 			+	"    <table id=\"userTable\" border=\"1\">\n"
 		);
 	}

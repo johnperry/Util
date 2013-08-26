@@ -24,6 +24,7 @@ public class SysPropsServlet extends Servlet {
 	private static long usedMemory() {
 		return runtime.totalMemory() - runtime.freeMemory();
 	}
+	String home = "/";
 
 	/**
 	 * Construct a SysPropsServlet.
@@ -43,7 +44,6 @@ public class SysPropsServlet extends Servlet {
 		res.disableCaching();
 		boolean admin = req.userHasRole("admin");
 		if (admin && (req.getParameter("gc") != null)) collect();
-		String home = filter(req.getParameter("home", "/"));
 		res.write(getPage(admin, home));
 		res.setContentType("html");
 		res.send();

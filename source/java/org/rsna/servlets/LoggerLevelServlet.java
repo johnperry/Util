@@ -29,6 +29,7 @@ import org.w3c.dom.Node;
 public class LoggerLevelServlet extends Servlet {
 
 	static final Logger logger = Logger.getLogger(LoggerLevelServlet.class);
+	String home = "/";
 
 	/**
 	 * Construct a LoggerLevelServlet.
@@ -49,7 +50,6 @@ public class LoggerLevelServlet extends Servlet {
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
 
 		//Make sure the user is authorized to do this.
-		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin")) { res.redirect(home); return; }
 
 		//Make the page and return it.
@@ -75,7 +75,6 @@ public class LoggerLevelServlet extends Servlet {
 	public void doPost(HttpRequest req, HttpResponse res) throws Exception {
 
 		//Make sure the user is authorized to do this.
-		String home = filter(req.getParameter("home", "/"));
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
 			res.redirect(home);
 			return;
