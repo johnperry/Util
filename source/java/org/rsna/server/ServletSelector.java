@@ -75,17 +75,22 @@ public class ServletSelector {
 	 */
     public Servlet getServlet(HttpRequest req) {
 
-		//First make sure the user is authenticated if necessary.
-		if (requireAuthentication && (req.getUser() == null)) {
-			return new LoginServlet(root, "");
-		}
-
-		//Okay, it is permissable to serve this request.
 		//Get the path element on which to search.
 		Path path = req.getParsedPath();
-
 		String pathElement = path.element(0);
 
+		//Make sure the user is authenticated if necessary.
+		if (requireAuthentication && (req.getUser() == null)) {
+			if ((req.getHeader("servicemanager") == null)
+				|| (path.length() != 1)
+					|| !pathElement.equals("shutdown")
+						|| !req.isFromLocalHost()) {
+				return new LoginServlet(root, "");
+			}
+		}
+
+
+		//Okay, it is permissable to serve this request.
 		//Find a matching servlet.
 		Class servlet = servlets.get(pathElement);
 		if (servlet != null) {

@@ -23,9 +23,17 @@ public class ColorPane extends JTextPane {
 	 * Create a ColorPane.
 	 */
 	public ColorPane() {
+		this("");
+	}
+
+	/**
+	 * Create a ColorPane.
+	 */
+	public ColorPane(String text) {
 		super();
 		setFont(new Font("Monospaced",Font.PLAIN,12));
 		setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		setText(text);
 	}
 
 	/**
