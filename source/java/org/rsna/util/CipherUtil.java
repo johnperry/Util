@@ -16,7 +16,8 @@ import javax.crypto.spec.*;
  */
 public class CipherUtil {
 
-	Cipher cipher;
+	static final String transform = "Blowfish";
+	Cipher cipher = null;
 
 	/**
 	 * Decode an encrypted string.
@@ -24,6 +25,24 @@ public class CipherUtil {
 	 */
 	public CipherUtil(String key) throws Exception {
 		cipher = getCipher(key.trim());
+	}
+
+	/**
+	 * Get the maximum key length allowed by the Java Cryptography Extension.
+	 * @return the maximum allowed key length, or zero if the transform is not available.
+	 */
+	public static int getMaxAllowedKeyLength() {
+		return getMaxAllowedKeyLength(transform);
+	}
+
+	/**
+	 * Get the maximum key length allowed by the Java Cryptography Extension.
+	 * @param name the name of the transform.
+	 * @return the maximum allowed key length, or zero if the transform is not available.
+	 */
+	public static int getMaxAllowedKeyLength(String name) {
+		try { return Cipher.getMaxAllowedKeyLength(name); }
+		catch (Exception ex) { return 0; }
 	}
 
 	/**
@@ -58,8 +77,8 @@ public class CipherUtil {
 	private static Cipher getCipher(String keyText) throws Exception {
 		Provider sunJce = new com.sun.crypto.provider.SunJCE();
 		Security.addProvider(sunJce);
-		byte[] key = getEncryptionKey(keyText,128);
-		SecretKeySpec skeySpec = new SecretKeySpec(key,"Blowfish");
+		byte[] key = getEncryptionKey(keyText, 128);
+		SecretKeySpec skeySpec = new SecretKeySpec(key, transform);
 
 		SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
 		byte[] seed = random.generateSeed(8);
