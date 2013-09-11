@@ -987,4 +987,34 @@ public class XmlUtil {
 		return el.getTextContent();
 	}
 
+	/**
+	 * Rename an element, replacing it in its document.
+	 * @param element the element to rename.
+	 * @param name the new element name.
+	 * @return the renamed element.
+	 */
+	public static Element renameElement(Element element, String name) {
+		if (element.getNodeName().equals(name)) return element;
+		Element el = element.getOwnerDocument().createElement(name);
+
+		//Copy the attributes
+		NamedNodeMap attributes = element.getAttributes();
+		int nAttrs = attributes.getLength();
+		for (int i=0; i<nAttrs; i++) {
+			Node attr = attributes.item(i);
+			el.setAttribute(attr.getNodeName(), attr.getNodeValue());
+		}
+
+		//Copy the children
+		Node node = element.getFirstChild();
+		while (node != null) {
+			Node clone = node.cloneNode(true);
+			el.appendChild(clone);
+			node = node.getNextSibling();
+		}
+
+		//Replace the element
+		element.getParentNode().replaceChild(el, element);
+		return element;
+	}
 }
