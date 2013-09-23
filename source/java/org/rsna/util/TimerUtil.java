@@ -48,8 +48,7 @@ public class TimerUtil {
 	 */
 	public static String getTotalTimeText(String text) {
 		long time = getTotalTime();
-		double dtime = ((double)time)/1000000.0;
-		return String.format("%10.6f ms: %s", dtime, text);
+		return getText(time, text);
 	}
 
 	/**
@@ -72,8 +71,19 @@ public class TimerUtil {
 	 */
 	public static String getLapTimeText(String text) {
 		long time = getLapTime();
+		return getText(time, text);
+	}
+
+	/**
+	 * Get a string formatting a time.
+	 * @param the time to be displayed.
+	 * @param text any text describing the time.
+	 */
+	public static String getText(long time, String text) {
+		text = text.trim();
+		if (!text.equals("")) text = ": "+text;
 		double dtime = ((double)time)/1000000.0;
-		return String.format("%10.6f ms: %s", dtime, text);
+		return String.format("%10.6f ms%s", dtime, text);
 	}
 
 }
