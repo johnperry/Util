@@ -76,7 +76,7 @@ public class TimerUtil {
 
 	/**
 	 * Get a string formatting a time.
-	 * @param the time to be displayed.
+	 * @param time the time to be displayed.
 	 * @param text any text describing the time.
 	 */
 	public static String getText(long time, String text) {
