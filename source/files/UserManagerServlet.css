@@ -1,13 +1,13 @@
 body {
-	margin:0; 
-	padding:0; 
+	margin:0;
+	padding:0;
 	overflow:auto;
 }
 
 h1 { padding-top:10; }
 
 .thv {
-	padding:5; 
+	padding:5;
 	font-family:monospace;
 	text-align:left;
 	layout-flow: vertical-ideographic;
@@ -17,7 +17,7 @@ h1 { padding-top:10; }
 }
 
 .thl {
-	text-align:left; 
+	text-align:left;
 	padding: 5;
 	vertical-align:bottom;
 	background:#2977b9;
@@ -25,28 +25,30 @@ h1 { padding-top:10; }
 }
 
 td {
-	text-align:center; 
+	text-align:center;
 	padding:5;
 }
 
 .tdu {
-	text-align:left; 
+	text-align:left;
 	padding 5;
 }
 
-td.tdu input { 
+td.tdu input {
 	font-family:monospace;
-	width:220px;
+	width:125px;
 }
 
 .tdp {
-	text-align:left; 
+	text-align:left;
 	padding 5;
 }
 
-td.tdp input { 
+td.tdp input {
 	font-family:monospace;
-	width:150px;
+	width:125px;
 }
 
 table { empty-cells:hide; }
+
+.buttons { margin-bottom:10px; }

@@ -124,7 +124,8 @@ public class HttpRequest {
 	public boolean isFromLocalHost() {
 		SocketAddress rsa = socket.getRemoteSocketAddress();
 		if ((rsa != null) && (rsa instanceof InetSocketAddress)) {
-			return ((InetSocketAddress)rsa).getAddress().isLoopbackAddress();
+			InetAddress addr = ((InetSocketAddress)rsa).getAddress();
+			return (addr.isLoopbackAddress() || addr.isLinkLocalAddress());
 		}
 		return false;
 	}

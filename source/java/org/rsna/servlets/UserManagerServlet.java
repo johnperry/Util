@@ -50,21 +50,19 @@ public class UserManagerServlet extends Servlet {
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
 
-		//Make sure the user is authorized to do this.
-		if (!req.userHasRole("admin")) { res.redirect(home); return; }
-
 		//Get the Users object.
 		Users users = Users.getInstance();
 
-		//Make sure that this system is using the XML implementation.
-		if (!(users instanceof UsersXmlFileImpl)) {
-			res.setResponseCode(404);
+		//Make sure the user is authorized to do this.
+		if (!req.userHasRole("admin") || !(users instanceof UsersXmlFileImpl)) {
+			res.setResponseCode(res.forbidden);
 			res.send();
 			return;
 		}
 
 		//Make the page and return it.
-		res.write( getPage( (UsersXmlFileImpl)users, home ) );
+		if (req.hasParameter("suppress")) home = "";
+		res.write( getPage( (UsersXmlFileImpl)users ) );
 		res.setContentType("html");
 		res.disableCaching();
 		res.send();
@@ -91,11 +89,14 @@ public class UserManagerServlet extends Servlet {
 			logger.debug("Cookies:\n"+req.listCookies(""));
 			logger.debug("User has shutdown role: "+req.userHasRole("shutdown"));
 			logger.debug("Request is from localhost: "+req.isFromLocalHost());
+			logger.debug("Request is referred from context \""+context+"\": "+req.isReferredFrom(context));
+			logger.debug("Request contains suppress parameter: "+req.hasParameter("suppress"));
 		}
 
 		//Make sure the user is authorized to do this.
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
-			res.redirect(home);
+			res.setResponseCode(res.forbidden);
+			res.send();
 			return;
 		}
 
@@ -106,7 +107,7 @@ public class UserManagerServlet extends Servlet {
 
 		//Make sure that this system is using the XML implementation.
 		if (!(users instanceof UsersXmlFileImpl)) {
-			res.setResponseCode(404);
+			res.setResponseCode(res.notfound);
 			res.send();
 			return;
 		}
@@ -183,7 +184,8 @@ public class UserManagerServlet extends Servlet {
 		usersXmlFileImpl.resetUsers(newUserTable);
 
 		//Make a new page from the new data and return it.
-		res.write(getPage(usersXmlFileImpl, home));
+		if (req.hasParameter("suppress")) home = "";
+		res.write(getPage(usersXmlFileImpl));
 		res.setContentType("html");
 		res.disableCaching();
 		res.send();
@@ -234,12 +236,12 @@ public class UserManagerServlet extends Servlet {
 
 	//Create an HTML page containing the form for managing
 	//the users and roles.
-	private String getPage(UsersXmlFileImpl users, String home) {
+	private String getPage(UsersXmlFileImpl users) {
 		String[] usernames = users.getUsernames();
 		String[] rolenames = users.getRoleNames();
 
 		StringBuffer sb = new StringBuffer();
-		responseHead(sb, home);
+		responseHead(sb);
 		makeTableHeader(sb, rolenames);
 		makeTableRows(sb, users, usernames, rolenames);
 		responseTail(sb);
@@ -290,7 +292,7 @@ public class UserManagerServlet extends Servlet {
 		sb.append( " </tr>\n" );
 	}
 
-	private void responseHead(StringBuffer sb, String home) {
+	private void responseHead(StringBuffer sb) {
 		sb.append(
 				"<html>\n"
 			+	" <head>\n"
@@ -304,24 +306,43 @@ public class UserManagerServlet extends Servlet {
 			+	"  <script language=\"JavaScript\" type=\"text/javascript\" src=\"/UserManagerServlet.js\">;</script>\n"
 			+	" </head>\n"
 			+	" <body>\n"
-
 			+	"  <div style=\"float:right;\">\n"
-			+	"   <img src=\"/icons/home.png\"\n"
-			+	"    onclick=\"window.open('"+home+"','_self');\"\n"
-			+	"    style=\"margin-right:2px;\"\n"
-			+	"    title=\"Return to the home page\"/>\n"
-			+	"   <br>\n"
-			+	"   <img src=\"/icons/save.png\"\n"
+		);
+
+		if (!home.equals("")) {
+			sb.append(
+					"   <img src=\"/icons/home.png\"\n"
+				+	"    onclick=\"window.open('"+home+"','_self');\"\n"
+				+	"    style=\"margin:2px;\"\n"
+				+	"    title=\"Return to the home page\"/>\n"
+				+	"   <br>\n"
+			);
+		}
+		sb.append(
+				"   <img src=\"/icons/save.png\"\n"
 			+	"    onclick=\"save();\"\n"
-			+	"    style=\"margin-right:2px;\"\n"
+			+	"    style=\"margin:2px;\"\n"
 			+	"    title=\"Save\"/>\n"
 			+	"  </div>\n"
 
 			+	"  <center>\n"
 			+	"   <h1>User Manager</h1>\n"
-			+	"   <input type=\"button\" onclick=\"showHideColumns()\" id=\"shRoles\" value=\"Hide Unused Roles\"/>\n"
+			+	"   <p class=\"buttons\">\n"
+			+	"     <input type=\"button\" onclick=\"showHideColumns()\" id=\"shRoles\" value=\"Hide Unused Roles\"/>\n"
+			+	"     &nbsp;&nbsp;&nbsp;&nbsp;\n"
+			+	"     <input type=\"button\" onclick=\"showRolesPopup()\" value=\"Show Role Definitions\"/>\n"
+			+	"   </p>\n"
 			+	"   <form id=\"formID\" action=\"/users\" method=\"post\" accept-charset=\"UTF-8\" action=\"\">\n"
-			+	"    <table id=\"userTable\" border=\"1\">\n"
+		);
+
+		if (home.equals("")) {
+			sb.append(
+					"   <input type=\"hidden\" name=\"suppress\" value=\"\"/>\n"
+			);
+		}
+
+		sb.append(
+				"    <table id=\"userTable\" border=\"1\">\n"
 		);
 	}
 

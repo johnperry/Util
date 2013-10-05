@@ -10,18 +10,18 @@
 			<title>Set Logger Level</title>
 			<link rel="Stylesheet" type="text/css" media="all" href="/BaseStyles.css"></link>
 			<link rel="Stylesheet" type="text/css" media="all" href="/LoggerLevelServlet.css"></link>
-			<link rel="Stylesheet" type="text/css" media="all" href="/JSPopup.css"></link>
 			<script> var home = '<xsl:value-of select="$home"/>';</script>
 			<script language="JavaScript" type="text/javascript" src="/JSUtil.js">;</script>
-			<script language="JavaScript" type="text/javascript" src="/JSPopup.js">;</script>
 			<script language="JavaScript" type="text/javascript" src="/LoggerLevelServlet.js">;</script>
 		</head>
 		<body>
 		<div class="closebox">
-			<img src="/icons/home.png"
-				 onclick="window.open('{$home}','_self');"
-				 title="Return to the home page"/>
-			<br/>
+			<xsl:if test="$home">
+				<img src="/icons/home.png"
+					 onclick="window.open('{$home}','_self');"
+					 title="Return to the home page"/>
+				<br/>
+			</xsl:if>
 			<img src="/icons/save.png"
 				 onclick="save();"
 				 title="Set the logger level"/>
@@ -30,7 +30,9 @@
 		<h1>Set Logger Level</h1>
 
 		<form id="formID" method="post" action="" accept-charset="UTF-8">
-		<input type="hidden" name="home" value="{$home}"/>
+		<xsl:if test="not($home)">
+			<input type="hidden" name="suppress" value=""/>
+		</xsl:if>
 
 		<p class="note">
 			This page can be used to set the logger level for classes in the application.

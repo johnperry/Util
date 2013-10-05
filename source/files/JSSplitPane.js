@@ -136,10 +136,10 @@ function startHorizontalDrag(evt) {
 		hs.slider.attachEvent("onmouseup", dropSlider);
 		hs.slider.setCapture();
 	}
-	if (event.stopPropagation) event.stopPropagation();
-	else event.cancelBubble = true;
-	if (event.preventDefault) event.preventDefault();
-	else event.returnValue = false;
+	if (evt.stopPropagation) evt.stopPropagation();
+	evt.cancelBubble = true;
+	if (evt.preventDefault) evt.preventDefault();
+	evt.returnValue = false;
 	return false;
 
 	function dragSlider(evt) {
@@ -147,7 +147,7 @@ function startHorizontalDrag(evt) {
 		hs.leftWidth = (evt.clientX - deltaX);
 		hs.positionSlider();
 		if (evt.stopPropagation) evt.stopPropagation();
-		else evt.cancelBubble = true;
+		evt.cancelBubble = true;
 		return false;
 	}
 
@@ -162,8 +162,8 @@ function startHorizontalDrag(evt) {
 			hs.slider.detachEvent("onmouseup", dropSlider);
 			hs.slider.releaseCapture();
 		}
-		if (evt.stopPropagation) event.stopPropagation();
-		else evt.cancelBubble = true;
+		if (evt.stopPropagation) evt.stopPropagation();
+		evt.cancelBubble = true;
 		return false;
 	}
 }
@@ -257,10 +257,10 @@ function startVerticalDrag(evt) {
 		vs.slider.attachEvent("onmouseup", dropSlider);
 		vs.slider.setCapture();
 	}
-	if (event.stopPropagation) event.stopPropagation();
-	else event.cancelBubble = true;
-	if (event.preventDefault) event.preventDefault();
-	else event.returnValue = false;
+	if (evt.stopPropagation) evt.stopPropagation();
+	evt.cancelBubble = true;
+	if (evt.preventDefault) evt.preventDefault();
+	evt.returnValue = false;
 	return false;
 
 	function dragSlider(evt) {
@@ -268,7 +268,7 @@ function startVerticalDrag(evt) {
 		vs.topHeight = (evt.clientY - deltaY);
 		vs.positionSlider();
 		if (evt.stopPropagation) evt.stopPropagation();
-		else evt.cancelBubble = true;
+		evt.cancelBubble = true;
 		return false;
 	}
 
@@ -283,8 +283,8 @@ function startVerticalDrag(evt) {
 			vs.slider.detachEvent("onmouseup", dropSlider);
 			vs.slider.releaseCapture();
 		}
-		if (evt.stopPropagation) event.stopPropagation();
-		else evt.cancelBubble = true;
+		if (evt.stopPropagation) evt.stopPropagation();
+		evt.cancelBubble = true;
 		return false;
 	}
 }

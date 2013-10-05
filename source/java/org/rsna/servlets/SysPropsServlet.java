@@ -44,13 +44,14 @@ public class SysPropsServlet extends Servlet {
 		res.disableCaching();
 		boolean admin = req.userHasRole("admin");
 		if (admin && (req.getParameter("gc") != null)) collect();
-		res.write(getPage(admin, home));
+		if (req.hasParameter("suppress")) home = "";
+		res.write(getPage(admin));
 		res.setContentType("html");
 		res.send();
 	}
 
 	//Create an HTML page containing the data.
-	private String getPage(boolean admin, String home) {
+	private String getPage(boolean admin) {
 		String page =
 				"<html>\n"
 			+	" <head>\n"
@@ -71,11 +72,11 @@ public class SysPropsServlet extends Servlet {
 			+	"   </script>\n"
 			+	" </head>\n"
 			+	" <body>\n"
-			+	HtmlUtil.getCloseBox(home)
+			+	(!home.equals("") ? HtmlUtil.getCloseBox(home) : "")
 			+ 	" <h1>System Properties</h1>\n"
 			+	"  <center>\n"
 			+	"   <table border=\"1\">\n"
-			+	     displayProperties(admin, home)
+			+	     displayProperties(admin)
 			+	"   </table>\n"
 			+	"  </center>\n"
 			+	" </body>\n"
@@ -86,11 +87,16 @@ public class SysPropsServlet extends Servlet {
 	//Return a String containing an HTML table row containing
 	//the current memory in use, with a link allowing garbage
 	//collection if the user has admin privileges.
-	private void displayMemory(StringBuffer sb, boolean admin, String home) {
+	private void displayMemory(StringBuffer sb, boolean admin) {
 		Formatter formatter = new Formatter(sb);
 		sb.append( "<tr><td>MEMORY IN USE</td><td>" );
 		formatter.format("%,d", usedMemory());
-		sb.append( (admin ? " (<a href=\"?gc&home="+home+"\">collect garbage</a>)\n" : "\n") );
+		if (admin) {
+			sb.append(" (<a href=\"?gc");
+			if (home.equals("")) sb.append("&suppress");
+			sb.append("\">collect garbage</a>)");
+		}
+		sb.append("\n");
 		sb.append( "</td></tr>\n" );
 		sb.append( "<tr><td>TOTAL MEMORY</td><td>"  );
 		formatter.format("%,d", runtime.totalMemory());
@@ -99,11 +105,11 @@ public class SysPropsServlet extends Servlet {
 
 	//Return a String containing the HTML rows of a table
 	//displaying all the Java System properties.
-	private String displayProperties(boolean admin, String home) {
+	private String displayProperties(boolean admin) {
 		String v;
 		String sep = System.getProperty("path.separator",";");
 		StringBuffer sb = new StringBuffer();
-		displayMemory(sb, admin, home);
+		displayMemory(sb, admin);
 
 		Properties p = System.getProperties();
 		String[] n = new String[p.size()];

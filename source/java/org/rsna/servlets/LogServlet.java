@@ -63,6 +63,7 @@ public class LogServlet extends Servlet {
 		if (pathElements.length > 1) filename = pathElements[1];
 
 		//Get the page
+		if (req.hasParameter("suppress")) home = "";
 		String page;
 		if ((filename == null) || filename.trim().equals("") || filename.trim().equals("/"))
 			page = getDirectoryPage(dir, context, home);
@@ -82,27 +83,29 @@ public class LogServlet extends Servlet {
 
 		//Make the page
 		StringBuffer page = new StringBuffer(responseHead(home));
-		page.append("<div class=\"logdir\">");
-		page.append("<table>");
-		for (int i=files.length-1; i>=0; i--) {
-			if (files[i].length() != 0) {
-				page.append(
-					tr(
-						td(a(contextPath+"/"+files[i].getName(), "logtext", files[i].getName()))
-							+
-						td(StringUtil.getDateTime(files[i].lastModified(),"&nbsp;&nbsp;&nbsp;"))
-							+
-						td(
-							"style=\"text-align:right\"",
-							StringUtil.insertCommas(Long.toString(files[i].length())))
-					)
-				);
+		if (files.length != 1) {
+			page.append("<div class=\"logdir\">");
+			page.append("<table>");
+			for (int i=files.length-1; i>=0; i--) {
+				if (files[i].length() != 0) {
+					page.append(
+						tr(
+							td(a(contextPath+"/"+files[i].getName(), "logtext", files[i].getName()))
+								+
+							td(StringUtil.getDateTime(files[i].lastModified(),"&nbsp;&nbsp;&nbsp;"))
+								+
+							td(
+								"style=\"text-align:right\"",
+								StringUtil.insertCommas(Long.toString(files[i].length())))
+						)
+					);
+				}
 			}
+			page.append("</table>");
+			page.append("</div>");
+			page.append("<iframe name=\"logtext\" id=\"logtext\">-</iframe>");
 		}
-		page.append("</table>");
-		page.append("</div>");
-		page.append("<hr>");
-		page.append("<iframe name=\"logtext\" id=\"logtext\">-</iframe>");
+		else page.append("<iframe name=\"logtext\" id=\"logtext\" src=\""+contextPath+"/"+files[0].getName()+"\">-</iframe>");
 		page.append(responseTail());
 		return page.toString();
 	}
@@ -120,15 +123,15 @@ public class LogServlet extends Servlet {
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/BaseStyles.css\"></link>\n"
 			+	"   <style>\n"
 			+	"    body {margin:0; padding:0;}\n"
-			+	"    iframe {height:100; width:100%}\n"
-			+	"    td {text-align:left; padding:5; padding-right:20; background:white}\n"
+			+	"    iframe {height:100; width:100%; background:white;}\n"
+			+	"    td {text-align:left; background:white; padding:5; padding-right:20;}\n"
 			+	"    .logdir {height:150; background:white; overflow:auto}\n"
 			+	"    h1 {text-align:center; margin-top:5; margin-bottom:5;}\n"
 			+	"   </style>\n"
 			+	script()
 			+	" </head>\n"
 			+	" <body scroll=\"no\">\n"
-			+	HtmlUtil.getCloseBox(home)
+			+	(!home.equals("") ? HtmlUtil.getCloseBox(home) : "")
 			+	"   <h1>Log Viewer</h1>\n";
 		return head;
 	}

@@ -10,7 +10,7 @@ function setPageHeader(title, subtitle, closeboxFile, closeboxHandler, closeboxT
 	//if the child is not a closebox div, create a header.
 	if ((child.tagName != "DIV") || (child.className != "closebox")) {
 		var closebox = null;
-		if (closeboxFile && closeboxHandler) {
+		if (closeboxFile && closeboxHandler && (closeboxFile != "")) {
 			var closebox = document.createElement("DIV");
 			closebox.id = "closeboxID";
 			closebox.className = "closebox";

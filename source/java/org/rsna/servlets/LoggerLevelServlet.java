@@ -49,8 +49,14 @@ public class LoggerLevelServlet extends Servlet {
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
 
-		//Make sure the user is authorized to do this.
-		if (!req.userHasRole("admin")) { res.redirect(home); return; }
+		//Require that the user have the admin role
+		if (!req.userHasRole("admin")) {
+			res.setResponseCode(res.notfound);
+			res.send();
+			return;
+		}
+
+		if (req.hasParameter("suppress")) home = "";
 
 		//Make the page and return it.
 		Document xml = XmlUtil.getDocument();
@@ -76,10 +82,10 @@ public class LoggerLevelServlet extends Servlet {
 
 		//Make sure the user is authorized to do this.
 		if (!req.userHasRole("admin") || !req.isReferredFrom(context)) {
-			res.redirect(home);
+			res.setResponseCode(res.notfound);
+			res.send();
 			return;
 		}
-		if (!req.userHasRole("admin")) { res.redirect(home); return; }
 
 		//Get the class and level
 		String theClass = req.getParameter("class", "").trim();

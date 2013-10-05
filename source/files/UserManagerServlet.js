@@ -1,7 +1,7 @@
 function loaded() {
 	var tools = new Array();
 	tools[tools.length] = new PopupTool("/icons/save.png", "Save", null, save);
-	tools[tools.length] = new PopupTool("/icons/home.png", "Return to the home page", home, null);
+	if (home != "") tools[tools.length] = new PopupTool("/icons/home.png", "Return to the home page", home, null);
 	setPopupToolPanel( tools );
 
 	showHideColumns();
@@ -28,7 +28,6 @@ function toggleRoles(n, event) {
 }
 
 function showHideColumns() {
-
 		var button = document.getElementById("shRoles");
 		var show = (button.value.indexOf("Show") != -1);
 		var table = document.getElementById("userTable");
@@ -71,4 +70,22 @@ function hideColumns(part, name, used) {
 			if (!used[j]) cells[j].style.display = "none";
 		}
 	}
+}
+
+function showRolesPopup() {
+	var id = "rolesPopupID";
+	var pop = document.getElementById(id);
+	if (pop) pop.parentNode.removeChild(pop);
+
+	var div = document.createElement("DIV");
+	div.className = "content";
+	var w = 400;
+	var h = 400;
+	var iframe = document.createElement("IFRAME");
+	iframe.style.width = w - 30;
+	iframe.style.height = h - 55;
+	iframe.src = "/UserManagerRoles.html";
+	div.appendChild(iframe);
+	var closebox = "/icons/closebox.gif";
+	showDialog(id, w, h, "Standard Role Definitions", closebox, null, div, null, null);
 }

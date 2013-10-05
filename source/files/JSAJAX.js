@@ -46,15 +46,22 @@ function getXmlHttp() {
 //a Microsoft ActiveXObject implementation of XMLHTTP.
 function AJAX() {
 	this.req = null;
-
-	if (!this.req && window.ActiveXObject) {
-		try { this.req = new ActiveXObject("Microsoft.XMLHTTP"); }
-		catch (unableMicrosoft) { }
-	}
+	this.type = "";
 
 	if (!this.req && window.XMLHttpRequest) {
-		try { this.req = new XMLHttpRequest(); }
+		try {
+			this.req = new XMLHttpRequest();
+			this.type = "XMLHttpRequest";
+		}
 		catch (unableXMLHttpRequest) { }
+	}
+
+	if (!this.req && window.ActiveXObject) {
+		try {
+			this.req = new ActiveXObject("Microsoft.XMLHTTP");
+			this.type = "ActiveXObject";
+		}
+		catch (unableMicrosoft) { }
 	}
 
 	if (this.req) {
@@ -69,7 +76,11 @@ function AJAX() {
 				var thisObject = this;
 				var async = (handler != null);
 				this.req.open("GET", url + (qs ? "?"+qs : ""), async);
-				if (async) this.req.onreadystatechange = function() { handler(thisObject); };
+				if (async) this.req.onreadystatechange = function() {
+					if (thisObject.req.readyState == thisObject.req.DONE) {
+						handler(thisObject);
+					}
+				}
 				this.req.send(null);
 			};
 
