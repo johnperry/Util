@@ -48,20 +48,20 @@ function AJAX() {
 	this.req = null;
 	this.type = "";
 
-	if (!this.req && window.XMLHttpRequest) {
-		try {
-			this.req = new XMLHttpRequest();
-			this.type = "XMLHttpRequest";
-		}
-		catch (unableXMLHttpRequest) { }
-	}
-
 	if (!this.req && window.ActiveXObject) {
 		try {
 			this.req = new ActiveXObject("Microsoft.XMLHTTP");
 			this.type = "ActiveXObject";
 		}
 		catch (unableMicrosoft) { }
+	}
+
+	if (!this.req && window.XMLHttpRequest) {
+		try {
+			this.req = new XMLHttpRequest();
+			this.type = "XMLHttpRequest";
+		}
+		catch (unableXMLHttpRequest) { }
 	}
 
 	if (this.req) {
