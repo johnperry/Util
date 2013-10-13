@@ -40,15 +40,25 @@ public class ProxyServer {
 	 * <li>proxyUsername
 	 * <li>proxyPassword
 	 * </ul>
-	 * @param element the element specifying the proxy parameters.
+	 * @param element the element specifying the proxy parameters. The
+	 * element must have a first-generation child element with the tag
+	 * name "ProxyServer" containing the proxy attributes.
 	 * @return the singleton instance of the proxy server.
 	 */
 	public static synchronized ProxyServer getInstance(Element element) {
-		return getInstance(
-					element.getAttribute("proxyIPAddress"),
-					element.getAttribute("proxyPort"),
-					element.getAttribute("proxyUsername"),
-					element.getAttribute("proxyPassword") );
+		if (proxyServer == null) {
+			if (!element.getTagName().equals("ProxyServer")) {
+				element = XmlUtil.getFirstNamedChild(element, "ProxyServer");
+			}
+			if (element != null) {
+				return getInstance(
+							element.getAttribute("proxyIPAddress"),
+							element.getAttribute("proxyPort"),
+							element.getAttribute("proxyUsername"),
+							element.getAttribute("proxyPassword") );
+			}
+		}
+		return proxyServer;
 	}
 
 	/**

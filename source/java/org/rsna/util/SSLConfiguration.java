@@ -54,11 +54,19 @@ public class SSLConfiguration {
 	 * @return the singleton instance of the SSLConfiguration.
 	 */
 	public static synchronized SSLConfiguration getInstance(Element element) {
-		return getInstance(
-					element.getAttribute("keystore"),
-					element.getAttribute("keystorePassword"),
-					element.getAttribute("truststore"),
-					element.getAttribute("truststorePassword") );
+		if (sslConfiguration == null) {
+			if (!element.getTagName().equals("SSL")) {
+				element = XmlUtil.getFirstNamedChild(element, "SSL");
+			}
+			if (element != null) {
+				return getInstance(
+							element.getAttribute("keystore"),
+							element.getAttribute("keystorePassword"),
+							element.getAttribute("truststore"),
+							element.getAttribute("truststorePassword") );
+			}
+		}
+		return sslConfiguration;
 	}
 
 	/**

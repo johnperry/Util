@@ -34,22 +34,26 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 	 */
 	public UsersLdapFileImpl(Element element) {
 		super(element);
-		initialContextFactory = element.getAttribute("initialContextFactory");
-		providerURL = element.getAttribute("providerURL");
-		securityAuthentication = element.getAttribute("securityAuthentication");
-		securityPrincipal = element.getAttribute("securityPrincipal");
+		Element ldap = XmlUtil.getFirstNamedChild(element, "LDAP");
+		if (ldap != null) {
+			initialContextFactory = ldap.getAttribute("initialContextFactory");
+			providerURL = ldap.getAttribute("providerURL");
+			securityAuthentication = ldap.getAttribute("securityAuthentication");
+			securityPrincipal = ldap.getAttribute("securityPrincipal");
 
-		//Make sure we have an admin user who is known to LDAP
-		String ldapAdmin = element.getAttribute("ldapAdmin").trim();
-		if (!ldapAdmin.equals("")) {
-			User admin = getUser(ldapAdmin);
-			if (admin == null) {
-				admin = new User(ldapAdmin, "");
-				logger.info("\""+ldapAdmin+"\" admin user created");
+			//Make sure we have an admin user who is known to LDAP
+			String ldapAdmin = ldap.getAttribute("ldapAdmin").trim();
+			if (!ldapAdmin.equals("")) {
+				User admin = getUser(ldapAdmin);
+				if (admin == null) {
+					admin = new User(ldapAdmin, "");
+					logger.info("\""+ldapAdmin+"\" admin user created");
+				}
+				admin.addRole("admin");
+				addUser(admin);
 			}
-			admin.addRole("admin");
-			addUser(admin);
 		}
+		else logger.warn("Missing LDAP element - no parameters are available for initialization");
 	}
 
 	/**
