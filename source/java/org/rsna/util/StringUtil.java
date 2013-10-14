@@ -9,6 +9,7 @@ package org.rsna.util;
 
 import java.io.*;
 import java.util.Calendar;
+import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -257,17 +258,40 @@ public class StringUtil {
 	}
 
 	/**
+	 * Equivalent to <code>replace(string, null, true)</code>.
+	 * @param string the String to be processed.
+	 * @return a new string with the identifiers replace with values
+	 * from the system environment.
+	 */
+	public static String replace(String string) {
+		return replace(string, null, true);
+	}
+
+	/**
+	 * Equivalent to <code>replace(string, table, false)</code>.
+	 * @param string the String to be processed.
+	 * @param table the replacement strings
+	 * @return a new string with the identifiers replaced with values
+	 * from the table.
+	 */
+	public static String replace(String string, Properties table) {
+		return replace(string, table, false);
+	}
+
+	/**
 	 * Replace coded identifiers with values from a table.
 	 * Identifiers are coded as ${name}. The identifier is replaced
 	 * by the string value in the table, using the name as the key.
 	 * Identifiers which are not present in the table are left
 	 * unmodified.
-	 * @param string the String to be processed.
-	 * @param table the replacement strings
-	 * @return a new string with the identifiers replaces with values
+	 * @param string the String to be processed
+	 * @param table the replacement strings (this argument can be null)
+	 * @param includeEnvironmentVariables true to include the System
+	 * environment variables in the replacement table
+	 * @return a new string with the identifiers replaced with values
 	 * from the table.
 	 */
-	public static String replace(String string, Properties table) {
+	public static String replace(String string, Properties table, boolean includeEnvironmentVariables) {
 		try {
 			Pattern pattern = Pattern.compile("\\$\\{\\w+\\}");
 			Matcher matcher = pattern.matcher(string);
@@ -275,7 +299,9 @@ public class StringUtil {
 			while (matcher.find()) {
 				String group = matcher.group();
 				String key = group.substring(2, group.length()-1).trim();
-				String repl = table.getProperty(key);
+				String repl = null;
+				if (table != null) repl = table.getProperty(key);
+				if ((repl == null) && includeEnvironmentVariables) repl = System.getenv(key);
 				if (repl == null) repl = matcher.quoteReplacement(group);
 				matcher.appendReplacement(sb, repl);
 			}

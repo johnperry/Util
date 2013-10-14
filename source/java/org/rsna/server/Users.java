@@ -86,6 +86,17 @@ public abstract class Users {
 	public abstract User authenticate(String username, String password);
 
 	/**
+	 * Check whether a request comes from a user known to an external system.
+	 * This implementation returns null, indicating that no external system can
+	 * associate a user with this request. ingle Sign On implementations must
+	 * override this method.
+	 * @return the user who matches the credentials, or null if no matching user exists.
+	 */
+	public User validate(HttpRequest req) {
+		return null;
+	}
+
+	/**
 	 * Get an alphabetized array of usernames.
 	 * @return the array of usernames or a zero-length array if unable.
 	 */

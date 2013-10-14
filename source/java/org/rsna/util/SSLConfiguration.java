@@ -30,10 +30,10 @@ public class SSLConfiguration {
 	protected SSLConfiguration(String keystore, String keystorePassword,
 							   String truststore, String truststorePassword) {
 
-		this.keystore = StringUtil.replace( StringUtil.trim(keystore), System.getProperties() ).trim();
+		this.keystore = StringUtil.replace( StringUtil.trim(keystore), System.getProperties(), true ).trim();
 		this.keystorePassword = StringUtil.trim(keystorePassword);
 
-		this.truststore = StringUtil.replace( StringUtil.trim(truststore), System.getProperties() ).trim();
+		this.truststore = StringUtil.replace( StringUtil.trim(truststore), System.getProperties(), true ).trim();
 		this.truststorePassword = StringUtil.trim(truststorePassword);
 
 		if (keystore.equals("")) this.keystore = "keystore";
@@ -65,6 +65,7 @@ public class SSLConfiguration {
 							element.getAttribute("truststore"),
 							element.getAttribute("truststorePassword") );
 			}
+			else return getInstance("", "", "", "");
 		}
 		return sslConfiguration;
 	}

@@ -91,5 +91,4 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 		logger.debug("Unable to find user \""+username+"\" in the users.xml file.");
 		return null;
 	}
-
 }

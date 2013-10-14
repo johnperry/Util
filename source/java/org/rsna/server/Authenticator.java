@@ -23,6 +23,7 @@ public class Authenticator {
 	static Authenticator authenticator = null;
 
 	protected Hashtable<String,Session> sessions = null;
+	String ssoCookieName = null;
 	long timeout = 1 * 60 * 60 * 1000; //default session timeout in ms = 1 hour
 
 	/**
@@ -50,6 +51,22 @@ public class Authenticator {
 	}
 
 	/**
+	 * Set the Single Sign On cookie name. This method must
+	 * be called by Users implementations that use an external
+	 * SSO server for authentication. When the ssoCookieName
+	 * is set, the authenticator uses the cookie value as an
+	 * index into the sessions table.
+	 * @param ssoCookieName the Single Sign On cookie name.
+	 */
+	public synchronized void setSSOCookieName(String ssoCookieName) {
+		if (ssoCookieName != null) {
+			ssoCookieName = ssoCookieName.trim();
+			if (ssoCookieName.equals("")) ssoCookieName = null;
+		}
+		this.ssoCookieName = ssoCookieName;
+	}
+
+	/**
 	 * Get the Session timeout.
 	 */
 	public synchronized long getSessionTimeout() {
@@ -68,9 +85,35 @@ public class Authenticator {
 	 * @return the authenticated user, or null if the user cannot be authenticated.
 	 */
     public User authenticate(HttpRequest req) {
-
-		//First try the session cookie
 		Session session;
+
+		//First try the SSO session cookie
+		if (ssoCookieName != null) {
+			String id = req.getCookie(ssoCookieName);
+			if (id != null) {
+				if ( ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
+					session.recordAccess();
+					return session.user;
+				}
+				else {
+					User user = Users.getInstance().validate(req);
+					if (user != null) {
+						try {
+							session = new Session(user, req.getRemoteAddress());
+							//Note: we don't use the id created by the session
+							//because the SSO system has already set the cookie,
+							//so we index on that.
+							sessions.put(id, session);
+							session.recordAccess();
+							return session.user;
+						}
+						catch (Exception unable) { }
+					}
+				}
+			}
+		}
+
+		//No joy, try the RSNA session cookie
 		String id = req.getCookie("RSNASESSION");
 		if ( (id != null) && ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
 			session.recordAccess();
@@ -93,12 +136,14 @@ public class Authenticator {
 				catch (Exception ex) { }
 			}
 		}
+
 		//Next try the RSNA header. This header is not encoded.
 		credentials = req.getHeader("RSNA");
 		if (credentials != null) {
 			User user = getUserFromCredentials(credentials);
 			if (user != null) return user;
 		}
+
 		//The user cannot be authenticated.
 		return null;
 	}

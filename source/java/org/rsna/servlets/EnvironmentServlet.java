@@ -15,9 +15,9 @@ import org.rsna.server.HttpResponse;
 import org.rsna.util.HtmlUtil;
 
 /**
- * The SysPropsServlet.
+ * The EnvironmentServlet.
  */
-public class SysPropsServlet extends Servlet {
+public class EnvironmentServlet extends Servlet {
 
 	static final Logger logger = Logger.getLogger(SysPropsServlet.class);
 	private static final Runtime runtime = Runtime.getRuntime();
@@ -27,23 +27,22 @@ public class SysPropsServlet extends Servlet {
 	String home = "/";
 
 	/**
-	 * Construct a SysPropsServlet.
+	 * Construct an EnvironmentServlet.
 	 * @param root the root directory of the server.
 	 * @param context the path identifying the servlet.
 	 */
-	public SysPropsServlet(File root, String context) {
+	public EnvironmentServlet(File root, String context) {
 		super(root, context);
 	}
 
 	/**
-	 * The GET handler: return a page displaying the system properties.
+	 * The GET handler: return a page displaying the environment variables.
 	 * @param req the request object
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
 		res.disableCaching();
 		boolean admin = req.userHasRole("admin");
-		if (admin && (req.getParameter("gc") != null)) collect();
 		if (req.hasParameter("suppress")) home = "";
 		res.write(getPage(admin));
 		res.setContentType("html");
@@ -55,7 +54,7 @@ public class SysPropsServlet extends Servlet {
 		String page =
 				"<html>\n"
 			+	" <head>\n"
-			+	"  <title>System Properties</title>\n"
+			+	"  <title>Environment Variables</title>\n"
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/BaseStyles.css\"></link>\n"
 			+	"  <link rel=\"Stylesheet\" type=\"text/css\" media=\"all\" href=\"/JSPopup.css\"></link>\n"
 			+	"  <style>\n"
@@ -66,10 +65,10 @@ public class SysPropsServlet extends Servlet {
 			+	" </head>\n"
 			+	" <body>\n"
 			+	(!home.equals("") ? HtmlUtil.getCloseBox(home) : "")
-			+ 	" <h1>System Properties</h1>\n"
+			+ 	" <h1>Environment Variables</h1>\n"
 			+	"  <center>\n"
 			+	"   <table border=\"1\">\n"
-			+	     displayProperties(admin)
+			+	     display()
 			+	"   </table>\n"
 			+	"  </center>\n"
 			+	" </body>\n"
@@ -77,71 +76,27 @@ public class SysPropsServlet extends Servlet {
 		return page;
 	}
 
-	//Return a String containing an HTML table row containing
-	//the current memory in use, with a link allowing garbage
-	//collection if the user has admin privileges.
-	private void displayMemory(StringBuffer sb, boolean admin) {
-		Formatter formatter = new Formatter(sb);
-		sb.append( "<tr><td>MEMORY IN USE</td><td>" );
-		formatter.format("%,d", usedMemory());
-		if (admin) {
-			sb.append(" (<a href=\"?gc");
-			if (home.equals("")) sb.append("&suppress");
-			sb.append("\">collect garbage</a>)");
-		}
-		sb.append("\n");
-		sb.append( "</td></tr>\n" );
-		sb.append( "<tr><td>TOTAL MEMORY</td><td>"  );
-		formatter.format("%,d", runtime.totalMemory());
-		sb.append( "</td></tr>" );
-	}
-
 	//Return a String containing the HTML rows of a table
-	//displaying all the Java System properties.
-	private String displayProperties(boolean admin) {
+	//displaying all the environment variables.
+	private String display() {
 		String v;
 		String sep = System.getProperty("path.separator",";");
 		StringBuffer sb = new StringBuffer();
-		displayMemory(sb, admin);
 
-		Properties p = System.getProperties();
-		String[] n = new String[p.size()];
-		Enumeration e = p.propertyNames();
-		for (int i=0; i< n.length; i++) n[i] = (String)e.nextElement();
+		Map<String,String> env = System.getenv();
+		String[] n = new String[env.size()];
+		n = env.keySet().toArray(n);
 		Arrays.sort(n);
 		for (int i=0; i<n.length; i++) {
-			v = p.getProperty(n[i]);
+			v = env.get(n[i]);
 
-			//Make path and dirs properties more readable by
+			//Make path and dirs variables more readable by
 			//putting each element on a separate line.
-			if (n[i].endsWith(".path") ||
-				n[i].endsWith(".dirs"))
-					v = v.replace(sep, sep+"<br/>");
-
-			//Make definition, access, and loader properties more
-			//readable by putting each element on a separate line.
-			if (n[i].endsWith(".definition") ||
-				n[i].endsWith(".access") ||
-				n[i].endsWith(".loader"))
-					v = v.replace(",", ",<br>");
+			if (n[i].toLowerCase().contains("path"))
+				v = v.replace(sep, sep+"<br/>");
 
 			sb.append( "<tr><td>" + n[i] + "</td><td>" + v + "</td></tr>\n" );
 		}
 		return sb.toString();
-	}
-
-	//Collect the garbage.
-
-	private static void collect() {
-		int i;
-		long usedMemory1 = usedMemory();
-		long usedMemory2 = Long.MAX_VALUE;
-		for (i=0; (usedMemory1 < usedMemory2) && (i < 40); i++) {
-			runtime.runFinalization();
-			runtime.gc();
-			Thread.currentThread().yield();
-			usedMemory2 = usedMemory1;
-			usedMemory1 = usedMemory();
-		}
 	}
 }

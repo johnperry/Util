@@ -57,6 +57,7 @@ public class ProxyServer {
 							element.getAttribute("proxyUsername"),
 							element.getAttribute("proxyPassword") );
 			}
+			else return getInstance("", "", "", "");
 		}
 		return proxyServer;
 	}
