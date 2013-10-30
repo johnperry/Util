@@ -33,6 +33,8 @@ public abstract class Users {
 	 * @param className the fully qualified name of the class to
 	 * instantiate if a Users instance does not already exist.
 	 * If the className is null or blank, no class is instantiated.
+	 * @param element the element from which to obtain any required
+	 * configuration parameters
 	 * @return the Users object or null if it cannot be instantiated from
 	 * the supplied className.
 	 */
@@ -88,7 +90,7 @@ public abstract class Users {
 	/**
 	 * Check whether a request comes from a user known to an external system.
 	 * This implementation returns null, indicating that no external system can
-	 * associate a user with this request. ingle Sign On implementations must
+	 * associate a user with this request. Single Sign On implementations must
 	 * override this method.
 	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
