@@ -70,8 +70,9 @@ public class ApplicationServer extends Servlet {
 
 		//See if this request points to the XSL file for launching an application
 		if (path.length() > 1) {
-			String appname = path.element(1);
-			File dir = new File(root, appname);
+			String appname = path.element(path.length()-1);
+			String apppath = path.subpath(1).substring(1);
+			File dir = new File(root, apppath);
 			File xslFile = new File(dir, appname+".xsl");
 			if (xslFile.exists()) {
 				try {
@@ -83,7 +84,7 @@ public class ApplicationServer extends Servlet {
 					Element environment = doc.createElement("environment");
 					environment.appendChild(getTextElement(doc, "protocol", protocol));
 					environment.appendChild(getTextElement(doc, "host", host));
-					environment.appendChild(getTextElement(doc, "application", appname));
+					environment.appendChild(getTextElement(doc, "application", apppath));
 					root.appendChild(environment);
 
 					String[] paramNames = req.getParameterNames();

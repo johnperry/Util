@@ -390,7 +390,7 @@ public class StringUtil {
 	 */
 	public static String removeEnclosingQuotes(String s) {
 		if (s == null) return "";
-		if (s.length() == 1) return "";
+		if (s.length() == 1) return s.replace("\"", "");
 		if (s.startsWith("\"") && s.endsWith("\"")) {
 			return s.substring(1, s.length() - 1);
 		}

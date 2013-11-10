@@ -42,13 +42,42 @@
 		</p>
 
 		<p class="note">
-			Enter the fully qualified class name of the class
-			and select the logger level for that class.</p>
+			Select the class from the pull-down field or enter
+			the fully qualified class name of the class in the
+			text field. Then select the logger level for the
+			selected class.</p>
 		<center>
 			<table border="1">
 				<tr>
 					<td width="30%">Class name</td>
-					<td width="70%"><input class="text" type="text" name="class"/></td>
+					<td width="70%">
+						<select id="ClassSelector" onchange="setClass()">
+							<option value=""/>
+							<option value="org.rsna.servlets.ApplicationServer">ApplicationServer</option>
+							<option value="org.rsna.ctp.stdplugins.AuditLog">AuditLog</option>
+							<option value="org.rsna.ctp.stdstages.DicomAnonymizer">DicomAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.anonymizer.dicom.DICOMAnonymizer">DICOMAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.DicomAuditLogger">DicomAuditLogger</option>
+							<option value="org.rsna.ctp.stdstages.DicomCorrector">DicomCorrector</option>
+							<option value="org.rsna.ctp.stdstages.anonymizer.dicom.DICOMCorrector">DICOMCorrector</option>
+							<option value="org.rsna.ctp.stdstages.DicomExportService">DicomExportService</option>
+							<option value="org.rsna.ctp.stdstages.DicomImportService">DicomImportService</option>
+							<option value="org.rsna.ctp.stdstages.DicomMammoPixelAnonymizer">DicomMammoPixelAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.anonymizer.dicom.DICOMMammoPixelAnonymizer">DICOMMammoPixelAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.DicomPixelAnonymizer">DicomPixelAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.anonymizer.dicom.DICOMPixelAnonymizer">DICOMPixelAnonymizer</option>
+							<option value="org.rsna.ctp.stdstages.dicom.DicomStorageSCP">DicomStorageSCP</option>
+							<option value="org.rsna.ctp.stdstages.dicom.DicomStorageSCU">DicomStorageSCU</option>
+							<option value="org.rsna.ctp.stdstages.DirectoryExportService">DirectoryExportService</option>
+							<option value="org.rsna.ctp.stdstages.DirectoryImportService">DirectoryImportService</option>
+							<option value="org.rsna.ctp.stdstages.FileStorageService">FileStorageService</option>
+							<option value="org.rsna.ctp.stdstages.FtpExportService">FtpExportService</option>
+							<option value="org.rsna.ctp.stdstages.HttpExportService">HttpExportService</option>
+							<option value="org.rsna.ctp.stdstages.HttpImportService">HttpImportService</option>
+						</select>
+						<br/>
+						<input class="text" type="text" id="class" name="class"/>
+					</td>
 				</tr>
 				<tr>
 					<td>Level</td>
