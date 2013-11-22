@@ -74,6 +74,8 @@
 							<option value="org.rsna.ctp.stdstages.FtpExportService">FtpExportService</option>
 							<option value="org.rsna.ctp.stdstages.HttpExportService">HttpExportService</option>
 							<option value="org.rsna.ctp.stdstages.HttpImportService">HttpImportService</option>
+							<option value="mirc.users.MircUserManagerServlet">MircUserManagerServlet</option>
+							<option value="org.rsna.servlets.UserManagerServlet">UserManagerServlet</option>
 						</select>
 						<br/>
 						<input class="text" type="text" id="class" name="class"/>

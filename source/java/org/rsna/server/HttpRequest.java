@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -661,6 +662,20 @@ public class HttpRequest {
 		StringBuffer sb = new StringBuffer();
 		for (String key : cookies.keySet()) {
 			sb.append(margin + key + ": " + cookies.get(key) + "\n");
+		}
+		if (sb.length() == 0) sb.append(margin + "none\n");
+		return sb.toString();
+	}
+
+	/**
+	 * List the cookies from this HttpRequest
+	 */
+	public String listParameters(String margin) {
+		StringBuffer sb = new StringBuffer();
+		String[] names = getParameterNames();
+		Arrays.sort(names);
+		for (String name : names) {
+			sb.append(margin + name + ": " + getParameter(name) + "\n");
 		}
 		if (sb.length() == 0) sb.append(margin + "none\n");
 		return sb.toString();
