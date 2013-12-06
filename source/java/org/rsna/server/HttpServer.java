@@ -27,7 +27,7 @@ public class HttpServer extends Thread {
 
 	static final Logger logger = Logger.getLogger(HttpServer.class);
 
-	final int maxThreads = 20; //max concurrent threads
+	final int maxThreads; //max concurrent threads
 	final int port;
 	final boolean ssl;
 	final ServletSelector selector;
@@ -39,13 +39,15 @@ public class HttpServer extends Thread {
 	 * the HttpServer thread on the specified port.
 	 * @param ssl true if connections to this server require SSL
 	 * @param port the port on which this server listens for connections
+	 * @param maxThreads the maximum number of concurrent threads allowed.
 	 * @param selector the translator from requested resources to servlets
 	 * @throws Exception if the ServerSocket cannot be created.
 	 */
-    public HttpServer(boolean ssl, int port, ServletSelector selector) throws Exception {
+    public HttpServer(boolean ssl, int port, int maxThreads, ServletSelector selector) throws Exception {
 		super("HttpServer");
 		this.ssl = ssl;
 		this.port = port;
+		this.maxThreads = maxThreads;
 		this.selector = selector;
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
@@ -57,7 +59,7 @@ public class HttpServer extends Thread {
 	 * Start the HttpServer and accept connections.
 	 */
 	public void run() {
-		logger.info((ssl?"SSL ":"")+"HttpServer started on port "+port);
+		logger.info((ssl?"SSL ":"")+"HttpServer started on port "+port+" [maxThreads="+maxThreads+"]");
 		while (!this.isInterrupted()) {
 			try {
 				//Wait for a connection
@@ -95,6 +97,14 @@ public class HttpServer extends Thread {
 	 */
 	public int getPort() {
 		return port;
+	}
+
+	/**
+	 * Get maxThreads.
+	 * @return the maximum number of threads allowed for this HttpServer
+	 */
+	public int getMaxThreads() {
+		return maxThreads;
 	}
 
 	/**
