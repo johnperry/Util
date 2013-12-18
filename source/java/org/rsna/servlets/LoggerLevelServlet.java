@@ -9,11 +9,15 @@ package org.rsna.servlets;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
 import org.rsna.server.HttpRequest;
 import org.rsna.server.HttpResponse;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.rsna.util.ClasspathUtil;
 import org.rsna.util.FileUtil;
 import org.rsna.util.XmlUtil;
 
@@ -30,6 +34,8 @@ public class LoggerLevelServlet extends Servlet {
 
 	static final Logger logger = Logger.getLogger(LoggerLevelServlet.class);
 	String home = "/";
+	static HashSet<String> classes = null;
+
 
 	/**
 	 * Construct a LoggerLevelServlet.
@@ -38,6 +44,7 @@ public class LoggerLevelServlet extends Servlet {
 	 */
 	public LoggerLevelServlet(File root, String context) {
 		super(root, context);
+		if (classes == null) classes = ClasspathUtil.getClassNames();
 	}
 
 	/**
@@ -60,7 +67,21 @@ public class LoggerLevelServlet extends Servlet {
 
 		//Make the page and return it.
 		Document xml = XmlUtil.getDocument();
-		xml.appendChild( xml.createElement("LoggerLevel") );
+		Element root = xml.createElement("Classes");
+		xml.appendChild(root);
+
+		//Put in the class names
+		String[] paths = new String[classes.size()];
+		paths = classes.toArray(paths);
+		Arrays.sort(paths, new NameComparator());
+		for (String path : paths) {
+			String name = path.substring( path.lastIndexOf(".")+1 );
+			Element c = xml.createElement("Class");
+			c.setAttribute("name", name);
+			c.setAttribute("path", path);
+			root.appendChild(c);
+		}
+
 		Document xsl = getDocument("LoggerLevelServlet.xsl");
 		String[] params = new String[] { "home", home };
 		res.write( XmlUtil.getTransformedText( xml, xsl, params ) );
@@ -103,6 +124,14 @@ public class LoggerLevelServlet extends Servlet {
 		File file = new File(root, name);
 		InputStream in = FileUtil.getStream(file, "/"+name);
 		return XmlUtil.getDocument(in);
+	}
+
+	class NameComparator implements Comparator<String> {
+		public int compare(String s1, String s2) {
+			String n1 = s1.substring( s1.lastIndexOf(".")+1 );
+			String n2 = s2.substring( s2.lastIndexOf(".")+1 );
+			return n1.compareTo(n2);
+		}
 	}
 
 }

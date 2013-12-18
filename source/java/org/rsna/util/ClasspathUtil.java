@@ -4,6 +4,10 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.jar.JarFile;
+import java.util.jar.JarEntry;
 
 public class ClasspathUtil {
 
@@ -73,7 +77,7 @@ public class ClasspathUtil {
 	}
 
 	/**
-	 * List the current classpath on System.out.
+	 * List the current classpath.
 	 */
 	public static String listClasspath() {
 		StringBuffer sb = new StringBuffer();
@@ -83,5 +87,34 @@ public class ClasspathUtil {
 		}
 		return sb.toString();
 	}
+
+	/**
+	 * Get a Set of class names available on the current classpath.
+	 */
+	public static HashSet<String> getClassNames() {
+		HashSet<String> names = new HashSet<String>();
+		URL[] urls = getClasspath();
+		for (URL url : urls) {
+			try {
+				JarFile jar = new JarFile( new File( url.toURI() ) );
+				Enumeration<JarEntry> entries = jar.entries();
+				while (entries.hasMoreElements()) {
+					JarEntry entry = entries.nextElement();
+					String name = entry.getName();
+					if (name.endsWith(".class")
+						&& !name.contains("$")
+							&& (name.startsWith("org/rsna") || name.startsWith("mirc"))) {
+						name = name.substring(0, name.length() - ".class".length());
+						name = name.replace("/", ".");
+						names.add(name);
+					}
+				}
+			}
+			catch (Exception ignore) { }
+		}
+		return names;
+	}
+
+
 
 }
