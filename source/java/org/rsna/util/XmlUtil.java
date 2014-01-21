@@ -1015,6 +1015,6 @@ public class XmlUtil {
 
 		//Replace the element
 		element.getParentNode().replaceChild(el, element);
-		return element;
+		return el;
 	}
 }

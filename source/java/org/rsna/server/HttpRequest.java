@@ -128,7 +128,7 @@ public class HttpRequest {
 			try {
 				InetAddress addr = ((InetSocketAddress)rsa).getAddress();
 				InetAddress localHost = InetAddress.getLocalHost();
-				return addr.equals(localHost);
+				return addr.equals(localHost) || addr.isLoopbackAddress();
 			}
 			catch (Exception unable) { }
 		}
