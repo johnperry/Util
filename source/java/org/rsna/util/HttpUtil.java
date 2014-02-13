@@ -8,6 +8,8 @@
 package org.rsna.util;
 
 import java.io.*;
+import java.netCookieHandler;
+import java.netCookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -92,5 +94,14 @@ public class HttpUtil {
 
 		//and return the connection.
 		return conn;
+	}
+
+	/**
+	 * Initialize the CookieHandler.
+	 */
+	public static CookieManager initializeCookieManager() {
+		CookieManager cookieManager = new CookieManager();
+		CookieHandler.setDefault(cookieManager);
+		return cookieManager;
 	}
 }

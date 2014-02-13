@@ -638,6 +638,19 @@ public class HttpRequest {
 	}
 
 	/**
+	 * Get a String representation of this HttpRequest, including the headers, cookies, and parameters.
+	 * @return the text value of the request.
+	 */
+	public String toVerboseString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(toString() + "\n");
+		sb.append("Headers:\n"+listHeaders("  "));
+		sb.append("Cookies:\n"+listCookies("  "));
+		sb.append("Parameters:\n"+listParameters("  "));
+		return sb.toString();
+	}
+
+	/**
 	 * Get a String representation of this HttpRequest
 	 * @return the text value of the request, including the method, path, and query or content.
 	 */

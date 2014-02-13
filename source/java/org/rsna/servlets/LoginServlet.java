@@ -51,7 +51,10 @@ public class LoginServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
-		//Get the possible query parameters.
+
+		logger.debug("Request received:\n"+req.toVerboseString());
+
+ 		//Get the possible query parameters.
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String logout = req.getParameter("logout");
@@ -117,6 +120,9 @@ public class LoginServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) {
+
+		logger.debug("Request received:\n"+req.toVerboseString());
+
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		login(req, res, username, password);
@@ -128,15 +134,19 @@ public class LoginServlet extends Servlet {
 						HttpRequest req, HttpResponse res,
 						String username, String password) {
 
+		logger.debug("username = "+username);
+		logger.debug("password = "+password);
 		boolean passed = false;
 		Authenticator authenticator = Authenticator.getInstance();
 		if ((username != null) && (password != null)) {
 			User user = Users.getInstance().authenticate(username, password);
 			if (user != null) {
 				passed = authenticator.createSession(user, req, res);
+				logger.debug("Response headers:\n"+res.listHeaders("  "));
 			}
 		}
 		if (!passed) authenticator.closeSession(req, res);
+		logger.debug("passed = "+passed);
 		return passed;
 	}
 
