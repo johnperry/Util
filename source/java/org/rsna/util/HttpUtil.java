@@ -8,8 +8,8 @@
 package org.rsna.util;
 
 import java.io.*;
-import java.netCookieHandler;
-import java.netCookieManager;
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.SecureRandom;

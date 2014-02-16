@@ -75,7 +75,6 @@ public class Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
-		URL url = null;
 		File file = getRequestedFile(req);
 		String ct = res.setContentType(file);
 		if ((ct == null) || ct.startsWith("application/")) res.disableCaching();
@@ -100,15 +99,14 @@ public class Servlet {
 			//If there is a cache. try to get the file from there.
 			Cache cache = Cache.getInstance();
 			if (cache != null) {
-				String p = req.path;
-				if (p.startsWith("/")) p = p.substring(1);
-				file = cache.getFile(p);
+				file = cache.getFile(req.path);
 				if (file != null) res.write(file);
 				else res.setResponseCode( res.notfound );
 			}
 			else {
 				//There is no cache, see if the file can
 				//be obtained from the classpath.
+				URL url = null;
 				if ((url=getClass().getResource(req.path)) != null)  res.write(url);
 				else res.setResponseCode( res.notfound );
 			}

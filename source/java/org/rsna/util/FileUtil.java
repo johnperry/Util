@@ -343,8 +343,8 @@ public class FileUtil {
 	/**
 	 * Copy a maximum number of bytes from an InputStream to an OutputStream.
 	 * The OutputStream is always closed when the operation is complete.
-	 * If the contentLength is positive, the InputStream is left open; else it is closed
-	 * when the operation is complete.
+	 * If the contentLength is positive, the InputStream is left open;
+	 * else it is closed when the operation is complete.
 	 * @param in the stream to copy.
 	 * @param out the copy.
 	 * @param contentLength the maximum number of bytes to copy, or -1 to read the InputStream fully.
@@ -355,6 +355,7 @@ public class FileUtil {
 		boolean result = true;
 		int bytesRead = 0;
 		try {
+			in = new BufferedInputStream(in);
 			byte[] b = new byte[4096];
 			int n;
 			while ( (bytesRead < length) &&

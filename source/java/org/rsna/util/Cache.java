@@ -7,7 +7,13 @@
 
 package org.rsna.util;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.zip.*;
 
 /**
  * A singleton cache for files that are served from the classpath jars.
@@ -69,4 +75,37 @@ public class Cache {
 		File file = new File(dir, path);
 		return FileUtil.getFile(file, path);
 	}
+
+	/**
+	 * Load all the files in a zip file into the cache, preserving the
+	 * directory structure of the zip file, and ignoring any .class files.
+	 * @param file the zip file to unpack.
+	 */
+	public synchronized int load(File file) {
+		int count = 0;
+		ZipFile zipFile = null;
+		try {
+			if (file.exists()) {
+				zipFile = new ZipFile(file);
+				Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+				while (zipEntries.hasMoreElements()) {
+					ZipEntry entry = zipEntries.nextElement();
+					if (!entry.isDirectory()) {
+						String name = entry.getName().replace('/', File.separatorChar);
+						if (!name.endsWith(".class") && !name.startsWith("META-INF")) {
+							File outFile = new File(dir, name);
+							outFile.getParentFile().mkdirs();
+							OutputStream out = new BufferedOutputStream(new FileOutputStream(outFile));
+							InputStream in = zipFile.getInputStream(entry);
+							if (FileUtil.copy( in, out, -1 )) count++;;
+						}
+					}
+				}
+			}
+		}
+		catch (Exception ignore) { }
+		FileUtil.close(zipFile);
+		return count;
+	}
+
 }
