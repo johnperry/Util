@@ -63,7 +63,7 @@ public class HttpRequest {
 		inputStream = new BufferedInputStream(socket.getInputStream());
 		parseRequestLine();
 		getHeaders();
-		if ( method.equals("POST")
+		if ( (method.equals("POST") || method.equals("PUT"))
 				&& getContentType().toLowerCase().contains("application/x-www-form-urlencoded") ) {
 			content = getContentText();
 			getQueryParameters(content);
