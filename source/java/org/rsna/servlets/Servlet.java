@@ -127,6 +127,30 @@ public class Servlet {
 	}
 
 	/**
+	 * The default handler for PUT requests.
+	 * Return a not found error in the response.
+	 * @param req the request object
+	 * @param res the response object
+	 */
+	public void doPut(HttpRequest req, HttpResponse res) throws Exception {
+		res.disableCaching();
+		res.setResponseCode( res.notfound );
+		res.send();
+	}
+
+	/**
+	 * The default handler for DELETE requests.
+	 * Return a not found error in the response.
+	 * @param req the request object
+	 * @param res the response object
+	 */
+	public void doDelete(HttpRequest req, HttpResponse res) throws Exception {
+		res.disableCaching();
+		res.setResponseCode( res.notfound );
+		res.send();
+	}
+
+	/**
 	 * Get the file identified in an HttpRequest.
 	 * @param req the request object
 	 * @return the file identified by the request, treating
