@@ -239,16 +239,19 @@ public class RowLayout implements LayoutManager2 {
 		int maxX = 0;
 		x = 0;
 		y = 0;
+		boolean hasVisibleComponents = false;
 		for (int i=0; i<components.length; i++) {
-			if (components[i] instanceof CRLF) {
+			Component c = components[i];
+			if (c instanceof CRLF) {
 				maxX = Math.max(maxX, currentX);
 				currentX = insets.left;
-				currentY += rowHeight[y] + vGap;
+				if (hasVisibleComponents) currentY += rowHeight[y] + vGap;
+				hasVisibleComponents = false;
 				x = 0;
 				y++;
 			}
 			else {
-				//It's not a CRLF, lay it out.
+				hasVisibleComponents |= c.isVisible();
 				d = components[i].getPreferredSize();
 				float xAlign = components[i].getAlignmentX();
 				float yAlign = components[i].getAlignmentY();
