@@ -116,6 +116,19 @@ public class RowLayout implements LayoutManager2 {
 		return rows;
 	}
 
+	public void setRowVisible(Container parent, Component startingComponent, boolean visibility) {
+		Component[] components = parent.getComponents();
+		for (int i=0; i<components.length; i++) {
+			if (components[i].equals(startingComponent)) {
+				for (int k=i; k<components.length; k++) {
+					Component c = components[k];
+					if (c instanceof CRLF) return;
+					c.setVisible(visibility);
+				}
+			}
+		}
+	}
+
 	private Dimension getLayoutSize(Container parent, int hGap, int vGap, boolean layout) {
 		Dimension d;
 		Component[] components = parent.getComponents();
