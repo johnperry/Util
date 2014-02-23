@@ -33,7 +33,7 @@ public class RowLayout implements LayoutManager2 {
 	 * The default layoutAlignmentY is 0.0.
 	 */
 	public RowLayout() {
-		init();
+		spans = new Hashtable<Component,Integer>();
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class RowLayout implements LayoutManager2 {
 	 * @param verticalGap the vertical gap in pixels between rows.
 	 */
 	public RowLayout(int horizontalGap, int verticalGap) {
-		init();
+		spans = new Hashtable<Component,Integer>();
 		this.horizontalGap = horizontalGap;
 		this.verticalGap = verticalGap;
 	}
@@ -57,22 +57,11 @@ public class RowLayout implements LayoutManager2 {
 	 * @param layoutAlignmentY the preferred vertical alignment of this component in its container.
 	 */
 	public RowLayout(int horizontalGap, int verticalGap, float layoutAlignmentX, float layoutAlignmentY) {
-		init();
+		spans = new Hashtable<Component,Integer>();
 		this.horizontalGap = horizontalGap;
 		this.verticalGap = verticalGap;
 		this.layoutAlignmentX = layoutAlignmentX;
 		this.layoutAlignmentY = layoutAlignmentY;
-	}
-
-	private void init() {
-		spans = new Hashtable<Component,Integer>();
-	}
-
-	/**
-	 * Get an object to end a row.
-	 */
-	public static JComponent crlf() {
-		return new CRLF();
 	}
 
 	/**
@@ -80,10 +69,6 @@ public class RowLayout implements LayoutManager2 {
 	 */
 	public static Integer span(int colspan) {
 		return new Integer( (colspan>0) ? colspan : 1 );
-	}
-
-	static boolean isCRLF(Component c) {
-		return (c instanceof CRLF);
 	}
 
 	public void invalidateLayout(Container target) { }
@@ -243,7 +228,7 @@ public class RowLayout implements LayoutManager2 {
 		y = 0;
 		for (int i=0; i<components.length; i++) {
 			if (components[i] instanceof CRLF) {
-				maxX = Math.max(maxX, currentX + insets.right);
+				maxX = Math.max(maxX, currentX);
 				currentX = insets.left;
 				currentY += rowHeight[y] + vGap;
 				x = 0;
@@ -269,7 +254,21 @@ public class RowLayout implements LayoutManager2 {
 				x += w;
 			}
 		}
-		return new Dimension(maxX - hGap, currentY + insets.bottom - vGap);
+		return new Dimension(maxX + insets.right - hGap, currentY + insets.bottom - vGap);
+	}
+
+	/**
+	 * Get an object to end a row.
+	 */
+	public static JComponent crlf() {
+		return new CRLF();
+	}
+
+	/**
+	 * Test whether a component is a CRLF.
+	 */
+	public static boolean isCRLF(Component c) {
+		return (c instanceof CRLF);
 	}
 
 	static class CRLF extends JComponent {
