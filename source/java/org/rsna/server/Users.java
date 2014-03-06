@@ -70,29 +70,42 @@ public abstract class Users {
 
 	/**
 	 * Get a specific user.
+	 * This implementation returns null. Implementations that
+	 * manage users must override this method.
 	 * @return the user or null if unable.
 	 */
-	public abstract User getUser(String username);
+	public User getUser(String username) {
+		return null;
+	}
 
 	/**
 	 * Convert a plaintext password to the form used by this implementation.
+	 * This implementation returns the password unmodified. Implementations
+	 * that store passwords in encrypted forms must override this method.
 	 * @param password the plaintext password
 	 * @return the password converted to the form used by this implementation.
 	 */
-	public abstract String convertPassword(String password);
+	public String convertPassword(String password) {
+		return password;
+	}
 
 	/**
-	 * Check whether a set of credentials match a user in the system.
+	 * Check whether a set of credentials matches a user in the system.
+	 * This implementation returns null, indicating that users cannot
+	 * be authenticated locally. Users class extensions that can authenticate
+	 * users locally must override this method.
 	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
-	public abstract User authenticate(String username, String password);
+	public User authenticate(String username, String password) {
+		return null;
+	}
 
 	/**
 	 * Check whether a request comes from a user known to an external system.
 	 * This implementation returns null, indicating that no external system can
 	 * associate a user with this request. Single Sign On implementations must
 	 * override this method.
-	 * @return the user who matches the credentials, or null if no matching user exists.
+	 * @return the user who matches the request, or null if no matching user exists.
 	 */
 	public User validate(HttpRequest req) {
 		return null;
@@ -100,14 +113,20 @@ public abstract class Users {
 
 	/**
 	 * Get an alphabetized array of usernames.
+	 * This method returns an empty array. Implementations that
+	 * manage users must override this method.
 	 * @return the array of usernames or a zero-length array if unable.
 	 */
-	public abstract String[] getUsernames();
+	public String[] getUsernames() {
+		return new String[0];
+	}
 
 	/**
 	 * Add a role to the list of standard roles.
+	 * This method does nothing. Implementations
+	 * that manage roles must override this method.
 	 * @param role the name of the role.
 	 */
-	public abstract void addRole(String role);
+	public void addRole(String role) { }
 
 }

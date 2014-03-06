@@ -325,7 +325,10 @@ public class HttpRequest {
 	 * the cookie was not present in the request.
 	 */
 	public String getCookie(String name) {
-		return cookies.get(name.toLowerCase());
+		if (name != null) {
+			return cookies.get(name.toLowerCase());
+		}
+		else return null;
 	}
 
 	/**

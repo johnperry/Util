@@ -10,11 +10,7 @@ package org.rsna.servlets;
 import java.io.File;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
-import org.rsna.server.HttpRequest;
-import org.rsna.server.HttpResponse;
-import org.rsna.server.User;
-import org.rsna.server.Users;
-import org.rsna.server.UsersXmlFileImpl;
+import org.rsna.server.*;
 import org.rsna.util.XmlUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,7 +59,10 @@ public class UserServlet extends Servlet {
 			roles = user.getRoleNames();
 		}
 		Users users = Users.getInstance();
-		boolean usersImplIsXML = (users instanceof UsersXmlFileImpl);
+		String usersImpl = "";
+		if (users instanceof UsersXmlFileImpl) usersImpl = "xml";
+		else if (users instanceof UsersLdapFileImpl) usersImpl = "ldap";
+		else if (users instanceof UsersOpenAMImpl) usersImpl = "openam";
 		boolean local = req.isFromLocalHost();
 		String ip = req.getRemoteAddress();
 		try {
@@ -72,7 +71,7 @@ public class UserServlet extends Servlet {
 			root.setAttribute("ip", ip);
 			root.setAttribute("name", name);
 			root.setAttribute("location", (local ? "local" : "remote"));
-			root.setAttribute("usersImpl", (usersImplIsXML ? "xml" : ""));
+			root.setAttribute("usersImpl", usersImpl);
 			for (String role : roles) {
 				role = role.trim();
 				if (!role.equals("")) {

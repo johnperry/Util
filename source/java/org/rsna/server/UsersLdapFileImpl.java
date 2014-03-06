@@ -70,6 +70,9 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 			Properties props = new Properties();
 			props.setProperty( "username", username );
 			String principal = StringUtil.replace( securityPrincipal, props );
+			logger.debug("securityPrincipal: \""+securityPrincipal+"\"");
+			logger.debug("username:          \""+username+"\"");
+			logger.debug("principal:         \""+principal+"\"");
 
 			if ( LdapUtil.authenticate(
 							initialContextFactory,

@@ -53,6 +53,7 @@ public class LdapUtil {
 
 		DirContext ctx = null;
 		boolean result = true;
+		logger.debug("Authenticating: \""+securityPrincipal+"\":\""+securityCredentials+"\"");
 		try {
 			ctx = new InitialDirContext(env);
 			logger.debug("Got InitialDirContext: class = "+ctx.getClass().getName());

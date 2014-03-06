@@ -98,10 +98,13 @@ public class Authenticator {
 							//because the SSO system has already set the cookie,
 							//so we index on that.
 							sessions.put(id, session);
+							logger.debug("Created session for "+session.user.getUsername());
 							session.recordAccess();
 							return session.user;
 						}
-						catch (Exception unable) { }
+						catch (Exception unable) {
+							logger.debug("Unable to create the session", unable);
+						}
 					}
 				}
 			}
@@ -182,8 +185,10 @@ public class Authenticator {
 		try {
 			Session session = new Session(user, req.getRemoteAddress());
 			sessions.put(session.id, session);
-			res.setHeader("Set-Cookie", "RSNASESSION="+session.id);
-			res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
+			if (ssoCookieName == null) {
+				res.setHeader("Set-Cookie", "RSNASESSION="+session.id);
+				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
+			}
 			return true;
 		}
 		catch (Exception failed) {
@@ -201,14 +206,21 @@ public class Authenticator {
 	 * @param res the response.
 	 */
     public void closeSession(HttpRequest req, HttpResponse res) {
+
+		//Get the session cookie name
+		String name = ssoCookieName;
+		if (name == null) name = "RSNASESSION";
+
 		//See if there is a cookie specifying an existing session.
-		String id = req.getCookie("RSNASESSION");
+		String id = req.getCookie(name);
 		if (id != null) {
 			//A session was specified. Remove it from the hashtable.
 			sessions.remove(id);
-			//Set a dummy session cookie that expires immediately.
-			res.setHeader("Set-Cookie","RSNASESSION=NONE; Max-Age=0");
-			res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
+			if (ssoCookieName == null) {
+				//Set a dummy session cookie that expires immediately.
+				res.setHeader("Set-Cookie", "RSNASESSION=NONE; Max-Age=0");
+				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
+			}
 		}
 	}
 
