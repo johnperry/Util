@@ -75,16 +75,34 @@ public class UsersOpenAMImpl extends Users {
 				//*********************************
 				// FOR TESTING ONLY
 				//*********************************
-				user.addRole("admin");
-				user.addRole("import");
-				user.addRole("export");
+				//user.addRole("admin");
+				//user.addRole("import");
+				//user.addRole("export");
 				//*********************************
-				logger.debug("Created user\n"+XmlUtil.toPrettyString(user.getXML(true)));
+				if (logger.isDebugEnabled()) {
+					logger.debug("Created user\n"+XmlUtil.toPrettyString(user.getXML(true)));
+				}
 				return user;
 			}
 			else logger.debug("uid attribute is missing");
 		}
 		return null;
+	}
+
+	/**
+	 * Get the URL of the OpenAM system's login servlet.
+	 * @return the URL of the OpenAM system's login servlet.
+	 */
+	public String getLoginURL(String redirectURL) {
+		return OpenAMUtil.getLoginURL(openAMURL, redirectURL);
+	}
+
+	/**
+	 * Get the URL of the OpenAM system's logout servlet.
+	 * @return the URL of the OpenAM system's logout servlet.
+	 */
+	public String getLogoutURL() {
+		return OpenAMUtil.getLogoutURL(openAMURL);
 	}
 
 }

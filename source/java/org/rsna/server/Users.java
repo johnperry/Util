@@ -112,6 +112,28 @@ public abstract class Users {
 	}
 
 	/**
+	 * Get the URL of the external system's login servlet that provides authentication.
+	 * This implementation returns the empty string, indicating that no external system provides
+	 * authentication. Single Sign On implementations must override this method.
+	 * @return the URL of the external authentication system's login servlet, or
+	 * the empty string if authentication is done locally.
+	 */
+	public String getLoginURL(String redirectURL) {
+		return "";
+	}
+
+	/**
+	 * Get the URL of the external system's logout servlet.
+	 * This implementation returns the empty string, indicating that no external system
+	 * provides authentication. Single Sign On implementations must override this method.
+	 * @return the URL of the external authentication system's logout servlet, or
+	 * the empty string if authentication is done locally.
+	 */
+	public String getLogoutURL() {
+		return "";
+	}
+
+	/**
 	 * Get an alphabetized array of usernames.
 	 * This method returns an empty array. Implementations that
 	 * manage users must override this method.

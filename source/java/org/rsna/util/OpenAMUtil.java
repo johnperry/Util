@@ -103,16 +103,38 @@ public class OpenAMUtil {
 	/**
 	 * Launch the browser and go to the login page
 	 * @param baseURL the base url of the OpenAM server, including the protocol, host, and port
+	 * @param redirectURL the destination system URL, to which the OpenAM server will redirect
+	 * the request after a successful authentication, including the protocol, host, and port
 	 * @return the result.
 	 */
     public static String login(String baseURL, String redirectURL) {
 		String result = "OK";
 		try {
-			URL url = new URL(baseURL + "/openam/UI/Login?goto="+redirectURL);
+			URL url = new URL( getLoginURL(baseURL, redirectURL) );
 			Desktop.getDesktop().browse( url.toURI() );
 		}
 		catch (Exception ignore) { result = "Unable to launch browser."; }
 		return result;
+	}
+
+	/**
+	 * Get the URL of the login page. If the redirect URL is not null and not blank,
+	 * the URL is returned with goto query parameter containing the redirect URL..
+	 * @param baseURL the base url of the OpenAM server, including the protocol, host, and port,
+	 * or null if no redirection is requested.
+	 * @param redirectURL the destination system URL, to which the OpenAM server will redirect
+	 * the request after a successful authentication, including the protocol, host, and port
+	 * @return the URL of the login page.
+	 */
+	public static String getLoginURL(String baseURL, String redirectURL) {
+		String qs = "";
+		if (redirectURL != null) {
+			redirectURL = redirectURL.trim();
+			if (!redirectURL.equals("")) {
+				qs = "?goto="+redirectURL;
+			}
+		}
+		return baseURL + "/openam/UI/Login" + qs;
 	}
 
 	/**
@@ -121,8 +143,15 @@ public class OpenAMUtil {
 	 * @return the result.
 	 */
     public static String logout(String baseURL) {
-		String result = doGet( baseURL + "/openam/UI/Logout" );
-		return result;
+		return doGet( getLogoutURL(baseURL) );
+	}
+
+	/**
+	 * Get the URL of the logout page.
+	 * @return the URL of the logout page.
+	 */
+	public static String getLogoutURL(String baseURL) {
+		return baseURL + "/openam/UI/Logout";
 	}
 
 	private static String doGet(String urlString) {

@@ -59,10 +59,10 @@ public class UserServlet extends Servlet {
 			roles = user.getRoleNames();
 		}
 		Users users = Users.getInstance();
-		String usersImpl = "";
-		if (users instanceof UsersXmlFileImpl) usersImpl = "xml";
-		else if (users instanceof UsersLdapFileImpl) usersImpl = "ldap";
-		else if (users instanceof UsersOpenAMImpl) usersImpl = "openam";
+		String usersClass = users.getClass().getName();
+		String redirectURL = req.getProtocol() + "://" + req.getHost();
+		String loginURL = users.getLoginURL(redirectURL);
+		String logoutURL = users.getLogoutURL();
 		boolean local = req.isFromLocalHost();
 		String ip = req.getRemoteAddress();
 		try {
@@ -71,7 +71,9 @@ public class UserServlet extends Servlet {
 			root.setAttribute("ip", ip);
 			root.setAttribute("name", name);
 			root.setAttribute("location", (local ? "local" : "remote"));
-			root.setAttribute("usersImpl", usersImpl);
+			root.setAttribute("usersClass", usersClass);
+			root.setAttribute("loginURL", loginURL);
+			root.setAttribute("logoutURL", logoutURL);
 			for (String role : roles) {
 				role = role.trim();
 				if (!role.equals("")) {

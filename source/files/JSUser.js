@@ -6,7 +6,9 @@ function User() {
 	this.roles = new Object();
 	this.isLoggedIn = false;
 	this.isLocal = false;
-	this.isRemote = false;
+	this.usersClass = ""
+	this.loginURL = "";
+	this.logoutURL = "";
 
 	var req = new AJAX();
 	req.GET("/user", req.timeStamp(), null);
@@ -17,7 +19,9 @@ function User() {
 		this.name = root.getAttribute("name");
 		this.isLocal = (root.getAttribute("location") == "local");
 		this.isLoggedIn = (this.name != "");
-		this.usersImpl = root.getAttribute("usersImpl");
+		this.usersClass = root.getAttribute("usersClass");
+		this.loginURL = root.getAttribute("loginURL");
+		this.logoutURL = root.getAttribute("logoutURL");
 
 		var roleElements = root.getElementsByTagName("role");
 		for (var i=0; i<roleElements.length; i++) {
