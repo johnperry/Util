@@ -171,7 +171,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the current color. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
+	 * This method is public only for backward compatibility; use print instead.
 	 */
 	public synchronized void append(String s) {
 		int len = getDocument().getLength(); // same value as getText().length();
@@ -181,7 +181,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the specified color. This method is not thread safe.
-	 * This method is public only for backward compatibility; use println instead.
+	 * This method is public only for backward compatibility; use print instead.
 	 */
 	public synchronized void append(Color c, String s) {
 		StyleContext sc = StyleContext.getDefaultStyleContext();
