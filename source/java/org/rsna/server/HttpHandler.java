@@ -66,9 +66,9 @@ public class HttpHandler extends Thread {
 				servlet.doDelete(req, res);
 			}
 			else {
-				res.setResponseCode(res.notimplemented);
+				res.setResponseCode(res.notallowed);
 				res.send();
-				logger.debug("Unimplemented request ("+req.method+") received from "+req.getRemoteAddress());
+				logger.debug("Unallowed method in request ("+req.method+") received from "+req.getRemoteAddress());
 			}
 		}
 		catch (Exception ex) {

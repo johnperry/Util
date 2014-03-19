@@ -29,9 +29,26 @@ function getXmlHttp() {
 				req.send(null);
 			};
 
+		req.DELETE =
+			function(url, qs, handler) {
+				var async = (handler != null);
+				req.open("DELETE", url + (qs ? "?"+qs : ""), async);
+				if (async) req.onreadystatechange = function() { handler(req); };
+				req.send(null);
+			};
+
 		req.POST =
 			function(url, qs, handler, contentType) {
 				req.open("POST", url, true);
+				if (handler) req.onreadystatechange = function() { handler(req); };
+				contentType = contentType ? contentType : "application/x-www-form-urlencoded";
+				req.setRequestHeader("Content-Type", contentType);
+				req.send(qs);
+			};
+
+		req.PUT =
+			function(url, qs, handler, contentType) {
+				req.open("PUT", url, true);
 				if (handler) req.onreadystatechange = function() { handler(req); };
 				contentType = contentType ? contentType : "application/x-www-form-urlencoded";
 				req.setRequestHeader("Content-Type", contentType);
@@ -84,10 +101,33 @@ function AJAX() {
 				this.req.send(null);
 			};
 
+		this.DELETE =
+			function(url, qs, handler) {
+				var thisObject = this;
+				var async = (handler != null);
+				this.req.open("DELETE", url + (qs ? "?"+qs : ""), async);
+				if (async) this.req.onreadystatechange = function() {
+					if (thisObject.req.readyState == thisObject.req.DONE) {
+						handler(thisObject);
+					}
+				}
+				this.req.send(null);
+			};
+
 		this.POST =
 			function(url, qs, handler, contentType) {
 				var thisObject = this;
 				this.req.open("POST", url, true);
+				if (handler) this.req.onreadystatechange = function() { handler(thisObject); };
+				contentType = contentType ? contentType : "application/x-www-form-urlencoded";
+				this.req.setRequestHeader("Content-Type", contentType);
+				this.req.send(qs);
+			};
+
+		this.PUTR =
+			function(url, qs, handler, contentType) {
+				var thisObject = this;
+				this.req.open("DELETE", url, true);
 				if (handler) this.req.onreadystatechange = function() { handler(thisObject); };
 				contentType = contentType ? contentType : "application/x-www-form-urlencoded";
 				this.req.setRequestHeader("Content-Type", contentType);

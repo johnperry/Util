@@ -44,17 +44,16 @@ public class PingServlet extends Servlet {
 
 		TimeZone tz = TimeZone.getDefault();
 		boolean inDST = tz.inDaylightTime(date);
-		int zoneOffset = tz.getOffset(date.getTime())/(60*60*1000);
+		int zoneOffset = tz.getOffset(date.getTime());
 		String zoneName = tz.getDisplayName(inDST, TimeZone.SHORT);
 		String zoneID = tz.getID();
 
-		int gmtHour = hour - (inDST ? zoneOffset : 0);
-		if (gmtHour < 0) gmtHour += 24;
-		if (gmtHour > 24) gmtHour -= 24;
-		if ((gmtHour == 24) && (minute > 0)) gmtHour = 0;
+		Calendar gmt = Calendar.getInstance();
+		gmt.setTimeInMillis(date.getTime() - zoneOffset);
+		int gmtHour = gmt.get(Calendar.HOUR_OF_DAY);
 
 		String response = String.format(
-			"%04d.%02d.%02d %02d:%02d:%02d %s %s [%2d%2dZ]",
+			"%04d.%02d.%02d %02d:%02d:%02d %s %s [%02d%02dZ]",
 			year, month, day, hour, minute, second, zoneName, zoneID, gmtHour, minute
 		);
 
