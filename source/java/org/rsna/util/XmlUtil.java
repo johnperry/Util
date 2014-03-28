@@ -44,6 +44,16 @@ public class XmlUtil {
 	public static DocumentBuilder getDocumentBuilder() throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
+		dbf.setValidating(false);
+		dbf.setXIncludeAware(false);
+		dbf.setExpandEntityReferences(true);
+		dbf.setCoalescing(false);
+
+		//dbf.setFeature("http://xml.org/sax/features/namespaces", false);
+		//dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+		dbf.setFeature("http://xml.org/sax/features/validation", false);
+		dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
 		return dbf.newDocumentBuilder();
 	}
 
