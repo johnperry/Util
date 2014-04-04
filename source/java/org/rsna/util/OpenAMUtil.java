@@ -21,6 +21,9 @@ public class OpenAMUtil {
 	static final String booleanEquals = "boolean=";
 	static final String nameEquals = "userdetails.attribute.name=";
 	static final String valueEquals = "userdetails.attribute.value=";
+	static final String roleEquals = "userdetails.role=";
+	static final String idEquals = "id=";
+	public static final String rolesKey = "ROLESKEY";
 
 	/**
 	 * Get the OpenAM token cookie name.
@@ -66,10 +69,12 @@ public class OpenAMUtil {
 	 * @return the attributes in a hashtable
 	 */
     public static Hashtable<String,LinkedList<String>> parseAttributes(String attributes) {
-		String[] lines = attributes.split("\n");
+		Hashtable<String,LinkedList<String>> attrs = new Hashtable<String,LinkedList<String>>();
 		String name = null;
 		LinkedList<String> values = null;
-		Hashtable<String,LinkedList<String>> attrs = new Hashtable<String,LinkedList<String>>();
+		LinkedList<String> roles = new LinkedList<String>();
+		attrs.put(rolesKey, roles);
+		String[] lines = attributes.split("\n");
 		for (String line : lines) {
 			line = line.trim();
 			if (line.startsWith(nameEquals)) {
@@ -79,6 +84,16 @@ public class OpenAMUtil {
 			}
 			else if (line.startsWith(valueEquals) && (values != null)) {
 				values.add(line.substring(valueEquals.length()));
+			}
+			else if (line.startsWith(roleEquals)) {
+				String[] segs = line.substring(roleEquals.length()).split(",");
+				for (String seg : segs) {
+					if (seg.startsWith(idEquals)) {
+						String role = seg.substring(idEquals.length()).trim().toLowerCase();
+						roles.add(role);
+						break;
+					}
+				}
 			}
 		}
 		return attrs;
