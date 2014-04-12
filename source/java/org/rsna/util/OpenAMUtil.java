@@ -23,7 +23,7 @@ public class OpenAMUtil {
 	static final String valueEquals = "userdetails.attribute.value=";
 	static final String roleEquals = "userdetails.role=";
 	static final String idEquals = "id=";
-	public static final String rolesKey = "ROLESKEY";
+	public static final String ROLESKEY = "ROLESKEY";
 
 	/**
 	 * Get the OpenAM token cookie name.
@@ -73,7 +73,7 @@ public class OpenAMUtil {
 		String name = null;
 		LinkedList<String> values = null;
 		LinkedList<String> roles = new LinkedList<String>();
-		attrs.put(rolesKey, roles);
+		attrs.put(ROLESKEY, roles);
 		String[] lines = attributes.split("\n");
 		for (String line : lines) {
 			line = line.trim();

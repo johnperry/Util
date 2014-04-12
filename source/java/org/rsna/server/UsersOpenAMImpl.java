@@ -66,19 +66,12 @@ public class UsersOpenAMImpl extends Users {
 			if (usernameList != null) {
 				String username = usernameList.getFirst();
 				User user = new User(username, "");
-				LinkedList<String>roleList = attrs.get("role");
+				LinkedList<String>roleList = attrs.get(OpenAMUtil.ROLESKEY);
 				if (roleList != null) {
 					for (String role : roleList) {
 						user.addRole(role);
 					}
 				}
-				//*********************************
-				// FOR TESTING ONLY
-				//*********************************
-				//user.addRole("admin");
-				//user.addRole("import");
-				//user.addRole("export");
-				//*********************************
 				if (logger.isDebugEnabled()) {
 					logger.debug("Created user\n"+XmlUtil.toPrettyString(user.getXML(true)));
 				}

@@ -8,6 +8,7 @@
 package org.rsna.servlets;
 
 import java.io.File;
+import java.net.URL;
 import java.util.*;
 import org.apache.log4j.Logger;
 import org.rsna.server.Authenticator;
@@ -163,8 +164,22 @@ public class LoginServlet extends Servlet {
 				url = url.substring(0, url.length() - context.length());
 			}
 		}
-		if (url.equals("") || isAttack(req, url)) url = "/";
+		if (url.equals("") || isAttack(req, url) || !isSameHost(req, url)) url = "/";
 		res.redirect(url);
+	}
+
+	//Check that a URL string points to the same host as an HttpRequest
+	//to defeat a kind of phishing attack
+	private boolean isSameHost(HttpRequest req, String urlString) {
+		try {
+			URL url = new URL(urlString);
+			String urlHost = url.getHost();
+			String reqHost = req.getHost();
+			if (reqHost.contains(":")) reqHost = reqHost.substring(0, reqHost.indexOf(":"));
+			return urlHost.equals(reqHost);
+		}
+		catch (Exception ex) { }
+		return false;
 	}
 
 	//Check a path for characters that indicate a cross-site scripting attack
