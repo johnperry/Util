@@ -25,6 +25,7 @@ public class SysPropsServlet extends Servlet {
 		return runtime.totalMemory() - runtime.freeMemory();
 	}
 	String home = "/";
+	static final long oneMB = 1024 * 1024;
 
 	/**
 	 * Construct a SysPropsServlet.
@@ -83,7 +84,7 @@ public class SysPropsServlet extends Servlet {
 	private void displayMemory(StringBuffer sb, boolean admin) {
 		Formatter formatter = new Formatter(sb);
 		sb.append( "<tr><td>MEMORY IN USE</td><td>" );
-		formatter.format("%,d", usedMemory());
+		formatter.format("%,d bytes", usedMemory());
 		if (admin) {
 			sb.append(" (<a href=\"?gc");
 			if (home.equals("")) sb.append("&suppress");
@@ -92,8 +93,17 @@ public class SysPropsServlet extends Servlet {
 		sb.append("\n");
 		sb.append( "</td></tr>\n" );
 		sb.append( "<tr><td>TOTAL MEMORY</td><td>"  );
-		formatter.format("%,d", runtime.totalMemory());
-		sb.append( "</td></tr>" );
+		formatter.format("%,d bytes", runtime.totalMemory());
+		sb.append( "</td></tr>\n" );
+		File[] roots = File.listRoots();
+		for (File root : roots) {
+			String name = root.getAbsolutePath()+" partition";
+			long free = root.getUsableSpace()/oneMB;
+			sb.append( "</td></tr>\n" );
+			sb.append( "<tr><td>"+name+"</td><td>"  );
+			formatter.format("%,d MB available", free);
+			sb.append( "</td></tr>\n" );
+		}
 	}
 
 	//Return a String containing the HTML rows of a table
