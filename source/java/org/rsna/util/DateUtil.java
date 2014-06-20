@@ -25,6 +25,8 @@ public class DateUtil {
 		//do a little filtering to protect against the most common booboos
 		date = date.replaceAll("[@:\\s]","");
 		if (date.startsWith("00")) date = "19" + date.substring(2);
+		int bslash = date.indexOf("\\");
+		if (bslash != -1) date = date.substring(0, bslash);
 		int year = Integer.parseInt(date.substring(0,4));
 		int month = Integer.parseInt(date.substring(4,6));
 		int day = Integer.parseInt(date.substring(6,8));
