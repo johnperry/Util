@@ -252,7 +252,7 @@ public class HttpRequest {
 	/**
 	 * Get the Host header associated with this request, or get the IP address
 	 * of the server if the Host header is missing.
-	 * @return the path.
+	 * @return the Host header.
 	 */
 	public String getHost() {
 		String host = getHeader("host");
@@ -260,6 +260,18 @@ public class HttpRequest {
 			host = IPUtil.getIPAddress() + ":" + socket.getPort();
 		}
 		return host;
+	}
+
+	/**
+	 * Get the Host header using the getHost method, and
+	 * remove the port from the result.
+	 * of the server if the Host header is missing.
+	 * @return the path.
+	 */
+	public String getHostWithoutPort() {
+		String host = getHost();
+		int k = host.indexOf(":");
+		return (k>0) ? host.substring(0,k) : host;
 	}
 
 	/**
