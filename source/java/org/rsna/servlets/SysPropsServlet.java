@@ -141,12 +141,10 @@ public class SysPropsServlet extends Servlet {
 	}
 
 	//Collect the garbage.
-
 	private static void collect() {
-		int i;
 		long usedMemory1 = usedMemory();
 		long usedMemory2 = Long.MAX_VALUE;
-		for (i=0; (usedMemory1 < usedMemory2) && (i < 40); i++) {
+		for (int i=0; (usedMemory1 < usedMemory2) && (i < 40); i++) {
 			runtime.runFinalization();
 			runtime.gc();
 			Thread.currentThread().yield();
