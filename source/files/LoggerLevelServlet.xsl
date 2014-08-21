@@ -65,11 +65,21 @@
 				<tr>
 					<td>Level</td>
 					<td>
-						<input type="radio" name="level" value="OFF"/>OFF<br/>
-						<input type="radio" name="level" value="ERROR"/>ERROR<br/>
-						<input type="radio" name="level" value="WARN"/>WARN<br/>
-						<input type="radio" name="level" value="INFO"/>INFO<br/>
-						<input type="radio" name="level" value="DEBUG"/>DEBUG<br/>
+						<input type="radio" name="level" value="OFF" id="OFF">
+							<label for="OFF">OFF</label>
+						</input><br/>
+						<input type="radio" name="level" value="ERROR" id="ERROR">
+							<label for="ERROR">ERROR</label>
+						</input><br/>
+						<input type="radio" name="level" value="WARN" id="WARN">
+							<label for="WARN">WARN</label>
+						</input><br/>
+						<input type="radio" name="level" value="INFO" id="INFO">
+							<label for="INFO">INFO</label>
+						</input><br/>
+						<input type="radio" name="level" value="DEBUG" id="DEBUG">
+							<label for="DEBUG">DEBUG</label>
+						</input><br/>
 					</td>
 				</tr>
 			</table>
