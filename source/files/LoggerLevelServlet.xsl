@@ -77,7 +77,7 @@
 						<input type="radio" name="level" value="INFO" id="INFO">
 							<label for="INFO">INFO</label>
 						</input><br/>
-						<input type="radio" name="level" value="DEBUG" id="DEBUG">
+						<input type="radio" name="level" value="DEBUG" id="DEBUG" checked="true">
 							<label for="DEBUG">DEBUG</label>
 						</input><br/>
 					</td>

@@ -1,3 +1,8 @@
+function loaded() {
+	document.getElementById("ClassSelector").focus();
+}
+window.onload = loaded;
+
 function save() {
 	var form = document.getElementById("formID");
 	form.target = "_self";
