@@ -38,13 +38,15 @@ public class HttpRequest {
 
 	protected static SimpleDateFormat dateFormat = null;
 
+	final int soTimeout = 2000;
+
 	public final Socket socket;
 	public final InputStream inputStream;
-	public String protocol;
-	public String method;
-	public String path;
-	public String query;
-	public String content;
+	public String protocol = "[]";
+	public String method = "[]";
+	public String path = "";
+	public String query = "";
+	public String content = "";
 	public Path parsedPath;
 	public User user;
 
@@ -60,6 +62,7 @@ public class HttpRequest {
 	 */
 	public HttpRequest(Socket socket) throws Exception {
 		this.socket = socket;
+		socket.setSoTimeout(soTimeout);
 		inputStream = new BufferedInputStream(socket.getInputStream());
 		parseRequestLine();
 		getHeaders();
@@ -581,7 +584,10 @@ public class HttpRequest {
 			try { return ( new String(bytes, "UTF-8") ).trim(); }
 			catch (Exception useDefault) { return ( new String(bytes) ).trim(); }
 		}
-		catch (Exception ex) { logger.debug("Exception reading a line from the request."); }
+		catch (Exception ex) {
+			logger.warn(ex.getClass().getName() + ": " + getRemoteAddress());
+			if (b != 'x') logger.warn("...Request:\n"+toString());
+		}
 		return "";
 	}
 
