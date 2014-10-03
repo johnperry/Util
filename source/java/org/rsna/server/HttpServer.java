@@ -13,8 +13,9 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import org.apache.log4j.Logger;
@@ -32,7 +33,7 @@ public class HttpServer extends Thread {
 	final boolean ssl;
 	final ServletSelector selector;
 	final ServerSocket serverSocket;
-	final ExecutorService execSvc;
+	final ThreadPoolExecutor execSvc;
 
 	/**
 	 * Class constructor; creates a new instance of
@@ -52,7 +53,10 @@ public class HttpServer extends Thread {
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);
-		execSvc = Executors.newFixedThreadPool( maxThreads );
+
+		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads,
+										  0L, TimeUnit.MILLISECONDS,
+										  new LinkedBlockingQueue<Runnable>() );
 	}
 
 	/**
@@ -105,6 +109,14 @@ public class HttpServer extends Thread {
 	 */
 	public int getMaxThreads() {
 		return maxThreads;
+	}
+
+	/**
+	 * Get the number of active Threads.
+	 * @return the number of active Threads currently servicing requests in this HttpServer
+	 */
+	public int getActiveThreads() {
+		return execSvc.getActiveCount();
 	}
 
 	/**

@@ -12,7 +12,7 @@ import java.util.*;
 import org.rsna.server.*;
 
 /**
- * The PingServlet. This servlet is returns a text/plain
+ * The PingServlet. This servlet returns a text/plain
  * response containing the date/time.
  */
 public class PingServlet extends Servlet {
