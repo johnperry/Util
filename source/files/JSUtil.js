@@ -96,7 +96,7 @@ function getVerticalScrollPosition() {
 	return (p ? p : 0);
 }
 
-//Get the vertical scroll position
+//Get the horizontal scroll position
 function getHorizontalScrollPosition() {
 	var p = (document.all ? document.body.scrollLeft : window.pageXOffset);
 	return (p ? p : 0);
