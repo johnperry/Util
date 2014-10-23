@@ -36,8 +36,8 @@ import java.util.zip.*;
  */
 public class FileUtil {
 
-	public static Charset latin1 = Charset.forName("ISO-8859-1");
-	public static Charset utf8 = Charset.forName("UTF-8");
+	public static final Charset latin1 = Charset.forName("ISO-8859-1");
+	public static final Charset utf8 = Charset.forName("UTF-8");
 
 	/**
 	 * Read a file completely and return a byte array containing the data.
@@ -147,6 +147,17 @@ public class FileUtil {
 	 * @return the text, or an empty string if an error occurred.
 	 */
 	public static String getText(InputStream stream, Charset charset) {
+		try { return getTextOrException(stream, charset); }
+		catch (Exception e) { return ""; }
+	}
+
+	/**
+	 * Read an InputStream completely, using the specified encoding.
+	 * @param stream the InputStream to read.
+	 * @param charset the character set to use for the encoding of the file.
+	 * @return the text, or an empty string if an error occurred.
+	 */
+	public static String getTextOrException(InputStream stream, Charset charset) throws Exception {
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader( new InputStreamReader(stream, charset) );
@@ -157,7 +168,7 @@ public class FileUtil {
 			br.close();
 			return sw.toString();
 		}
-		catch (Exception e) { close(br); return ""; }
+		catch (Exception e) { close(br); throw(e); }
 	}
 
 	/**
