@@ -834,13 +834,20 @@ public class FileUtil {
 	 * @throws Exception if any error occurs.
 	 */
 	public static void streamFile(File file, OutputStream out) throws Exception {
-		FileInputStream fis = new FileInputStream(file);
-		byte[] bbuf = new byte[1024];
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		byte[] buffer = new byte[4096];
 		int n;
-		while ((n=fis.read(bbuf,0,bbuf.length)) > 0) out.write(bbuf,0,n);
-		out.flush();
-		out.close();
-		fis.close();
+		try {
+			bis = new BufferedInputStream( new FileInputStream(file) );
+			bos = new BufferedOutputStream(out);
+			while ((n=bis.read(buffer,0,buffer.length)) > 0) bos.write(buffer,0,n);
+			bos.flush();
+		}
+		finally {
+			close(bis);
+			close(bos);
+		}
 	}
 
 	/**
@@ -852,21 +859,30 @@ public class FileUtil {
 	 */
 	public static void zipStreamFile(File file, OutputStream out) throws Exception {
 		FileInputStream fin;
-		ZipOutputStream zout = new ZipOutputStream(out);
+		ZipOutputStream zout = null;
+		String entryname;
+		int bytesread;
 		ZipEntry ze;
 		byte[] buffer = new byte[10000];
-		int bytesread;
-		String entryname = file.getName();
-		ze = new ZipEntry(entryname);
-		if (file.exists()) {
-			fin = new FileInputStream(file);
-			zout.putNextEntry(ze);
-			while ((bytesread = fin.read(buffer)) > 0) zout.write(buffer,0,bytesread);
-			fin.close();
+		try {
+			zout = new ZipOutputStream(out);
+			entryname = file.getName();
+			ze = new ZipEntry(entryname);
+			if (file.exists()) {
+				fin = new FileInputStream(file);
+				zout.putNextEntry(ze);
+				while ((bytesread = fin.read(buffer)) > 0) zout.write(buffer,0,bytesread);
+				fin.close();
+			}
 		}
-		zout.closeEntry();
-		zout.flush();
-		zout.close();
+		finally {
+			if (zout != null) {
+				try { zout.closeEntry(); } catch (Exception ex) { }
+				try { zout.flush(); } catch (Exception ex) { }
+				try { zout.close(); } catch (Exception ex) { }
+
+			}
+		}
 	}
 
 	/**

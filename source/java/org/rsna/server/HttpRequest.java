@@ -38,7 +38,7 @@ public class HttpRequest {
 
 	protected static SimpleDateFormat dateFormat = null;
 
-	final int soTimeout = 2000;
+	final int soTimeout = 60000;
 
 	public final Socket socket;
 	public final InputStream inputStream;
