@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.apache.log4j.Logger;
+import org.rsna.util.AttackLog;
 import org.rsna.util.FileUtil;
 import org.rsna.util.IPUtil;
 import org.rsna.multipart.*;
@@ -585,8 +586,10 @@ public class HttpRequest {
 			catch (Exception useDefault) { return ( new String(bytes) ).trim(); }
 		}
 		catch (Exception ex) {
-			logger.warn(ex.getClass().getName() + ": " + getRemoteAddress());
-			if (b != 'x') logger.warn("...Request:\n"+toString());
+			String ip = getRemoteAddress();
+			AttackLog.getInstance().addAttack(ip);
+			logger.debug(ex.getClass().getName() + ": " + ip);
+			if (b != 'x') logger.debug("...Request:\n"+toString());
 		}
 		return "";
 	}

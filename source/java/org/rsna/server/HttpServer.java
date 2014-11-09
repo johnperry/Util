@@ -34,6 +34,7 @@ public class HttpServer extends Thread {
 	final ServletSelector selector;
 	final ServerSocket serverSocket;
 	final ThreadPoolExecutor execSvc;
+	final LinkedBlockingQueue<Runnable> queue;
 
 	/**
 	 * Class constructor; creates a new instance of
@@ -50,13 +51,12 @@ public class HttpServer extends Thread {
 		this.port = port;
 		this.maxThreads = maxThreads;
 		this.selector = selector;
+		this.queue = new LinkedBlockingQueue<Runnable>();
+
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);
-
-		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads,
-										  0L, TimeUnit.MILLISECONDS,
-										  new LinkedBlockingQueue<Runnable>() );
+		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads, 0L, TimeUnit.MILLISECONDS, queue );
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class HttpServer extends Thread {
 
 	/**
 	 * Get maxThreads.
-	 * @return the maximum number of threads allowed for this HttpServer
+	 * @return the maximum number of active Threads allowed in this HttpServer
 	 */
 	public int getMaxThreads() {
 		return maxThreads;
@@ -117,6 +117,14 @@ public class HttpServer extends Thread {
 	 */
 	public int getActiveThreads() {
 		return execSvc.getActiveCount();
+	}
+
+	/**
+	 * Get the number of Threads waiting in the queue.
+	 * @return the number of Threads currently waiting in the queue
+	 */
+	public int getQueuedThreads() {
+		return queue.size();
 	}
 
 	/**
