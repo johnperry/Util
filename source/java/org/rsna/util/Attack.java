@@ -21,7 +21,7 @@ public class Attack implements Comparable<Attack> {
 	 * Create a new Attack for an IP address, initializing
 	 * the count and the last time to zero.
 	 */
-	public Attack(String IP) {
+	public Attack(String ip) {
 		this.ip = ip;
 		this.count = 0;
 		this.last = 0;
