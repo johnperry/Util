@@ -7,8 +7,15 @@
 
 package org.rsna.util;
 
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Hashtable;
+import org.rsna.util.FileUtil;
+import org.rsna.util.HttpUtil;
+import org.rsna.util.XmlUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  * A singleton log of server attacks.
@@ -17,6 +24,7 @@ public class AttackLog {
 
 	static AttackLog attackLog = null;
 	private Hashtable<String,Attack> attackTable;
+	final int readTimeout = 60000;
 
 	/**
 	 * The protected constructor to prevent instantiation of
@@ -44,6 +52,7 @@ public class AttackLog {
 		if (attack == null) attack = new Attack(ip);
 		attack.increment();
 		attack.setLast(System.currentTimeMillis());
+		getInfo(attack);
 		attackTable.put(ip, attack);
 	}
 
@@ -61,6 +70,29 @@ public class AttackLog {
 		}
 		Arrays.sort(atks);
 		return atks;
+	}
+
+	private void getInfo(Attack attack) {
+		if (attack.getCountry().equals("")) {
+			String ip = attack.getIP();
+			String url = "http://www.geobytes.com/IpLocator.htm?GetLocation&template=xml.txt&IpAddress="+ip;
+			try {
+				HttpURLConnection conn = HttpUtil.getConnection(url);
+				conn.setReadTimeout(readTimeout);
+				conn.setRequestMethod("GET");
+				conn.connect();
+				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+					String result = FileUtil.getText( conn.getInputStream() );
+					Document doc = XmlUtil.getDocument(result);
+					Element root = doc.getDocumentElement();
+					String city = XmlUtil.getFirstNamedChild(root, "city").getTextContent().trim();
+					String country = XmlUtil.getFirstNamedChild(root, "country").getTextContent().trim();
+					attack.setCity(city);
+					attack.setCountry(country);
+				}
+			}
+			catch (Exception skip) { }
+		}
 	}
 
 }

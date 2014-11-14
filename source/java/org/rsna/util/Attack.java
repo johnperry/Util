@@ -14,6 +14,8 @@ package org.rsna.util;
 public class Attack implements Comparable<Attack> {
 
 	private String ip = "";
+	private String city = "";
+	private String country = "";
 	private int count = 0;
 	private long last = 0;
 
@@ -45,6 +47,20 @@ public class Attack implements Comparable<Attack> {
 	}
 
 	/**
+	 * Get the country of the attacker.
+	 */
+	public String getCountry() {
+		return country;
+	}
+
+	/**
+	 * Get the city of the attacker.
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
 	 * Get the number of attacks received from the attacker.
 	 */
 	public int getCount() {
@@ -66,7 +82,21 @@ public class Attack implements Comparable<Attack> {
 	}
 
 	/**
-	 * Set the last attack time.
+	 * Set the city.
+	 */
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	/**
+	 * Set the country.
+	 */
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	/**
+	 * Set the country.
 	 */
 	public void setLast(long last) {
 		this.last = last;

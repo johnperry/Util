@@ -66,10 +66,14 @@ public class AttackLogServlet extends Servlet {
 		Attack[] attacks = AttackLog.getInstance().getAttacks();
 		for (Attack attack : attacks) {
 			String ip = attack.getIP();
+			String city = attack.getCity();
+			String country = attack.getCountry();
 			int count = attack.getCount();
 			String last = StringUtil.getDateTime(attack.getLast(), " ");
 			Element e = xml.createElement("Attacker");
 			e.setAttribute("ip", ip);
+			e.setAttribute("city", city);
+			e.setAttribute("country", country);
 			e.setAttribute("count", Integer.toString(count));
 			e.setAttribute("last", last);
 			root.appendChild(e);

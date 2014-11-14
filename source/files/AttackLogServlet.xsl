@@ -29,6 +29,8 @@
 			<table border="1">
 				<tr>
 					<th>Attacker</th>
+					<th>City</th>
+					<th>Country</th>
 					<th class="count">Count</th>
 					<th>Last Attack</th>
 				</tr>
@@ -40,6 +42,8 @@
 								<xsl:value-of select="@ip"/>
 							</a>
 						</td>
+						<td><xsl:value-of select="@city"/></td>
+						<td><xsl:value-of select="@country"/></td>
 						<td class="count"><xsl:value-of select="@count"/></td>
 						<td><xsl:value-of select="@last"/></td>
 					</tr>
