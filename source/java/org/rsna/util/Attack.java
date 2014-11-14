@@ -35,6 +35,8 @@ public class Attack implements Comparable<Attack> {
 	 */
 	public Attack(Attack attack) {
 		this.ip = attack.getIP();
+		this.city = attack.getCity();
+		this.country = attack.getCountry();
 		this.count = attack.getCount();
 		this.last = attack.getLast();
 	}
@@ -111,6 +113,16 @@ public class Attack implements Comparable<Attack> {
 		if (last < x) return 1;
 		if (last > x) return -1;
 		return 0;
+	}
+
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("IP: "+ip+"\n");
+		sb.append("  city:    "+city+"\n");
+		sb.append("  country: "+country+"\n");
+		sb.append("  count:   "+count+"\n");
+		sb.append("  last:    "+StringUtil.getDateTime(last, " ")+"\n");
+		return sb.toString();
 	}
 
 }

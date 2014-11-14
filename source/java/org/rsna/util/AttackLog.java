@@ -85,10 +85,10 @@ public class AttackLog {
 					String result = FileUtil.getText( conn.getInputStream() );
 					Document doc = XmlUtil.getDocument(result);
 					Element root = doc.getDocumentElement();
-					String city = XmlUtil.getFirstNamedChild(root, "city").getTextContent().trim();
-					String country = XmlUtil.getFirstNamedChild(root, "country").getTextContent().trim();
-					attack.setCity(city);
-					attack.setCountry(country);
+					Element city = XmlUtil.getFirstNamedChild(root, "city");
+					Element country = XmlUtil.getFirstNamedChild(root, "country");
+					attack.setCity(city.getTextContent().trim());
+					attack.setCountry(country.getTextContent().trim());
 				}
 			}
 			catch (Exception skip) { }
