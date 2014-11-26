@@ -86,8 +86,10 @@ public class AttackLog {
 					Document doc = XmlUtil.getDocument(result);
 					Element root = doc.getDocumentElement();
 					Element city = XmlUtil.getFirstNamedChild(root, "city");
+					Element region = XmlUtil.getFirstNamedChild(root, "region");
 					Element country = XmlUtil.getFirstNamedChild(root, "country");
 					attack.setCity(city.getTextContent().trim());
+					attack.setRegion(region.getTextContent().trim());
 					attack.setCountry(country.getTextContent().trim());
 				}
 			}

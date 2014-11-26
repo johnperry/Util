@@ -15,6 +15,7 @@ public class Attack implements Comparable<Attack> {
 
 	private String ip = "";
 	private String city = "";
+	private String region = "";
 	private String country = "";
 	private int count = 0;
 	private long last = 0;
@@ -36,6 +37,7 @@ public class Attack implements Comparable<Attack> {
 	public Attack(Attack attack) {
 		this.ip = attack.getIP();
 		this.city = attack.getCity();
+		this.region = attack.getRegion();
 		this.country = attack.getCountry();
 		this.count = attack.getCount();
 		this.last = attack.getLast();
@@ -60,6 +62,13 @@ public class Attack implements Comparable<Attack> {
 	 */
 	public String getCity() {
 		return city;
+	}
+
+	/**
+	 * Get the city of the attacker.
+	 */
+	public String getRegion() {
+		return region;
 	}
 
 	/**
@@ -91,6 +100,13 @@ public class Attack implements Comparable<Attack> {
 	}
 
 	/**
+	 * Set the region.
+	 */
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	/**
 	 * Set the country.
 	 */
 	public void setCountry(String country) {
@@ -119,6 +135,7 @@ public class Attack implements Comparable<Attack> {
 		StringBuffer sb = new StringBuffer();
 		sb.append("IP: "+ip+"\n");
 		sb.append("  city:    "+city+"\n");
+		sb.append("  region:  "+region+"\n");
 		sb.append("  country: "+country+"\n");
 		sb.append("  count:   "+count+"\n");
 		sb.append("  last:    "+StringUtil.getDateTime(last, " ")+"\n");
