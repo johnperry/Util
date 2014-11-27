@@ -82,7 +82,7 @@ public class AttackLog {
 				conn.setRequestMethod("GET");
 				conn.connect();
 				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					String result = FileUtil.getText( conn.getInputStream() );
+					String result = FileUtil.getText( conn.getInputStream(), FileUtil.latin1 );
 					Document doc = XmlUtil.getDocument(result);
 					Element root = doc.getDocumentElement();
 					Element city = XmlUtil.getFirstNamedChild(root, "city");
