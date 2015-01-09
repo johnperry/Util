@@ -7,13 +7,14 @@
 
 package org.rsna.ui;
 
+import java.util.EventListener;
+
 /**
  * The interface for listeners to FileEvents.
  */
-public interface FileEventListener {
+public interface FileEventListener extends EventListener {
 
 	/**
-
 	 * Notify listeners that a file event has occurred.
 	 * @param event the event describing the file that was affected.
 	 */
