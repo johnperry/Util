@@ -29,7 +29,7 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	String currentPath;
 	File currentSelection = null;
 	Properties properties;
-	HashSet<FileEventListener> listeners;
+	HashSet<FileListener> listeners;
 
 	/**
 	 * Class constructor; creates a new JScrollPane and loads it with a tree showing
@@ -39,7 +39,7 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	 */
 	public DirectoryPane(GeneralFileFilter filter, String currentPath) {
 		super();
-		listenerList = new EventListenerList();
+		listeners = new HashSet<FileListener>();
 		roots = File.listRoots();
 		this.filter = filter;
 		this.currentPath = currentPath;
@@ -184,27 +184,27 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	}
 
 	/**
-	 * Add a FileEventListener to the listener list.
+	 * Add a FileListener to the listener list.
 	 * @param listener the FileListener.
 	 */
-	public void addFileEventListener(FileEventListener listener) {
+	public void addFileListener(FileListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * Remove a FileEventListener from the listener list.
+	 * Remove a FileListener from the listener list.
 	 * @param listener the FileListener.
 	 */
-	public void removeFileEventListener(FileEventListener listener) {
+	public void removeFileListener(FileListener listener) {
 		listeners.remove(listener);
 	}
 
-	// Send a FileEvent to all FileEventListener.
+	// Send a FileEvent to all FileListener.
 	// This event is sent in the calling thread because events in
 	// this class are generated in the event thread already,
 	// making them safe for GUI updates.
 	public void sendFileEvent(FileEvent event) {
-		for (FileEventListener listener : listeners) {
+		for (FileListener listener : listeners) {
 			listener.fileEventOccurred(event);
 		}
 	}

@@ -12,7 +12,7 @@ import java.util.EventListener;
 /**
  * The interface for listeners to FileEvents.
  */
-public interface FileEventListener extends EventListener {
+public interface FileListener extends EventListener {
 
 	/**
 	 * Notify listeners that a file event has occurred.
