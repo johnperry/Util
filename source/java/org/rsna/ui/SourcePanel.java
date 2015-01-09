@@ -186,7 +186,10 @@ public class SourcePanel extends JPanel implements FileListener {
 			extensionButton.addActionListener(this);
 		}
 		public void actionPerformed(ActionEvent evt) {
+			Component parent = extensionButton.getParent();
+			while ((parent != null) && !(parent instanceof Frame)) parent = parent.getParent();
 			String newExtensions = JOptionPane.showInputDialog(
+						parent,
 						"Edit the extension list.\nSeparate extensions by commas.\n\n",
 						filter.getExtensionString());
 			if ((newExtensions != null) && !newExtensions.trim().equals("")) {
