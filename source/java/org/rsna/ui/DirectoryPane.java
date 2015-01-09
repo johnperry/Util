@@ -179,24 +179,24 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 			if (isRoot(file)) reloadTree();
 			currentPath = file.getAbsolutePath();
 			currentSelection = file;
-			sendFileEvent(new FileEvent(this,FileEvent.SELECT,file));
+			sendFileEvent(new FileEvent(this, file));
 		}
 	}
 
 	/**
-	 * Add a FileListener to the listener list.
+	 * Add a FileEventListener to the listener list.
 	 * @param listener the FileListener.
 	 */
-	public void addFileListener(FileListener listener) {
-		listenerList.add(FileListener.class, listener);
+	public void addFileEventListener(FileEventListener listener) {
+		listenerList.add(FileEventListener.class, listener);
 	}
 
 	/**
 	 * Remove a FileListener from the listener list.
 	 * @param listener the FileListener.
 	 */
-	public void removeFileListener(FileListener listener) {
-		listenerList.remove(FileListener.class, listener);
+	public void removeFileEventListener(FileEventListener listener) {
+		listenerList.remove(FileEventListener.class, listener);
 	}
 
 	// Send a FileEvent to all FileListeners.
@@ -204,9 +204,9 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	// this class are generated in the event thread already,
 	// making them safe for GUI updates.
 	public void sendFileEvent(FileEvent event) {
-		EventListener[] listeners = listenerList.getListeners(FileListener.class);
+		EventListener[] listeners = listenerList.getListeners(FileEventListener.class);
 		for (int i=0; i<listeners.length; i++) {
-			((FileListener)listeners[i]).fileEventOccurred((FileEvent)event);
+			((FileEventListener)listeners[i]).fileEventOccurred((FileEvent)event);
 		}
 	}
 }
