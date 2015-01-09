@@ -17,7 +17,7 @@ import javax.swing.*;
  * A JPanel to display a DirectoryPane and accompanying GUI components
  * to allow directory browsing and file selection.
  */
-public class SourcePanel extends JPanel implements FileListener {
+public class SourcePanel extends JPanel implements FileEventListener {
 
 	DirectoryPane directoryPane;
 	HeaderPanel headerPanel;
@@ -86,7 +86,7 @@ public class SourcePanel extends JPanel implements FileListener {
 		// Create the UI components
 		this.setLayout(new BorderLayout());
 		directoryPane = new DirectoryPane(filter,currentDirectoryPath);
-		directoryPane.addFileListener(this);
+		directoryPane.addFileEventListener(this);
 		headerPanel = new HeaderPanel(heading);
 		footerPanel = new FooterPanel();
 		this.add(headerPanel,BorderLayout.NORTH);
@@ -95,13 +95,13 @@ public class SourcePanel extends JPanel implements FileListener {
 	}
 
 	/**
-	 * Add a FileListener to the DirectoryPane. Higher level objects that
+	 * Add a FileEventListener to the DirectoryPane. Higher level objects that
 	 * have access only to this object can register with the DirectoryPane through
 	 * this method, but the DirectoryPane will send the events.
 	 * @param listener the object listening for FileEvents.
 	 */
-	public void addFileListener(FileListener listener) {
-		directoryPane.addFileListener(listener);
+	public void addFileEventListener(FileEventListener listener) {
+		directoryPane.addFileEventListener(listener);
 	}
 
 	/**
@@ -133,16 +133,14 @@ public class SourcePanel extends JPanel implements FileListener {
 	 * @param event the event.
 	 */
 	public void fileEventOccurred(FileEvent event) {
-		if (event.type == FileEvent.SELECT) {
-			File file = event.after;
-			if (file != null) {
-				String dirPath;
-				if (file.isDirectory()) dirPath = file.getAbsolutePath();
-				else dirPath = file.getParentFile().getAbsolutePath();
-				properties.setProperty("directory",dirPath);
-			}
-			else properties.remove("directory");
+		File file = event.getFile();
+		if (file != null) {
+			String dirPath;
+			if (file.isDirectory()) dirPath = file.getAbsolutePath();
+			else dirPath = file.getParentFile().getAbsolutePath();
+			properties.setProperty("directory", dirPath);
 		}
+		else properties.remove("directory");
 	}
 
 	class HeaderPanel extends JPanel implements ActionListener {

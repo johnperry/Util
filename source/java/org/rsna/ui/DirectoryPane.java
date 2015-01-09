@@ -192,14 +192,14 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	}
 
 	/**
-	 * Remove a FileListener from the listener list.
+	 * Remove a FileEventListener from the listener list.
 	 * @param listener the FileListener.
 	 */
 	public void removeFileEventListener(FileEventListener listener) {
 		listenerList.remove(FileEventListener.class, listener);
 	}
 
-	// Send a FileEvent to all FileListeners.
+	// Send a FileEvent to all FileEventListener.
 	// This event is sent in the calling thread because events in
 	// this class are generated in the event thread already,
 	// making them safe for GUI updates.
