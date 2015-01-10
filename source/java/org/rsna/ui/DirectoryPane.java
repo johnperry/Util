@@ -179,7 +179,7 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 			if (isRoot(file)) reloadTree();
 			currentPath = file.getAbsolutePath();
 			currentSelection = file;
-			sendFileEvent(new FileEvent(this, file));
+			sendFileEvent(FileEvent.SELECT(this, file));
 		}
 	}
 
