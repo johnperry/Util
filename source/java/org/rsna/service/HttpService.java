@@ -55,16 +55,19 @@ public class HttpService extends Thread {
 				Socket socket = serverSocket.accept();
 
 				//Handle the connection in a separate thread
+				logger.debug("Connection received");
 				if (!socket.isClosed()) {
 					Handler handler = new Handler(socket);
 					handler.start();
 				}
+				logger.debug("Connection handler started");
 			}
 			catch (Exception ex) { break; }
 		}
 		try { serverSocket.close(); }
 		catch (Exception ex) { logger.warn("Unable to close the server socket."); }
 		serverSocket = null;
+		logger.debug("Service closed");
 	}
 
 	// Stop the HttpReceiver.

@@ -26,31 +26,33 @@
 		<h1>Attack Log</h1>
 
 		<center>
-			<table border="1">
-				<tr>
-					<th>Attacker</th>
-					<th>City</th>
-					<th>Region</th>
-					<th>Country</th>
-					<th class="count">Count</th>
-					<th>Last Attack</th>
-				</tr>
-				<xsl:for-each select="Attacker">
+			<xsl:if test="Attacker">
+				<table border="1">
 					<tr>
-						<td>
-							<a href="http://www.geobytes.com/IpLocator.htm?GetLocation&amp;IpAddress={@ip}"
-							   target="geobytes">
-								<xsl:value-of select="@ip"/>
-							</a>
-						</td>
-						<td><xsl:value-of select="@city"/></td>
-						<td><xsl:value-of select="@region"/></td>
-						<td><xsl:value-of select="@country"/></td>
-						<td class="count"><xsl:value-of select="@count"/></td>
-						<td><xsl:value-of select="@last"/></td>
+						<th>Attacker</th>
+						<th>City</th>
+						<th>Region</th>
+						<th>Country</th>
+						<th class="count">Count</th>
+						<th>Last Attack</th>
 					</tr>
-				</xsl:for-each>
-			</table>
+					<xsl:for-each select="Attacker">
+						<tr>
+							<td>
+								<a href="http://www.geobytes.com/IpLocator.htm?GetLocation&amp;IpAddress={@ip}"
+								   target="geobytes">
+									<xsl:value-of select="@ip"/>
+								</a>
+							</td>
+							<td><xsl:value-of select="@city"/></td>
+							<td><xsl:value-of select="@region"/></td>
+							<td><xsl:value-of select="@country"/></td>
+							<td class="count"><xsl:value-of select="@count"/></td>
+							<td><xsl:value-of select="@last"/></td>
+						</tr>
+					</xsl:for-each>
+				</table>
+			</xsl:if>
 			<xsl:if test="not(Attacker)">
 				<p>The Attack Log is empty.</p>
 			</xsl:if>
