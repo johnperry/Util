@@ -134,6 +134,28 @@ public abstract class Users {
 	}
 
 	/**
+	 * Get whether the external system supports single signon.
+	 * This implementation returns false, indicating that SSO is not supported.
+	 * Single Sign On implementations must override this method.
+	 * @return true if the external authentication system supports single signon;
+	 * false otherwise.
+	 */
+	public boolean supportsSSO() {
+		return false;
+	}
+
+	/**
+	 * Get the name of the external system's single signon cookie.
+	 * This implementation returns null, indicating that there is no SSO cookie.
+	 * Single Sign On implementations must override this method.
+	 * @return the name of the external authentication system's single signon cookie, or
+	 * the empty string if there is no cookie name available.
+	 */
+	public String getSSOCookieName() {
+		return "";
+	}
+
+	/**
 	 * Get an alphabetized array of usernames.
 	 * This method returns an empty array. Implementations that
 	 * manage users must override this method.

@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import org.apache.log4j.Logger;
 import org.rsna.util.OpenAMUtil;
+import org.rsna.util.StringUtil;
 import org.rsna.util.XmlUtil;
 import org.w3c.dom.Element;
 
@@ -25,7 +26,7 @@ public class UsersOpenAMImpl extends Users {
 	static final Logger logger = Logger.getLogger(UsersOpenAMImpl.class);
 
 	String openAMURL = "";
-	String cookieName = "";
+	String ssoCookieName = "";
 
 	/**
 	 * Constructor.
@@ -35,18 +36,14 @@ public class UsersOpenAMImpl extends Users {
 		Element openAM = XmlUtil.getFirstNamedChild(element, "OpenAM");
 		if (openAM != null) {
 			openAMURL = openAM.getAttribute("openAMURL").trim();
+			openAMURL = StringUtil.replace( openAMURL, System.getProperties(), true ).trim();
 			URL url = null;
 			if (!openAMURL.equals("")) {
 				try { url = new URL(openAMURL); }
 				catch (Exception ex) { url = null; }
 			}
 			if (url == null) logger.warn("Invalid openAMURL attribute");
-			cookieName = OpenAMUtil.getCookieName(openAMURL);
-			if (!cookieName.equals("")) {
-				Authenticator.getInstance().setSSOCookieName(cookieName);
-				logger.info("OpenAM SSO cookie name: "+cookieName);
-			}
-			else logger.warn("Unable to obtain the SSO cookie name");
+			else logger.info("OpenAM URL: "+url);
 		}
 		else logger.warn("Missing OpenAM element - no parameters are available for initialization");
 	}
@@ -56,7 +53,7 @@ public class UsersOpenAMImpl extends Users {
 	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
 	public User validate(HttpRequest req) {
-		String token = req.getCookie(cookieName);
+		String token = req.getCookie(ssoCookieName);
 		boolean isValid = OpenAMUtil.validate(openAMURL, token);
 		logger.debug("Validating \""+token+"\";  result = "+isValid);
 		if (isValid) {
@@ -96,6 +93,30 @@ public class UsersOpenAMImpl extends Users {
 	 */
 	public String getLogoutURL() {
 		return OpenAMUtil.getLogoutURL(openAMURL);
+	}
+
+	/**
+	 * Indicate that the OpenAM system supports single signon.
+	 * @return true.
+	 * false otherwise.
+	 */
+	public boolean suppportsSSO() {
+		return true;
+	}
+
+	/**
+	 * Get the OpenAM system's SSO cookie name.
+	 * @return the name of the OpenAM system's SSO cookie.
+	 */
+	public String getSSOCookieName() {
+		if (ssoCookieName.equals("")) {
+			ssoCookieName = OpenAMUtil.getCookieName(openAMURL);			
+			if (!ssoCookieName.equals("")) {
+				logger.info("OpenAM SSO cookie name: "+ssoCookieName);
+			}
+			else logger.warn("Unable to obtain the SSO cookie name");
+		}
+		return ssoCookieName;
 	}
 
 }

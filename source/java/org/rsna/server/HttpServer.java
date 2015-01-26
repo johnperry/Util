@@ -51,8 +51,8 @@ public class HttpServer extends Thread {
 		this.port = port;
 		this.maxThreads = maxThreads;
 		this.selector = selector;
-		this.queue = new LinkedBlockingQueue<Runnable>();
-
+		
+		queue = new LinkedBlockingQueue<Runnable>();
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port);

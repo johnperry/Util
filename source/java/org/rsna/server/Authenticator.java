@@ -23,7 +23,6 @@ public class Authenticator {
 	static Authenticator authenticator = null;
 
 	protected Hashtable<String,Session> sessions = null;
-	String ssoCookieName = null;
 	long timeout = 1 * 60 * 60 * 1000; //default session timeout in ms = 1 hour
 
 	/**
@@ -51,22 +50,6 @@ public class Authenticator {
 	}
 
 	/**
-	 * Set the Single Sign On cookie name. This method must
-	 * be called by Users implementations that use an external
-	 * SSO server for authentication. When the ssoCookieName
-	 * is set, the authenticator uses the cookie value as an
-	 * index into the sessions table.
-	 * @param ssoCookieName the Single Sign On cookie name.
-	 */
-	public synchronized void setSSOCookieName(String ssoCookieName) {
-		if (ssoCookieName != null) {
-			ssoCookieName = ssoCookieName.trim();
-			if (ssoCookieName.equals("")) ssoCookieName = null;
-		}
-		this.ssoCookieName = ssoCookieName;
-	}
-
-	/**
 	 * Get the Session timeout.
 	 */
 	public synchronized long getSessionTimeout() {
@@ -80,9 +63,11 @@ public class Authenticator {
 	 */
     public User authenticate(HttpRequest req) {
 		Session session;
+		Users users = Users.getInstance();
 
-		//First try the SSO session cookie
-		if (ssoCookieName != null) {
+		//First, check the SSO session cookie
+		if (users.supportsSSO()) {
+			String ssoCookieName = users.getSSOCookieName();
 			String id = req.getCookie(ssoCookieName);
 			if (id != null) {
 				if ( ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
@@ -90,7 +75,7 @@ public class Authenticator {
 					return session.user;
 				}
 				else {
-					User user = Users.getInstance().validate(req);
+					User user = users.validate(req);
 					if (user != null) {
 						try {
 							session = new Session(user, req.getRemoteAddress());
@@ -185,7 +170,7 @@ public class Authenticator {
 		try {
 			Session session = new Session(user, req.getRemoteAddress());
 			sessions.put(session.id, session);
-			if (ssoCookieName == null) {
+			if (!Users.getInstance().supportsSSO()) {
 				res.setHeader("Set-Cookie", "RSNASESSION="+session.id);
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
 			}
@@ -206,17 +191,18 @@ public class Authenticator {
 	 * @param res the response.
 	 */
     public void closeSession(HttpRequest req, HttpResponse res) {
+		Users users = Users.getInstance();
 
 		//Get the session cookie name
-		String name = ssoCookieName;
-		if (name == null) name = "RSNASESSION";
+		String name = users.getSSOCookieName();
+		if (name.equals("")) name = "RSNASESSION";
 
 		//See if there is a cookie specifying an existing session.
 		String id = req.getCookie(name);
 		if (id != null) {
 			//A session was specified. Remove it from the hashtable.
 			sessions.remove(id);
-			if (ssoCookieName == null) {
+			if (!users.supportsSSO()) {
 				//Set a dummy session cookie that expires immediately.
 				res.setHeader("Set-Cookie", "RSNASESSION=NONE; Max-Age=0");
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");

@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------
-*  Copyright 2009 by the Radiological Society of North America
+*  Copyright 2015 by the Radiological Society of North America
 *
 *  This source software is released under the terms of the
 *  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
@@ -9,14 +9,14 @@ package org.rsna.service;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import org.apache.log4j.Logger;
-import org.rsna.server.Authenticator;
 import org.rsna.server.HttpRequest;
 import org.rsna.server.HttpResponse;
-import org.rsna.server.User;
-import org.rsna.server.Users;
 
 /**
  * A Thread that implements a single HTTP Service.
@@ -25,11 +25,14 @@ public class HttpService extends Thread {
 
 	static final Logger logger = Logger.getLogger(HttpService.class);
 
-	ServerSocket serverSocket;
-	boolean ssl;
-	int port;
-	Service service;
-	String name;
+	final int maxThreads = 4; //max concurrent threads
+	final ThreadPoolExecutor execSvc;
+	final LinkedBlockingQueue<Runnable> queue;
+	final ServerSocket serverSocket;
+	final boolean ssl;
+	final int port;
+	final Service service;
+	final String name;
 
     public HttpService(boolean ssl, int port, Service service) throws Exception {
 		this(ssl, port, service, null);
@@ -39,11 +42,14 @@ public class HttpService extends Thread {
 		super("HttpService");
 		this.ssl = ssl;
 		this.port = port;
-		this.name = name;
 		this.service = service;
+		this.name = name;
+		
+		queue = new LinkedBlockingQueue<Runnable>();
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
-		serverSocket = serverSocketFactory.createServerSocket(port);//Use the default backlog
+		serverSocket = serverSocketFactory.createServerSocket(port); //use the default backlog of 50
+		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads, 0L, TimeUnit.MILLISECONDS, queue );
 	}
 
 	// Start the HttpService and accept connections.
@@ -55,23 +61,21 @@ public class HttpService extends Thread {
 				Socket socket = serverSocket.accept();
 
 				//Handle the connection in a separate thread
-				logger.debug("Connection received");
 				if (!socket.isClosed()) {
-					Handler handler = new Handler(socket);
+					Handler handler = new Handler(socket, service);
 					handler.start();
 				}
-				logger.debug("Connection handler started");
 			}
 			catch (Exception ex) { break; }
 		}
 		try { serverSocket.close(); }
 		catch (Exception ex) { logger.warn("Unable to close the server socket."); }
-		serverSocket = null;
 		logger.debug("Service closed");
 	}
 
 	// Stop the HttpReceiver.
 	public void stopServer() {
+		execSvc.shutdown();
 		this.interrupt();
 	}
 
@@ -79,9 +83,11 @@ public class HttpService extends Thread {
 	class Handler extends Thread {
 
 		Socket socket;
+		Service service;
 
-		public Handler(Socket socket) {
+		public Handler(Socket socket, Service service) {
 			this.socket = socket;
+			this.service = service;
 		}
 
 		public void run() {
@@ -93,6 +99,8 @@ public class HttpService extends Thread {
 
 				//Get the request
 				req = new HttpRequest(socket);
+				
+				logger.debug("Connection received:\n"+req.toString());
 
 				//Service it
 				service.process(req, res);
@@ -117,6 +125,7 @@ public class HttpService extends Thread {
 			if (res != null) res.close();
 			try { socket.close(); }
 			catch (Exception ex) { logger.warn("Unable to close the socket."); }
+			logger.debug("Connection handler finished");
 		}
 	}
 }
