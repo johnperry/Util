@@ -31,7 +31,7 @@ public class OpenAMUtil {
 	 * @return the name of the session cookie, or the empty string if the name cannot be obtained.
 	 */
     public static String getCookieName(String baseURL) {
-		String cookieName = doGet( baseURL + "/openam/identity/getCookieNameForToken" );
+		String cookieName = doGet( baseURL + "/identity/getCookieNameForToken" );
 		if (cookieName.startsWith(stringEquals)) {
 			cookieName = cookieName.substring(stringEquals.length());
 		}
@@ -46,7 +46,7 @@ public class OpenAMUtil {
 	 * @return true if the token is valid; false otherwise.
 	 */
     public static boolean validate(String baseURL, String token) {
-		String result = doPost( baseURL + "/openam/identity/isTokenValid", "tokenid="+token );
+		String result = doPost( baseURL + "/identity/isTokenValid", "tokenid="+token );
 		if (result.startsWith(booleanEquals)) {
 			result = result.substring(booleanEquals.length());
 		}
@@ -60,7 +60,7 @@ public class OpenAMUtil {
 	 * @return the attributes.
 	 */
     public static String getAttributes(String baseURL, String token) {
-		String result = doPost( baseURL + "/openam/identity/attributes", "subjectid="+token );
+		String result = doPost( baseURL + "/identity/attributes", "subjectid="+token );
 		return result;
 	}
 
@@ -108,7 +108,7 @@ public class OpenAMUtil {
 	 */
     public static boolean authorize(String baseURL, String role, String token) {
 		String postBody = "uri="+role+"&action=GET&subjectid="+token;
-		String result = doPost( baseURL + "/openam/identity/authorize", postBody );
+		String result = doPost( baseURL + "/identity/authorize", postBody );
 		if (result.startsWith(booleanEquals)) {
 			result = result.substring(booleanEquals.length());
 		}
@@ -149,7 +149,7 @@ public class OpenAMUtil {
 				qs = "?goto="+redirectURL;
 			}
 		}
-		return baseURL + "/openam/UI/Login" + qs;
+		return baseURL + "/UI/Login" + qs;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class OpenAMUtil {
 	 * @return the URL of the logout page.
 	 */
 	public static String getLogoutURL(String baseURL) {
-		return baseURL + "/openam/UI/Logout";
+		return baseURL + "/UI/Logout";
 	}
 
 	private static String doGet(String urlString) {
