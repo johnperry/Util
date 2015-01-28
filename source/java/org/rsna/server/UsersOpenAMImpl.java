@@ -25,8 +25,8 @@ public class UsersOpenAMImpl extends Users {
 
 	static final Logger logger = Logger.getLogger(UsersOpenAMImpl.class);
 
-	String openAMURL = "";
-	String ssoCookieName = "";
+	volatile String openAMURL = "";
+	volatile String ssoCookieName = "";
 
 	/**
 	 * Constructor.
@@ -58,6 +58,7 @@ public class UsersOpenAMImpl extends Users {
 		logger.debug("Validating \""+token+"\";  result = "+isValid);
 		if (isValid) {
 			String attributes = OpenAMUtil.getAttributes(openAMURL, token);
+			logger.debug("Attributes:\n"+attributes);
 			Hashtable<String,LinkedList<String>> attrs = OpenAMUtil.parseAttributes(attributes);
 			LinkedList<String> usernameList = attrs.get("uid");
 			if (usernameList != null) {
@@ -100,7 +101,7 @@ public class UsersOpenAMImpl extends Users {
 	 * @return true.
 	 * false otherwise.
 	 */
-	public boolean suppportsSSO() {
+	public boolean supportsSSO() {
 		return true;
 	}
 

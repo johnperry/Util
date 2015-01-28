@@ -65,16 +65,19 @@ public class Authenticator {
 		Session session;
 		Users users = Users.getInstance();
 
-		//First, check the SSO session cookie
+		//First, check for an SSO session cookie
 		if (users.supportsSSO()) {
 			String ssoCookieName = users.getSSOCookieName();
 			String id = req.getCookie(ssoCookieName);
+			logger.debug("Authenticating "+id);
 			if (id != null) {
 				if ( ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
+					logger.debug("...existing session matched");
 					session.recordAccess();
 					return session.user;
 				}
 				else {
+					logger.debug("...no existing session; validating the request");
 					User user = users.validate(req);
 					if (user != null) {
 						try {
@@ -83,7 +86,7 @@ public class Authenticator {
 							//because the SSO system has already set the cookie,
 							//so we index on that.
 							sessions.put(id, session);
-							logger.debug("Created session for "+session.user.getUsername());
+							logger.debug("...created session for "+session.user.getUsername());
 							session.recordAccess();
 							return session.user;
 						}
@@ -91,6 +94,7 @@ public class Authenticator {
 							logger.debug("Unable to create the session", unable);
 						}
 					}
+					logger.debug("...request did not validate");
 				}
 			}
 		}

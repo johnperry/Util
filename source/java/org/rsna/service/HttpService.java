@@ -58,7 +58,9 @@ public class HttpService extends Thread {
 		while (!this.isInterrupted()) {
 			try {
 				//Wait for a connection
+				logger.debug("Waiting for connection");
 				Socket socket = serverSocket.accept();
+				logger.debug("...connection received");
 
 				//Handle the connection in a separate thread
 				if (!socket.isClosed()) {
@@ -100,7 +102,7 @@ public class HttpService extends Thread {
 				//Get the request
 				req = new HttpRequest(socket);
 				
-				logger.debug("Connection received:\n"+req.toString());
+				logger.debug("...request:\n"+req.toString());
 
 				//Service it
 				service.process(req, res);
