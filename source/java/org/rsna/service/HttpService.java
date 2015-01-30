@@ -49,7 +49,10 @@ public class HttpService extends Thread {
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port); //use the default backlog of 50
+		serverSocket.setReuseAddress(false); //allow connections while in refractory state
 		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads, 0L, TimeUnit.MILLISECONDS, queue );
+
+		System.setProperty("http.keepAlive", "false");
 	}
 
 	// Start the HttpService and accept connections.
@@ -67,6 +70,7 @@ public class HttpService extends Thread {
 					Handler handler = new Handler(socket, service);
 					handler.start();
 				}
+				else logger.warn("Connection received, but socket closed");
 			}
 			catch (Exception ex) { break; }
 		}
