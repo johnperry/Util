@@ -92,6 +92,7 @@ public class HttpService extends Thread {
 		Service service;
 
 		public Handler(Socket socket, Service service) {
+			super();
 			this.socket = socket;
 			this.service = service;
 		}
