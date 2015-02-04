@@ -886,6 +886,44 @@ public class FileUtil {
 	}
 
 	/**
+	 * Send an array of files to an output stream, 
+	 * zipping it during the transmission and
+	 * closing the output stream when done.
+	 * @param files the files to stream.
+	 * @param out the output stream.
+	 * @throws Exception if any error occurs.
+	 */
+	public static void zipStreamFiles(File[] files, OutputStream out) throws Exception {
+		FileInputStream fin;
+		ZipOutputStream zout = null;
+		String entryname;
+		int bytesread;
+		ZipEntry ze;
+		byte[] buffer = new byte[10000];
+		try {
+			zout = new ZipOutputStream(out);
+			for (File file : files) {
+				entryname = file.getName();
+				ze = new ZipEntry(entryname);
+				if (file.exists()) {
+					fin = new FileInputStream(file);
+					zout.putNextEntry(ze);
+					while ((bytesread = fin.read(buffer)) > 0) zout.write(buffer,0,bytesread);
+					fin.close();
+				}
+			}
+		}
+		finally {
+			if (zout != null) {
+				try { zout.closeEntry(); } catch (Exception ex) { }
+				try { zout.flush(); } catch (Exception ex) { }
+				try { zout.close(); } catch (Exception ex) { }
+
+			}
+		}
+	}
+
+	/**
 	 * Get an array of files from a directory and sort it by last-modified-date,
 	 * in reverse chronological order. This method ignores child directories.
 	 * @param dir the directory.
