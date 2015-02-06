@@ -49,9 +49,7 @@ public class HttpService extends Thread {
 		ServerSocketFactory serverSocketFactory =
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port); //use the default backlog of 50
-		serverSocket.setReuseAddress(false); //allow connections while in refractory state
 		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads, 0L, TimeUnit.MILLISECONDS, queue );
-
 		System.setProperty("http.keepAlive", "false");
 	}
 
@@ -60,23 +58,14 @@ public class HttpService extends Thread {
 		logger.info("HttpService open on port "+port + ((name!=null)?" ("+name+")":"") );
 		while (!this.isInterrupted()) {
 			try {
-				//Wait for a connection
-				logger.debug("Waiting for connection");
-				Socket socket = serverSocket.accept();
-				logger.debug("...connection received");
-
-				//Handle the connection in a separate thread
-				if (!socket.isClosed()) {
-					Handler handler = new Handler(socket, service);
-					handler.start();
-				}
-				else logger.warn("Connection received, but socket closed");
+				final Socket socket = serverSocket.accept();
+				Handler handler = new Handler(socket, service);
+				execSvc.execute( handler );
 			}
 			catch (Exception ex) { break; }
 		}
 		try { serverSocket.close(); }
 		catch (Exception ex) { logger.warn("Unable to close the server socket."); }
-		logger.debug("Service closed");
 	}
 
 	// Stop the HttpReceiver.
@@ -101,15 +90,8 @@ public class HttpService extends Thread {
 			HttpResponse res = null;
 			HttpRequest req = null;
 			try {
-				//Make a response
 				res = new HttpResponse(socket);
-
-				//Get the request
 				req = new HttpRequest(socket);
-				
-				logger.debug("...request:\n"+req.toString());
-
-				//Service it
 				service.process(req, res);
 			}
 			catch (Exception ex) {
@@ -132,7 +114,6 @@ public class HttpService extends Thread {
 			if (res != null) res.close();
 			try { socket.close(); }
 			catch (Exception ex) { logger.warn("Unable to close the socket."); }
-			logger.debug("Connection handler finished");
 		}
 	}
 }
