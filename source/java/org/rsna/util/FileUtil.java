@@ -141,37 +141,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * Read an InputStream completely, using the specified encoding.
-	 * @param stream the InputStream to read.
-	 * @param charset the character set to use for the encoding of the file.
-	 * @return the text, or an empty string if an error occurred.
-	 */
-	public static String getText(InputStream stream, Charset charset) {
-		try { return getTextOrException(stream, charset); }
-		catch (Exception e) { return ""; }
-	}
-
-	/**
-	 * Read an InputStream completely, using the specified encoding.
-	 * @param stream the InputStream to read.
-	 * @param charset the character set to use for the encoding of the file.
-	 * @return the text, or an empty string if an error occurred.
-	 */
-	public static String getTextOrException(InputStream stream, Charset charset) throws Exception {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader( new InputStreamReader(stream, charset) );
-			StringWriter sw = new StringWriter();
-			int n;
-			char[] cbuf = new char[1024];
-			while ((n=br.read(cbuf, 0, cbuf.length)) != -1) sw.write(cbuf,0,n);
-			br.close();
-			return sw.toString();
-		}
-		catch (Exception e) { close(br); throw(e); }
-	}
-
-	/**
 	 * Read a text file completely, using the UTF-8 encoding.
 	 * @param file the file to read.
 	 * @return the text of the file, or an empty string if an error occurred.
@@ -215,6 +184,51 @@ public class FileUtil {
 			return sw.toString();
 		}
 		catch (Exception e) { close(br); return ""; }
+	}
+
+	/**
+	 * Read an InputStream completely, using the specified encoding and closing the
+	 * input stream.
+	 * @param stream the InputStream to read.
+	 * @param charset the character set to use for the encoding of the input stream.
+	 * @return the text, or an empty string if an error occurred.
+	 */
+	public static String getText(InputStream stream, Charset charset) {
+		try { return getTextOrException(stream, charset, true); }
+		catch (Exception e) { return ""; }
+	}
+
+	/**
+	 * Read an InputStream completely, using the specified encoding.
+	 * @param stream the InputStream to read.
+	 * @param charset the character set to use for the encoding of the input stream.
+	 * @param close true to close the input stream; false to leave it open.
+	 * @return the text, or an empty string if an error occurred.
+	 */
+	public static String getText(InputStream stream, Charset charset, boolean close) {
+		try { return getTextOrException(stream, charset, close); }
+		catch (Exception e) { return ""; }
+	}
+
+	/**
+	 * Read an InputStream completely, using the specified encoding.
+	 * @param stream the InputStream to read.
+	 * @param charset the character set to use for the encoding of the input stream.
+	 * @param close true to close the input stream; false to leave it open.
+	 * @return the text, or an empty string if an error occurred.
+	 */
+	public static String getTextOrException(InputStream stream, Charset charset, boolean close) throws Exception {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader( new InputStreamReader(stream, charset) );
+			StringWriter sw = new StringWriter();
+			int n;
+			char[] cbuf = new char[1024];
+			while ((n=br.read(cbuf, 0, cbuf.length)) != -1) sw.write(cbuf,0,n);
+			if (close) br.close();
+			return sw.toString();
+		}
+		catch (Exception e) { close(br); throw(e); }
 	}
 
 	/**

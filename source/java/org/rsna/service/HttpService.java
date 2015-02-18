@@ -50,7 +50,6 @@ public class HttpService extends Thread {
 			ssl ? SSLServerSocketFactory.getDefault() : ServerSocketFactory.getDefault();
 		serverSocket = serverSocketFactory.createServerSocket(port); //use the default backlog of 50
 		execSvc = new ThreadPoolExecutor( maxThreads, maxThreads, 0L, TimeUnit.MILLISECONDS, queue );
-		System.setProperty("http.keepAlive", "false");
 	}
 
 	// Start the HttpService and accept connections.
