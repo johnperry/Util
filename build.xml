@@ -11,6 +11,7 @@
 	<property name="documentation" value="${basedir}/documentation"/>
 	<property name="title" value="Util"/>
 	<property name="copyright" value="Copyright 2010 Radiological Society of North America"/>
+	<property name="ctp" value="D:/Development/CTP"/>
 
 	<path id="classpath">
 		<pathelement location="${libraries}/jdbm.jar"/>
@@ -58,7 +59,7 @@
 	</target>
 
 	<target name="deploy">
-		<copy overwrite="true" file="${products}/${name}.jar" todir="../CTP/libraries"/>
+		<copy overwrite="true" file="${products}/${name}.jar" todir="${ctp}/libraries"/>
 		<tstamp>
 			<format property="end" pattern="HH:mm:ss"/>
 		</tstamp>
