@@ -10,12 +10,11 @@ package org.rsna.util;
 import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.rsna.util.FileUtil;
 import org.rsna.util.HttpUtil;
 import org.rsna.util.XmlUtil;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 
 /**
  * A singleton log of server attacks.
@@ -75,7 +74,7 @@ public class AttackLog {
 	private void getInfo(Attack attack) {
 		if (attack.getCountry().equals("")) {
 			String ip = attack.getIP();
-			String url = "http://www.geobytes.com/IpLocator.htm?GetLocation&template=xml.txt&IpAddress="+ip;
+			String url = "http://gd.geobytes.com/GetCityDetails?fqcn="+ip;
 			try {
 				HttpURLConnection conn = HttpUtil.getConnection(url);
 				conn.setReadTimeout(readTimeout);
@@ -83,18 +82,37 @@ public class AttackLog {
 				conn.connect();
 				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					String result = FileUtil.getText( conn.getInputStream(), FileUtil.latin1 );
-					Document doc = XmlUtil.getDocument(result);
-					Element root = doc.getDocumentElement();
-					Element city = XmlUtil.getFirstNamedChild(root, "city");
-					Element region = XmlUtil.getFirstNamedChild(root, "region");
-					Element country = XmlUtil.getFirstNamedChild(root, "country");
-					attack.setCity(city.getTextContent().trim());
-					attack.setRegion(region.getTextContent().trim());
-					attack.setCountry(country.getTextContent().trim());
+					JSONTable table = new JSONTable(result);
+					attack.setCity(table.get("geobytescity"));
+					attack.setRegion(table.get("geobytesregion"));
+					attack.setCountry(table.get("geobytescountry"));
 				}
 			}
 			catch (Exception skip) { }
 		}
 	}
+	
+/* Example result from geobytes (with newlines added for readability):
 
+{"geobytesinternet":"AU","geobytescountry":"Australia","geobytesregionlocationcode":"AUSA",
+"geobytesregion":"South Australia","geobytescode":"SA","geobyteslocationcode":"AUSAADEL",
+"geobytescity":"Adelaide","geobytescityid":"1312","geobytesfqcn":"Adelaide, SA, Australia",
+"geobyteslatitude":"-34.932999","geobyteslongitude":"138.600006","geobytescapital":"Canberra ",
+"geobytestimezone":"138.6","geobytesnationalitysingular":"Australian","geobytespopulation":"19357594",
+"geobytesnationalityplural":"Australians","geobytesmapreference":"Oceania ",
+"geobytescurrency":"Australian dollar ","geobytescurrencycode":"AUD","geobytestitle":"Australia"}
+
+*/
+	class JSONTable extends Hashtable<String,String> {
+		public JSONTable(String text) throws Exception {
+			super();
+			Pattern pattern = Pattern.compile("\"([^\"]*)\":\"([^\"]*)\"");
+			Matcher matcher = pattern.matcher(text);
+			while (matcher.find()) {
+				String key = matcher.group(1);
+				String value = matcher.group(2);
+				put(key, value);
+			}
+		}
+	}
 }
