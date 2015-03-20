@@ -91,6 +91,16 @@ public class HttpUtil {
 				"Proxy-Authorization",
 				"Basic "+proxy.getEncodedCredentials());
 		}
+		
+		String userinfo = url.getUserInfo();
+		if (userinfo != null) {
+			String[] creds = userinfo.split(":");
+			if (creds.length == 2) {
+				conn.setRequestProperty(
+					"Authorization",
+					"Basic "+Base64.encodeToString((creds[0].trim() + ":" + creds[1].trim()).getBytes()));
+			}
+		}
 
 		//and return the connection.
 		return conn;
