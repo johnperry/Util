@@ -366,21 +366,22 @@ public class HttpResponse {
 		}
 
 		public void write() {
+			InputStream inputStream = null;
 			try {
 				if (bytes != null) outputStream.write(bytes);
 				else if (file != null) {
-					FileInputStream inputStream = new FileInputStream(file);
+					inputStream = new FileInputStream(file);
 					int nbytes;
 					byte[] buffer = new byte[2048];
 					while ((nbytes = inputStream.read(buffer)) != -1) {
-						outputStream.write(buffer,0,nbytes);
+						outputStream.write(buffer, 0, nbytes);
 					}
-					inputStream.close();
 				}
 			}
 			catch (Exception ignore) {
-				logger.debug("Unable to write to the output stream.", ignore);
+				logger.debug("Unable to send response object.", ignore);
 			}
+			finally { FileUtil.close(inputStream); }
 		}
 	}
 

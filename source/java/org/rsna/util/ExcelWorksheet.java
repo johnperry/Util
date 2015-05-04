@@ -136,7 +136,7 @@ public class ExcelWorksheet {
 	 * @return the column identifier, or the empty string if no cell matches the
 	 * specified text.
 	 */
-	private String findColumn(int row, String text) {
+	public String findColumn(int row, String text) {
 		for (int i=0; i<26; i++) {
 			String col = Character.toString( (char)('A'+i) );
 			String cell = getCell( col + row );
