@@ -60,6 +60,7 @@ public class UserServlet extends Servlet {
 		}
 		Users users = Users.getInstance();
 		String usersClass = users.getClass().getName();
+		boolean isXMLFile = (users instanceof UsersXmlFileImpl);
 		String redirectURL = req.getProtocol() + "://" + req.getHost();
 		String loginURL = users.getLoginURL(redirectURL);
 		String logoutURL = users.getLogoutURL();
@@ -72,6 +73,7 @@ public class UserServlet extends Servlet {
 			root.setAttribute("name", name);
 			root.setAttribute("location", (local ? "local" : "remote"));
 			root.setAttribute("usersClass", usersClass);
+			root.setAttribute("usersClassIsXMLFile", (isXMLFile ? "yes" : "no"));
 			root.setAttribute("loginURL", loginURL);
 			root.setAttribute("logoutURL", logoutURL);
 			for (String role : roles) {

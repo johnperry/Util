@@ -6,7 +6,8 @@ function User() {
 	this.roles = new Object();
 	this.isLoggedIn = false;
 	this.isLocal = false;
-	this.usersClass = ""
+	this.usersClass = true;
+	this.usersClassIsXMLFile = true;
 	this.loginURL = "";
 	this.logoutURL = "";
 
@@ -20,6 +21,7 @@ function User() {
 		this.isLocal = (root.getAttribute("location") == "local");
 		this.isLoggedIn = (this.name != "");
 		this.usersClass = root.getAttribute("usersClass");
+		this.usersClassIsXMLFile = (root.getAttribute("usersClassIsXMLFile") == "yes");
 		this.loginURL = root.getAttribute("loginURL");
 		this.logoutURL = root.getAttribute("logoutURL");
 

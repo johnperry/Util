@@ -54,11 +54,19 @@ public class UserManagerServlet extends Servlet {
 		Users users = Users.getInstance();
 
 		//Make sure the user is authorized to do this.
-		if (!req.userHasRole("admin") || !(users instanceof UsersXmlFileImpl)) {
+		if (!req.userHasRole("admin")) {
 			res.setResponseCode(res.forbidden);
 			res.send();
 			return;
 		}
+		
+		//Make sure this servlet can manage the users class
+		 if (!(users instanceof UsersXmlFileImpl)) {
+			 res.write("This servlet cannot manage the configured users class\n("+users.getClass().getName()+").");
+			 res.setContentType("txt");
+			 res.send();
+			 return;
+		 }
 
 		//Make the page and return it.
 		if (req.hasParameter("suppress")) home = "";
