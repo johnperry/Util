@@ -375,16 +375,17 @@ public class FileUtil {
 	 * @param contentLength the maximum number of bytes to copy, or -1 to read the InputStream fully.
 	 * @return true if the operation succeeded completely; false otherwise.
 	 */
-	public static synchronized boolean copy(InputStream in, OutputStream out, int contentLength) {
-		int length = (contentLength > 0) ? contentLength : Integer.MAX_VALUE;
+	public static synchronized boolean copy(InputStream in, OutputStream out, long contentLength) {
+		long length = (contentLength > 0) ? contentLength : Long.MAX_VALUE;
 		boolean result = true;
-		int bytesRead = 0;
+		long bytesRead = 0;
 		try {
 			in = new BufferedInputStream(in);
 			byte[] b = new byte[4096];
 			int n;
+
 			while ( (bytesRead < length) &&
-						((n = in.read(b, 0, Math.min(b.length, length-bytesRead))) != -1) ) {
+						((n = in.read(b, 0, (int)Math.min(b.length, length-bytesRead))) != -1) ) {
 				out.write(b, 0, n);
 				bytesRead += n;
 			}
