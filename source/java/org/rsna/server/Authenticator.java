@@ -175,7 +175,7 @@ public class Authenticator {
 			Session session = new Session(user, req.getRemoteAddress());
 			sessions.put(session.id, session);
 			if (!Users.getInstance().supportsSSO()) {
-				res.setHeader("Set-Cookie", "RSNASESSION="+session.id);
+				res.setHeader("Set-Cookie", "RSNASESSION="+session.id + "; path=/");
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
 			}
 			return true;
