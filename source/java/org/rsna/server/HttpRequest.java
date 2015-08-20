@@ -44,6 +44,7 @@ public class HttpRequest {
 	public final Socket socket;
 	public final InputStream inputStream;
 	public String protocol = "[]";
+	public String protocolVersion = "";
 	public String method = "[]";
 	public String path = "";
 	public String query = "";
@@ -526,8 +527,14 @@ public class HttpRequest {
 			path = path.substring(0, queryStringStart).trim();
 		}
 		int protocolVersionStart = line.indexOf("/", protocolStart);
-		if (protocolVersionStart > 0) protocol = line.substring(protocolStart, protocolVersionStart);
-		else protocol = line.substring(protocolStart);
+		if (protocolVersionStart > 0) {
+			protocol = line.substring(protocolStart, protocolVersionStart);
+			protocolVersion = line.substring(protocolVersionStart + 1).trim();
+		}
+		else {
+			protocol = line.substring(protocolStart);
+			protocolVersion = "";
+		}
 		protocol = protocol.trim().toLowerCase(); //note: trim is necessary
 
 		try { path = URLDecoder.decode(path,"UTF-8"); }
