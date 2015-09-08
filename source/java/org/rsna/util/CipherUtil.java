@@ -42,7 +42,7 @@ public class CipherUtil {
 	 * @param key the encryption key as a Base-64 string.
 	 * @return the encrypted string in Based-64.
 	 */
-	public String encrypt(String text, String key) throws Exception {
+	public static String encrypt(String text, String key) throws Exception {
 		if (text == null) text = "null";
 		Cipher enCipher = getCipher(key, Cipher.ENCRYPT_MODE);
 		byte[] encrypted = enCipher.doFinal(text.getBytes("UTF-8"));
