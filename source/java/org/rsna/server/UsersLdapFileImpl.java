@@ -27,6 +27,8 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 	String providerURL = "";
 	String securityAuthentication = "simple";
 	String securityPrincipal = "";
+	String referral = "ignore";
+	String derefAliases = "never";
 
 	/**
 	 * Constructor.
@@ -40,6 +42,8 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 			providerURL = ldap.getAttribute("providerURL");
 			securityAuthentication = ldap.getAttribute("securityAuthentication");
 			securityPrincipal = ldap.getAttribute("securityPrincipal");
+			referral =ldap.getAttribute("referral");
+			derefAliases = ldap.getAttribute("derefAliases");
 
 			//Make sure we have an admin user who is known to LDAP
 			String ldapAdmin = ldap.getAttribute("ldapAdmin").trim();
@@ -79,7 +83,9 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 							providerURL,
 							securityAuthentication,
 							principal,
-							password) ) {
+							password,
+							referral,
+							derefAliases) ) {
 				if (logger.isDebugEnabled()) {
 					String xml = XmlUtil.toPrettyString(user.getXML(false)); //don't log the password
 					logger.debug("LDAP has authenticated user \""+username+"\"\n"+xml);

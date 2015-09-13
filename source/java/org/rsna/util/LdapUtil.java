@@ -20,6 +20,8 @@ public class LdapUtil {
 	static final Logger logger = Logger.getLogger(LdapUtil.class);
 	static final String defaultContextFactory = "com.sun.jndi.ldap.LdapCtxFactory";
 	static final String defaultSecurityAuthentication = "simple";
+	static final String defaultReferral = "ignore";
+	static final String defaultDerefAliases = "never";	
 
 	/**
 	 * Authenticate a securityPrincipal with an LDAP provider
@@ -35,7 +37,9 @@ public class LdapUtil {
 			String providerURL,
 			String securityAuthentication,
 			String securityPrincipal,
-			String securityCredentials) {
+			String securityCredentials,
+			String referral,
+			String derefAliases) {
 
 		initialContextFactory = initialContextFactory.trim();
 		initialContextFactory = (initialContextFactory.equals("") ? defaultContextFactory : initialContextFactory);
@@ -43,13 +47,20 @@ public class LdapUtil {
 		securityAuthentication = securityAuthentication.trim();
 		securityAuthentication = (securityAuthentication.equals("") ? defaultSecurityAuthentication : securityAuthentication);
 
+		referral = referral.trim();
+		referral = (referral.equals("") ? defaultReferral : referral);
+
+		derefAliases = derefAliases.trim();
+		derefAliases = (derefAliases.equals("") ? defaultDerefAliases : derefAliases);
+
 		Hashtable<String,String> env = new Hashtable<String,String>();
 		env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
 		env.put(Context.PROVIDER_URL, providerURL);
 		env.put(Context.SECURITY_AUTHENTICATION, securityAuthentication);
 		env.put(Context.SECURITY_PRINCIPAL, securityPrincipal);
 		env.put(Context.SECURITY_CREDENTIALS, securityCredentials);
-	    env.put("java.naming.ldap.derefAliases", "never");
+		env.put(Context.REFERRAL, referral);
+	    env.put("java.naming.ldap.derefAliases", derefAliases);
 
 		DirContext ctx = null;
 		boolean result = true;
