@@ -78,6 +78,7 @@ public class Servlet {
 		File file = getRequestedFile(req);
 		String ct = res.setContentType(file);
 		if ((ct == null) || ct.startsWith("application/")) res.disableCaching();
+		res.setContentEncoding(req);
 
 		if (file.exists()) {
 			//The file exists in the root directory tree.
@@ -107,7 +108,7 @@ public class Servlet {
 				//There is no cache, see if the file can
 				//be obtained from the classpath.
 				URL url = null;
-				if ((url=getClass().getResource(req.path)) != null)  res.write(url);
+				if ((url=getClass().getResource(req.path)) != null) res.write(url);
 				else res.setResponseCode( res.notfound );
 			}
 		}

@@ -314,6 +314,18 @@ public class HttpRequest {
 	}
 
 	/**
+	 * Get a header value or a default value if the header is missing.
+	 * @param name the case-insensitive name of the header.
+	 * @param defaultValue the value to return if the header is missing.
+	 * @return the string value of the header, or the default value if
+	 * the header was not present in the request.
+	 */
+	public String getHeader(String name, String defaultValue) {
+		String header = headers.get(name.toLowerCase());
+		return (header != null) ? header : defaultValue;
+	}
+
+	/**
 	 * Get the conditional GET time value as specified
 	 * in the "If-Modified-Since" header. The format of
 	 * the time is "Thu, 16 Mar 2000 11:00:00 GMT".

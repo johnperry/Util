@@ -48,7 +48,7 @@ public class HttpHandler extends Thread {
 
 			//Get the request
 			req = new HttpRequest(socket);
-
+			
 			//Get the Servlet
 			Servlet servlet = selector.getServlet(req);
 

@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.GZIPOutputStream;
 import org.apache.log4j.Logger;
 import org.rsna.util.FileUtil;
 import org.rsna.util.XmlUtil;
@@ -39,9 +40,9 @@ public class HttpResponse {
 	protected static SimpleDateFormat dateFormat = null;
 
 	final Socket socket;
-	final OutputStream outputStream;
 	final Hashtable<String,String> headers;
 	final List<ResponseItem> responseContent;
+	OutputStream outputStream;
 	long responseLength = 0;
 	int responseCode = 200;
 
@@ -192,6 +193,44 @@ public class HttpResponse {
 	}
 
 	/**
+	 * Set the Content-Encoding header if the request accepts gzip encoding.
+	 * @param req the request containing the Accept-Encoding header.
+	 * @return the value of the header set, or null if no header was set.
+	 */
+	public String setContentEncoding(HttpRequest req) {
+		String encoding = req.getHeader("Accept-Encoding", "").toLowerCase();
+		if (encoding.contains("gzip")) {
+			setHeader("Content-Encoding", "gzip");
+			return "gzip";
+		}
+		return null;
+	}
+
+	/**
+	 * Set the Content-Encoding header if the request accepts gzip encoding
+	 * and the supplied string matches one of:
+	 * <li>csv
+	 * <li>htm
+	 * <li>html
+	 * <li>js
+	 * <li>md
+	 * <li>svg
+	 * <li>txt
+	 * <li>xml
+	 * <ul>css
+	 * </ul>
+	 * @param req the request containing the Accept-Encoding header.
+	 * @param type the type of content (e.g. the file extension (without the leading period).
+	 * @return the value of the header set, or null if no header was set.
+	 */
+	public String setContentEncoding(HttpRequest req, String type) {
+		if (".css.csv.htm.html.js.md.svg.txt.xml.".contains("."+type+".")) {
+			return setContentEncoding(req);
+		}
+		return null;
+	}
+
+	/**
 	 * Set the Last-Modified header for a file.
 	 * @param time the last modified date in milliseconds.
 	 */
@@ -308,8 +347,11 @@ public class HttpResponse {
 				"Content-Length: " + responseLength + "\r\n\r\n";
 			byte[] preambleBytes = preamble.getBytes("UTF-8");
 			outputStream.write(preambleBytes);
-			ListIterator<ResponseItem> it = responseContent.listIterator();
-			while (it.hasNext()) it.next().write();
+			String encoding = headers.get("Content-Encoding");
+			boolean gzip = ((encoding != null) && encoding.equals("gzip"));
+			if (gzip) outputStream = new GZIPOutputStream(outputStream);
+			for (ResponseItem item : responseContent) item.write();
+			if (gzip) ((GZIPOutputStream)outputStream).finish();
 			outputStream.flush();
 			return true;
 		}
@@ -366,11 +408,11 @@ public class HttpResponse {
 		}
 
 		public void write() {
-			InputStream inputStream = null;
+			BufferedInputStream inputStream = null;
 			try {
 				if (bytes != null) outputStream.write(bytes);
 				else if (file != null) {
-					inputStream = new FileInputStream(file);
+					inputStream = new BufferedInputStream(new FileInputStream(file));
 					int nbytes;
 					byte[] buffer = new byte[2048];
 					while ((nbytes = inputStream.read(buffer)) != -1) {
