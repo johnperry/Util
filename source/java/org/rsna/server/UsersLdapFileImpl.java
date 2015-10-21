@@ -8,6 +8,8 @@
 package org.rsna.server;
 
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.rsna.util.LdapUtil;
 import org.rsna.util.StringUtil;
@@ -26,7 +28,7 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 	String initialContextFactory = "";
 	String providerURL = "";
 	String securityAuthentication = "simple";
-	String securityPrincipal = "";
+	String[] securityPrincipals;
 	String referral = "ignore";
 	String derefAliases = "never";
 
@@ -41,7 +43,28 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 			initialContextFactory = ldap.getAttribute("initialContextFactory");
 			providerURL = ldap.getAttribute("providerURL");
 			securityAuthentication = ldap.getAttribute("securityAuthentication");
-			securityPrincipal = ldap.getAttribute("securityPrincipal");
+			String securityPrincipal = ldap.getAttribute("securityPrincipal");
+			
+			logger.debug("securityPrincipal: \""+securityPrincipal+"\"");
+			Pattern pattern = Pattern.compile("(\\([^\\)]+\\))");
+			Matcher matcher = pattern.matcher(securityPrincipal);
+			if (matcher.find()) {
+				String groupStart = securityPrincipal.substring(0, matcher.start());
+				String group = matcher.group();
+				String groupEnd = securityPrincipal.substring(matcher.end());
+				String[] items = group.substring(1, group.length()-1).split("\\|");
+				securityPrincipals = new String[items.length];
+				for (int i=0; i<items.length; i++) {
+					securityPrincipals[i] = groupStart + items[i] + groupEnd;
+				}
+			}
+			else securityPrincipals = new String[] { securityPrincipal };
+			if (logger.isDebugEnabled()) {
+				for (int i=0; i<securityPrincipals.length; i++) {
+					logger.debug("securityPrincipal["+i+"]: \""+securityPrincipals[i]+"\"");
+				}
+			}
+			
 			referral =ldap.getAttribute("referral");
 			derefAliases = ldap.getAttribute("derefAliases");
 
@@ -73,30 +96,33 @@ public class UsersLdapFileImpl extends UsersXmlFileImpl {
 
 			Properties props = new Properties();
 			props.setProperty( "username", username );
-			String principal = StringUtil.replace( securityPrincipal, props );
-			logger.debug("securityPrincipal: \""+securityPrincipal+"\"");
-			logger.debug("username:          \""+username+"\"");
-			logger.debug("principal:         \""+principal+"\"");
-
-			if ( LdapUtil.authenticate(
-							initialContextFactory,
-							providerURL,
-							securityAuthentication,
-							principal,
-							password,
-							referral,
-							derefAliases) ) {
+			for (String securityPrincipal : securityPrincipals) {
+				String principal = StringUtil.replace( securityPrincipal, props );
 				if (logger.isDebugEnabled()) {
-					String xml = XmlUtil.toPrettyString(user.getXML(false)); //don't log the password
-					logger.debug("LDAP has authenticated user \""+username+"\"\n"+xml);
+					logger.debug("securityPrincipal: \""+securityPrincipal+"\"");
+					logger.debug("username:          \""+username+"\"");
+					logger.debug("principal:         \""+principal+"\"");
 				}
-				return user;
+
+				if ( LdapUtil.authenticate(
+								initialContextFactory,
+								providerURL,
+								securityAuthentication,
+								principal,
+								password,
+								referral,
+								derefAliases) ) {
+					if (logger.isDebugEnabled()) {
+						String xml = XmlUtil.toPrettyString(user.getXML(false)); //don't log the password
+						logger.debug("LDAP has authenticated user \""+username+"\"\n"+xml);
+					}
+					return user;
+				}
 			}
-			else {
-				logger.debug("LDAP failed to authenticate user \""+username+"\".");
-				return null;
-			}
+			logger.debug("LDAP failed to authenticate user \""+username+"\".");
+			return null;
 		}
+		
 		logger.debug("Unable to find user \""+username+"\" in the users.xml file.");
 		return null;
 	}
