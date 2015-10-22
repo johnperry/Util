@@ -45,6 +45,7 @@ public class PasswordServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 		//Get a password page from one of three places:
 		//-- the pages directory
 		//-- the root directory

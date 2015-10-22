@@ -42,6 +42,7 @@ public class SysPropsServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 		res.disableCaching();
 		boolean admin = req.userHasRole("admin");
 		if (admin && (req.getParameter("gc") != null)) collect();

@@ -70,6 +70,7 @@ public class FileServerServlet extends Servlet {
 				res.write( XmlUtil.getTransformedText( xml, xsl, params ) );
 				res.setContentType("html");
 			}
+			res.setContentEncoding(req);
 			res.disableCaching();
 			res.send();
 		}

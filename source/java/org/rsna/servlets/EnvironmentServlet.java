@@ -41,6 +41,7 @@ public class EnvironmentServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 		res.disableCaching();
 		boolean admin = req.userHasRole("admin");
 		if (req.hasParameter("suppress")) home = "";

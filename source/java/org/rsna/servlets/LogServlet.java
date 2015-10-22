@@ -43,6 +43,7 @@ public class LogServlet extends Servlet {
 	 * @param res The HttpServletResponse provided by the servlet container.
 	 */
 	public void doGet( HttpRequest req, HttpResponse res ) {
+		res.setContentEncoding(req);
 		res.disableCaching();
 
 		//Require that the user have the admin role

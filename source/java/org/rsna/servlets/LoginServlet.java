@@ -52,6 +52,7 @@ public class LoginServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 
 		logger.debug("Request received:\n"+req.toVerboseString());
 

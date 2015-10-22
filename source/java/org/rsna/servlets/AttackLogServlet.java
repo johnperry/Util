@@ -47,6 +47,7 @@ public class AttackLogServlet extends Servlet {
 	 * @param res the response object.
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
+		res.setContentEncoding(req);
 
 		//Require that the user have the admin role
 		if (!req.userHasRole("admin")) {

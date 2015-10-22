@@ -49,6 +49,7 @@ public class UserManagerServlet extends Servlet {
 	 * @param res the response object.
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 
 		//Get the Users object.
 		Users users = Users.getInstance();
@@ -86,6 +87,7 @@ public class UserManagerServlet extends Servlet {
 	 * @param res the response object.
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) {
+		res.setContentEncoding(req);
 
 		if (logger.isDebugEnabled()) {
 			String username = null;
