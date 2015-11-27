@@ -62,13 +62,22 @@ public class ClientHttpRequest {
   /**
    * Create a new multipart POST HTTP request on a freshly opened URLConnection
    * @param connection an already open URL connection
+   * @param reqContentType the Content-Type of the request (ending in ';')
+   * @throws IOException
+   */
+  public ClientHttpRequest(URLConnection connection, String reqContentType) throws IOException {
+    this.connection = connection;
+    connection.setDoOutput(true);
+    connection.setRequestProperty("Content-Type", reqContentType + " boundary=" + boundary);
+  }
+
+  /**
+   * Create a new multipart POST HTTP request on a freshly opened URLConnection
+   * @param connection an already open URL connection
    * @throws IOException
    */
   public ClientHttpRequest(URLConnection connection) throws IOException {
-    this.connection = connection;
-    connection.setDoOutput(true);
-    connection.setRequestProperty("Content-Type",
-                                  "multipart/form-data; boundary=" + boundary);
+    this(connection, "multipart/form-data;");
   }
 
   /**
@@ -179,7 +188,23 @@ public class ClientHttpRequest {
    */
   public void setParameter(String name, File file) throws IOException {
 	InputStream in = new FileInputStream(file);
-    setParameter(name, file.getPath(), in);
+    setParameter(name, file.getName(), in);
+    in.close();
+  }
+
+  /**
+   * Add a DICOM file part to the request
+   * @param file the file to upload
+   * @param partContentType the ContentType to be used for this part
+   * @throws IOException
+   */
+  public void addPart(File file, String partContentType) throws IOException {
+	InputStream in = new FileInputStream(file);
+	boundary();
+	newline();
+    writeln("Content-Type: " + partContentType);
+    pipe(in, os);
+    newline();
     in.close();
   }
 

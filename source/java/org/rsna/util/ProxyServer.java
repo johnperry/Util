@@ -131,6 +131,10 @@ public class ProxyServer {
 		System.setProperty("proxySet","true");
 		System.setProperty("http.proxyHost",proxyIPAddress);
 		System.setProperty("http.proxyPort",proxyPort);
+		System.setProperty("https.proxyHost",proxyIPAddress);
+		System.setProperty("https.proxyPort",proxyPort);
+		System.setProperty("ftp.proxyHost",proxyIPAddress);
+		System.setProperty("ftp.proxyPort",proxyPort);
 	}
 
 	/**
@@ -141,6 +145,10 @@ public class ProxyServer {
 		sys.remove("proxySet");
 		sys.remove("http.proxyHost");
 		sys.remove("http.proxyPort");
+		sys.remove("https.proxyHost");
+		sys.remove("https.proxyPort");
+		sys.remove("ftp.proxyHost");
+		sys.remove("ftp.proxyPort");
 	}
 
 	/**
