@@ -556,6 +556,23 @@ public class FileUtil {
 	}
 
 	/**
+	 * Get the first file whose name matches starting and ending strings.
+	 * @param dir the directory to search.
+	 * @param nameStart the string to match against the start of the name.
+	 * @param nameEnd the string to match against the end of the name.
+	 * @return the first matching file, or null if no matching file is found in the directory.
+	 */
+	public static File getFile(File dir, String nameStart, String nameEnd) {
+		for (File file : dir.listFiles()) {
+			String name = file.getName();
+			if (name.startsWith(nameStart) && name.endsWith(nameEnd)) {
+				return file;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Get an InputStream for a resource.
 	 * @param resourcePath the file to get if the primaryFile doesn't exist.
 	 * @return the stream for the resource, or null if the stream could not be created.
