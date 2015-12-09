@@ -2,7 +2,7 @@
 *  Copyright 20054 by the Radiological Society of North America
 *
 *  This source software is released under the terms of the
-*  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
+*  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense.pdf)
 *
 *  Adapted from code by Christian Kaufhold (ch-kaufhold@gmx.de)
 *----------------------------------------------------------------*/

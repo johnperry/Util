@@ -2,7 +2,7 @@
 *  Copyright 2013 by the Radiological Society of North America
 *
 *  This source software is released under the terms of the
-*  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense)
+*  RSNA Public License (http://mirc.rsna.org/rsnapubliclicense.pdf)
 *----------------------------------------------------------------*/
 
 package org.rsna.ui;
