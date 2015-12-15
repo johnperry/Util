@@ -40,11 +40,15 @@ public class ServerStatusServlet extends Servlet {
 		int maxThreads = server.getMaxThreads();
 		int activeThreads = server.getActiveThreads();
 		int queuedThreads = server.getQueuedThreads();
+		int sessionCount = Authenticator.getInstance().getActiveSessionCount();
 
 		String response = activeThreads + " of " + maxThreads + " server threads are currently active.\n"
 							+ queuedThreads + " thread"
 							+ ((queuedThreads == 1) ? " is" : "s are")
-							+ " waiting in the queue.";
+							+ " waiting in the queue.\n"
+							+ sessionCount + " session"
+							+ ((sessionCount == 1) ? " is" : "s are")
+							+ " currently active.";
 
 		res.write(response);
 		res.setContentType("txt");

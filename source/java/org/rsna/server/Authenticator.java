@@ -57,6 +57,13 @@ public class Authenticator {
 	}
 
 	/**
+	 * Get the number of active sessions.
+	 */
+	public synchronized int getActiveSessionCount() {
+		return sessions.size();
+	}
+
+	/**
 	 * Authenticate the user from an HttpRequest.
 	 * @param req the request.
 	 * @return the authenticated user, or null if the user cannot be authenticated.
