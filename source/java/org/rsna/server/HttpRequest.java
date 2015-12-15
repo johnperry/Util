@@ -42,6 +42,7 @@ public class HttpRequest {
 	final int soTimeout = 60000;
 
 	public final Socket socket;
+	public final HttpServer server;
 	public final InputStream inputStream;
 	public String protocol = "[]";
 	public String protocolVersion = "";
@@ -63,7 +64,18 @@ public class HttpRequest {
 	 * @param socket the socket on which to construct the request.
 	 */
 	public HttpRequest(Socket socket) throws Exception {
+		this(socket, null);
+	}
+
+	/**
+	 * Construct an HttpRequest, connect it to an InputStream, and
+	 * read the request from the stream.
+	 * @param socket the socket on which to construct the request.
+	 * @param server the HttpServer which received the request.
+	 */
+	public HttpRequest(Socket socket, HttpServer server) throws Exception {
 		this.socket = socket;
+		this.server = server;
 		socket.setSoTimeout(soTimeout);
 		inputStream = new BufferedInputStream(socket.getInputStream());
 		parseRequestLine();
@@ -92,6 +104,14 @@ public class HttpRequest {
 		}
 		list.add(value);
 		paramLists.put(name, list);
+	}
+
+	/**
+	 * Get the HttpServer associated with this request.
+	 * @return the HttpServer.
+	 */
+	public HttpServer getServer() {
+		return server;
 	}
 
 	/**

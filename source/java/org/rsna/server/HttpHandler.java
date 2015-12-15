@@ -22,6 +22,7 @@ public class HttpHandler extends Thread {
 	static final Logger logger = Logger.getLogger(HttpHandler.class);
 
 	Socket socket;
+	HttpServer server;
 	ServletSelector selector;
 	HttpResponse res = null;
 	HttpRequest req = null;
@@ -30,10 +31,11 @@ public class HttpHandler extends Thread {
 	 * Construct an HttpHandler.
 	 * @param socket the socket on which the connection was received.
 	 */
-	public HttpHandler(Socket socket, ServletSelector selector) {
+	public HttpHandler(Socket socket, ServletSelector selector, HttpServer server) {
 		super("HttpHandler");
 		this.socket = socket;
 		this.selector = selector;
+		this.server = server;
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class HttpHandler extends Thread {
 			res = new HttpResponse(socket);
 
 			//Get the request
-			req = new HttpRequest(socket);
+			req = new HttpRequest(socket, server);
 			
 			//Get the Servlet
 			Servlet servlet = selector.getServlet(req);

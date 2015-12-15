@@ -70,7 +70,7 @@ public class HttpServer extends Thread {
 				final Socket socket = serverSocket.accept();
 
 				//Handle the connection in a separate thread
-				execSvc.execute( new HttpHandler(socket, selector) );
+				execSvc.execute( new HttpHandler(socket, selector, this) );
 			}
 			catch (Exception ex) { break; }
 		}
