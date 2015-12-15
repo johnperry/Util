@@ -78,7 +78,9 @@ public class Servlet {
 		File file = getRequestedFile(req);
 		String ct = res.setContentType(file);
 		if ((ct == null) || ct.startsWith("application/")) res.disableCaching();
-		res.setContentEncoding(req);
+		String type = file.getName();
+		type = type.substring(type.lastIndexOf(".") + 1).trim().toLowerCase();
+		res.setContentEncoding(req, type);
 
 		if (file.exists()) {
 			//The file exists in the root directory tree.

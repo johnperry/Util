@@ -193,7 +193,9 @@ public class HttpResponse {
 	}
 
 	/**
-	 * Set the Content-Encoding header if the request accepts gzip encoding.
+	 * Set the Content-Encoding header if the request accepts gzip encoding,
+	 * independ of the requested resource type. This method should be used
+	 * by servlets that generate content known to benefit from zip encoding.
 	 * @param req the request containing the Accept-Encoding header.
 	 * @return the value of the header set, or null if no header was set.
 	 */
@@ -209,6 +211,8 @@ public class HttpResponse {
 	/**
 	 * Set the Content-Encoding header if the request accepts gzip encoding
 	 * and the supplied string matches one of:
+	 * <ul>
+	 * <li>css
 	 * <li>csv
 	 * <li>htm
 	 * <li>html
@@ -217,8 +221,8 @@ public class HttpResponse {
 	 * <li>svg
 	 * <li>txt
 	 * <li>xml
-	 * <ul>css
 	 * </ul>
+	 * This method should be used when returning files.
 	 * @param req the request containing the Accept-Encoding header.
 	 * @param type the type of content (e.g. the file extension (without the leading period).
 	 * @return the value of the header set, or null if no header was set.
@@ -447,7 +451,7 @@ public class HttpResponse {
 			put("jpeg","image/jpeg");
 			put("jpg","image/jpeg");
 			put("js","text/javascript;charset=UTF-8");
-			put("manifest", "application/x-ms-manifest");
+			put("manifest","application/x-ms-manifest");
 			put("md","application/unknown");
 			put("mp4","video/mp4");
 			put("mpeg","video/mpg");
