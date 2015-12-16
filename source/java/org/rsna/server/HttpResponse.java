@@ -193,17 +193,16 @@ public class HttpResponse {
 	}
 
 	/**
-	 * Set the Content-Encoding header if the request accepts gzip encoding,
-	 * independ of the requested resource type. This method should be used
-	 * by servlets that generate content known to benefit from zip encoding.
+	 * Set the Content-Encoding header for a file if the request accepts gzip encoding.
 	 * @param req the request containing the Accept-Encoding header.
 	 * @return the value of the header set, or null if no header was set.
 	 */
-	public String setContentEncoding(HttpRequest req) {
+	public String setContentEncoding(HttpRequest req, File file) {
 		String encoding = req.getHeader("Accept-Encoding", "").toLowerCase();
 		if (encoding.contains("gzip")) {
-			setHeader("Content-Encoding", "gzip");
-			return "gzip";
+			String type = file.getName();
+			type = type.substring(type.lastIndexOf(".") + 1).trim().toLowerCase();
+			return setContentEncoding(req, type);
 		}
 		return null;
 	}
@@ -230,6 +229,20 @@ public class HttpResponse {
 	public String setContentEncoding(HttpRequest req, String type) {
 		if (".css.csv.htm.html.js.md.svg.txt.xml.".contains("."+type+".")) {
 			return setContentEncoding(req);
+		}
+		return null;
+	}
+
+	/**
+	 * Set the Content-Encoding header if the request accepts gzip encoding.
+	 * @param req the request containing the Accept-Encoding header.
+	 * @return the value of the header set, or null if no header was set.
+	 */
+	public String setContentEncoding(HttpRequest req) {
+		String encoding = req.getHeader("Accept-Encoding", "").toLowerCase();
+		if (encoding.contains("gzip")) {
+			setHeader("Content-Encoding", "gzip");
+			return "gzip";
 		}
 		return null;
 	}
@@ -345,17 +358,23 @@ public class HttpResponse {
 	 */
 	public boolean send() {
 		try {
+			String encoding = headers.get("Content-Encoding");
+			boolean isGzipEncoding = (encoding != null) && encoding.equals("gzip");
+			String contentType = headers.get("Content-Type");
+			boolean isZipContentType = (contentType != null) && contentType.contains("/zip");
+			if (isGzipEncoding && isZipContentType) {
+				headers.remove("Content-Encoding");
+				isGzipEncoding = false;
+			}
 			String preamble =
 				"HTTP/1.1 " + responseCode + "\r\n" +
 				getHeadersString() +
 				"Content-Length: " + responseLength + "\r\n\r\n";
 			byte[] preambleBytes = preamble.getBytes("UTF-8");
 			outputStream.write(preambleBytes);
-			String encoding = headers.get("Content-Encoding");
-			boolean gzip = ((encoding != null) && encoding.equals("gzip"));
-			if (gzip) outputStream = new GZIPOutputStream(outputStream);
+			if (isGzipEncoding) outputStream = new GZIPOutputStream(outputStream);
 			for (ResponseItem item : responseContent) item.write();
-			if (gzip) ((GZIPOutputStream)outputStream).finish();
+			if (isGzipEncoding) ((GZIPOutputStream)outputStream).finish();
 			outputStream.flush();
 			return true;
 		}
