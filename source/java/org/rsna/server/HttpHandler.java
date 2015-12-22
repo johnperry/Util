@@ -67,6 +67,9 @@ public class HttpHandler extends Thread {
 			else if (req.method.equals("DELETE")) {
 				servlet.doDelete(req, res);
 			}
+			else if (req.method.equals("OPTIONS")) {
+				servlet.doOptions(req, res);
+			}
 			else if (req.method.equals("")) {
 				//Do not send a response
 			}

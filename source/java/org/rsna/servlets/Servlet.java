@@ -152,6 +152,31 @@ public class Servlet {
 	}
 
 	/**
+	 * The default handler for OPTIONS requests.
+	 * Return a response allowing everything.
+	 * @param req the request object
+	 * @param res the response object
+	 */
+	public void doOptions(HttpRequest req, HttpResponse res) throws Exception {
+		res.disableCaching();
+		res.setResponseCode( res.ok );
+		String originHeader = req.getHeader("Origin");
+		if ((originHeader != null) && !originHeader.equals("null")) {
+			res.setHeader("Access-Control-Allow-Origin", originHeader);
+		}
+		String methodHeader = req.getHeader("Access-Control-Request-Method");
+		if (methodHeader != null) {
+			res.setHeader("Access-Control-Allow-Methods", methodHeader);
+		}
+		else {
+			res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+		}
+		String headersHeader = req.getHeader("Access-Control-Request-Headers");
+		if (headersHeader != null) res.setHeader("Access-Control-Allow-Headers", headersHeader);
+		res.send();
+	}
+
+	/**
 	 * Get the file identified in an HttpRequest.
 	 * @param req the request object
 	 * @return the file identified by the request, treating
