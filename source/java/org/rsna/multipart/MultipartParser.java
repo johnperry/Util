@@ -148,18 +148,25 @@ public class MultipartParser {
 				if (type != null) {
 					contentType = type;
 				}
+				if (contentType.equals("application/dicom")) {
+					if ((name == null) || (filename == null)) {
+						name = "stowrs";
+						filename = "stowrs.dcm";
+						contentType = "application/octet-stream";
+					}
+				}
 			}
 		}
 
 		// Now, finally, we read the content (end after reading the boundary)
-		if (filename == null) {
+		if ((filename == null) && !contentType.equals("application/dicom")) {
 			// This is a parameter, add it to the vector of values
 			// The encoding is needed to help parse the value
 			return new ParamPart(name, in, boundary, encoding);
     	}
 		else {
 			// This is a file
-			if (filename.equals("")) {
+			if ((filename != null) && filename.equals("")) {
 				filename = null; // empty filename, probably an "empty" file param
 			}
 			lastFilePart = new FilePart(name, in, boundary, contentType, filename, origname);
@@ -208,14 +215,14 @@ public class MultipartParser {
 		String origline = line;
 		line = origline.toLowerCase();
 
-		// Get the content disposition, should be "form-data"
+		// Get the content disposition, should be "form-data" or "attachment"
 		int start = line.indexOf("content-disposition: ");
 		int end = line.indexOf(";");
 		if (start == -1 || end == -1) {
 			throw new IOException("Content disposition corrupt: " + origline);
 		}
 		String disposition = line.substring(start + 21, end).trim();
-		if (!disposition.equals("form-data")) {
+		if (!disposition.equals("form-data") && !disposition.equals("attachment")) {
 			throw new IOException("Invalid content disposition: " + disposition);
 		}
 

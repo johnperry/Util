@@ -491,43 +491,44 @@ public class HttpRequest {
 
 		// Check the content type to make sure it's "multipart/form-data"
 		String type = getContentType();
-		if (!type.toLowerCase().contains("multipart/form-data")) {
-		  return files; //wrong content type; return the empty files object
-		}
+		String typeLC = type.toLowerCase();
+		if (typeLC.contains("multipart/form-data")
+			|| (typeLC.contains("multipart/related") && typeLC.contains("type=application/dicom"))) {
 
-		// Check the content length
-		int length = getContentLength();
-		if ((length == -1) || (length > maxPostSize)) {
-			logger.warn("Attempt to parse multipart form with unacceptable length ("+length+" / "+maxPostSize+")");
-			return files; //return an empty set of parts
-		}
-
-		MultipartInputStream mis = new MultipartInputStream( inputStream, length );
-		FileRenamePolicy policy = new DefaultFileRenamePolicy();
-
-		MultipartParser parser =
-				new MultipartParser(type, mis);
-
-		Part part;
-		while ((part = parser.readNextPart()) != null) {
-			String name = part.getName();
-			if (part.isParam()) {
-				ParamPart paramPart = (ParamPart) part;
-				String value = paramPart.getStringValue();
-				addParameter(name, value);
+			// Check the content length
+			int length = getContentLength();
+			if ((length == -1) || (length > maxPostSize)) {
+				logger.warn("Attempt to parse multipart form with unacceptable length ("+length+" / "+maxPostSize+")");
+				return files; //return an empty set of parts
 			}
-			else if (part.isFile()) {
-				FilePart filePart = (FilePart) part;
-				String fileName = filePart.getFileName();
-				if (fileName != null) {
-					filePart.setRenamePolicy(policy);
-					filePart.writeTo(dir);
-					files.add(
-							new UploadedFile(
-									name,
-									new File(dir, filePart.getFileName()), //note: the policy might have changed the filename
-									filePart.getPath(),
-									filePart.getContentType() ) );
+
+			MultipartInputStream mis = new MultipartInputStream( inputStream, length );
+			FileRenamePolicy policy = new DefaultFileRenamePolicy();
+
+			MultipartParser parser =
+					new MultipartParser(type, mis);
+
+			Part part;
+			while ((part = parser.readNextPart()) != null) {
+				String name = part.getName();
+				if (part.isParam()) {
+					ParamPart paramPart = (ParamPart) part;
+					String value = paramPart.getStringValue();
+					addParameter(name, value);
+				}
+				else if (part.isFile()) {
+					FilePart filePart = (FilePart) part;
+					String fileName = filePart.getFileName();
+					if (fileName != null) {
+						filePart.setRenamePolicy(policy);
+						filePart.writeTo(dir);
+						files.add(
+								new UploadedFile(
+										name,
+										new File(dir, filePart.getFileName()), //note: the policy might have changed the filename
+										filePart.getPath(),
+										filePart.getContentType() ) );
+					}
 				}
 			}
 		}

@@ -52,7 +52,8 @@ public class ClientHttpRequest {
     return Long.toString(random.nextLong(), 36);
   }
 
-  String boundary = "---------------------------" + randomString() + randomString() + randomString();
+  //String boundary = "---------------------------" + randomString() + randomString() + randomString();
+  String boundary = randomString() + randomString() + randomString() + randomString();
 
   private void boundary() throws IOException {
     write("--");
@@ -193,16 +194,34 @@ public class ClientHttpRequest {
   }
 
   /**
-   * Add a DICOM file part to the request
+   * Add a file part to the request
    * @param file the file to upload
    * @param partContentType the ContentType to be used for this part
    * @throws IOException
    */
-  public void addPart(File file, String partContentType) throws IOException {
+  public void addFilePart(File file, String partContentType) throws IOException {
 	InputStream in = new FileInputStream(file);
 	boundary();
 	newline();
     writeln("Content-Type: " + partContentType);
+    newline();
+    pipe(in, os);
+    newline();
+    in.close();
+  }
+
+  /**
+   * Add a file part to the request
+   * @param file the file to upload
+   * @param partHeaders the headers to be used for this part (without \r\n at the end)
+   * @throws IOException
+   */
+  public void addFilePart(File file, String[] partHeaders) throws IOException {
+	InputStream in = new FileInputStream(file);
+	boundary();
+	newline();
+    for (String header : partHeaders) writeln(header);
+    newline();
     pipe(in, os);
     newline();
     in.close();

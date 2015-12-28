@@ -30,6 +30,7 @@ public class HttpResponse {
 	public static final int ok 				= 200;
 	public static final int found			= 302;
 	public static final int notmodified		= 304;
+	public static final int badrequest	 	= 400;
 	public static final int unauthorized 	= 401;
 	public static final int forbidden 		= 403;
 	public static final int notfound 		= 404;
@@ -145,6 +146,7 @@ public class HttpResponse {
 	 *	<tr><td>jpeg</td><td>image/jpeg</td></tr>
 	 *	<tr><td>jpg</td><td>image/jpeg</td></tr>
 	 *	<tr><td>js</td><td>text/javascript;charset=UTF-8</td></tr>
+	 *	<tr><td>json</td><td>application/json;charset=UTF-8</td></tr>
 	 *	<tr><td>manifest</td><td>application/x-ms-manifest</td></tr>
 	 *	<tr><td>md</td><td>application/unknown</td></tr>
 	 *	<tr><td>mp4</td><td>video/mp4</td></tr>
@@ -470,6 +472,7 @@ public class HttpResponse {
 			put("jpeg","image/jpeg");
 			put("jpg","image/jpeg");
 			put("js","text/javascript;charset=UTF-8");
+			put("json","application/json;charset=UTF-8");
 			put("manifest","application/x-ms-manifest");
 			put("md","application/unknown");
 			put("mp4","video/mp4");
