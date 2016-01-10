@@ -26,6 +26,10 @@ public class Session {
 		this.ipAddress = ipAddress;
 		id = getSessionID(user.getUsername(), ipAddress);
 	}
+	
+	public User getUser() {
+		return user;
+	}
 
 	public boolean appliesTo(HttpRequest req) {
 		long timeout = Authenticator.getInstance().getSessionTimeout();
@@ -34,6 +38,11 @@ public class Session {
 			ok &= ((System.currentTimeMillis() - lastAccess) < timeout);
 		}
 		return ok;
+	}
+	
+	public boolean hasTimedOut() {
+		long timeout = Authenticator.getInstance().getSessionTimeout();
+		return (timeout > 0) && ((System.currentTimeMillis() - lastAccess) >= timeout);
 	}
 
 	public void recordAccess() {

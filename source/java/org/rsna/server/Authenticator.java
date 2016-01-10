@@ -8,6 +8,7 @@
 package org.rsna.server;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Hashtable;
 import org.apache.log4j.Logger;
 import org.rsna.util.Base64;
@@ -219,6 +220,28 @@ public class Authenticator {
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
 			}
 		}
+	}
+	
+	/**
+	 * Remove all sessions that have timed out.
+	 */
+	public void removeInactiveSessions() {
+		for (String id : sessions.keySet().toArray(new String[sessions.size()])) {
+			Session session = sessions.get(id);
+			if (session.hasTimedOut()) sessions.remove(id);
+		}
+	}
+	
+	/**
+	 * GetActiveUsers.
+	 */
+	public LinkedList<User> getActiveUsers() {
+		LinkedList<User> users = new LinkedList<User>();
+		removeInactiveSessions();
+		for (Session session : sessions.values()) {
+			users.add(session.getUser());
+		}
+		return users;
 	}
 
 }

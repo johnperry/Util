@@ -36,23 +36,32 @@ public class ServerStatusServlet extends Servlet {
 	 * @param res the response object
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) {
-		HttpServer server = req.getServer();
-		int maxThreads = server.getMaxThreads();
-		int activeThreads = server.getActiveThreads();
-		int queuedThreads = server.getQueuedThreads();
-		int sessionCount = Authenticator.getInstance().getActiveSessionCount();
+		if (req.userHasRole("admin")) {
+			Authenticator auth = Authenticator.getInstance();
+			auth.removeInactiveSessions();
+			HttpServer server = req.getServer();
+			int maxThreads = server.getMaxThreads();
+			int activeThreads = server.getActiveThreads();
+			int queuedThreads = server.getQueuedThreads();
+			int sessionCount = auth.getActiveSessionCount();
 
-		String response = activeThreads + " of " + maxThreads + " server threads are currently active.\n"
-							+ queuedThreads + " thread"
-							+ ((queuedThreads == 1) ? " is" : "s are")
-							+ " waiting in the queue.\n"
-							+ sessionCount + " session"
-							+ ((sessionCount == 1) ? " is" : "s are")
-							+ " currently active.";
+			StringBuffer sb = new StringBuffer();
+			sb.append( activeThreads + " of " + maxThreads + " server threads are currently active.\n"
+								+ queuedThreads + " thread"
+								+ ((queuedThreads == 1) ? " is" : "s are")
+								+ " waiting in the queue.\n"
+								+ sessionCount + " session"
+								+ ((sessionCount == 1) ? " is" : "s are")
+								+ " currently active" + ((sessionCount > 0) ? ":" : ".") );
+			
+			for (User user : auth.getActiveUsers()) {
+				sb.append( "\n    "+user.getUsername() );
+			}
 
-		res.write(response);
-		res.setContentType("txt");
-		res.disableCaching();
-		res.send();
+			res.write(sb.toString());
+			res.setContentType("txt");
+			res.disableCaching();
+			res.send();
+		}
 	}
 }
