@@ -22,7 +22,7 @@ public class Token {
 	 * @param delimiter the delimiter of the token
 	 */
 	public Token(String text, char delimiter) {
-		this.text = text;
+		this.text = text.trim();
 		this.delimiter = delimiter;
 
 		if (text.equals("")) {

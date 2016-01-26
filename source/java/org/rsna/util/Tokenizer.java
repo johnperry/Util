@@ -75,10 +75,12 @@ public class Tokenizer {
 			k++;
 		}
 		
-		String s = sb.toString();
+		String s = sb.toString().trim();
+		
+		if (s.equals("") && !hasText()) return null;
 		
 		//get the delimiter and skip it (if it's there)
-		char delimiter = hasText() ? text.charAt(k++) : null;
+		char delimiter = hasText() ? text.charAt(k++) : 0;
 		
 		return new Token(s, delimiter);
 	}
