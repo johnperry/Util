@@ -145,6 +145,7 @@ public class SourcePanel extends JPanel implements FileListener {
 
 	class HeaderPanel extends JPanel implements ActionListener {
 		public JComboBox root;
+		public JButton refresh;
 		public HeaderPanel(String heading) {
 			super();
 			this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
@@ -154,7 +155,15 @@ public class SourcePanel extends JPanel implements FileListener {
 			panelLabel.setFont(labelFont);
 			this.add(panelLabel);
 			this.add(Box.createHorizontalGlue());
+			refresh = new JButton("Refresh");
+			refresh.addActionListener(this);
+			this.add(refresh);
+			this.add(Box.createHorizontalStrut(5));
 			root = new JComboBox();
+			Dimension d = root.getPreferredSize();
+			d.width = 90;
+			root.setPreferredSize(d);
+			root.setMaximumSize(d);
 			File[] roots = directoryPane.getRoots();
 			for (int i=0; i<roots.length; i++) root.addItem(roots[i].getAbsolutePath());
 			this.add(root);
@@ -163,7 +172,13 @@ public class SourcePanel extends JPanel implements FileListener {
 			this.add(Box.createHorizontalStrut(17));
 		}
 		public void actionPerformed(ActionEvent evt) {
-			root.setSelectedIndex(directoryPane.changeRoot(root.getSelectedIndex()));
+			Object source = evt.getSource();
+			if (source.equals(root)) {
+				root.setSelectedIndex(directoryPane.changeRoot(root.getSelectedIndex()));
+			}
+			else if (source.equals(refresh)) {
+				directoryPane.reloadTree();
+			}
 		}
 	}
 

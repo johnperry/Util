@@ -105,8 +105,11 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 	 * Redisplay the directory tree.
 	 */
 	public void reloadTree() {
+		JScrollBar vsb = getVerticalScrollBar();
+		int v = vsb.getValue();
 		showTree();
 		showCurrentPath(currentPath);
+		vsb.setValue(v);
 	}
 
 	/**
