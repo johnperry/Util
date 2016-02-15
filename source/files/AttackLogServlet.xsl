@@ -39,7 +39,8 @@
 					<xsl:for-each select="Attacker">
 						<tr>
 							<td>
-								<a href="http://www.geobytes.com/IpLocator.htm?GetLocation&amp;IpAddress={@ip}"
+							http://gd.geobytes.com/GetCityDetails?fqcn="+ip
+								<a href="http://gd.geobytes.com/GetCityDetails?fqcn={@ip}"
 								   target="geobytes">
 									<xsl:value-of select="@ip"/>
 								</a>
