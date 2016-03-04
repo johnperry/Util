@@ -49,11 +49,10 @@ public class Tokenizer {
 			char c = text.charAt(k);
 			cArray[0] = c;
 			String cString = new String(cArray);
-			if (inEscape) inEscape = false;
-			else if (!inQuote && !inBracket && !inParen) {
+			if (!inEscape && !inQuote && !inBracket && !inParen) {
 				if ( delimiters.contains(cString) ) break;
 			}
-			if (c == escapeChar) inEscape = true;
+			if (!inEscape && (c == escapeChar)) inEscape = true;
 			else {
 				sb.append(c);
 				if (c == '"') {
@@ -71,6 +70,7 @@ public class Tokenizer {
 				else if (inParen && (c == ')')) {
 					inParen = false;
 				}
+				inEscape = false;
 			}
 			k++;
 		}
