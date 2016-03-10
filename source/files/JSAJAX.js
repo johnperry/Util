@@ -124,7 +124,7 @@ function AJAX() {
 				this.req.send(qs);
 			};
 
-		this.PUTR =
+		this.PUT =
 			function(url, qs, handler, contentType) {
 				var thisObject = this;
 				this.req.open("DELETE", url, true);
