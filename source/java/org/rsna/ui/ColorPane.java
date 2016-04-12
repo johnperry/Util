@@ -27,7 +27,8 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Create a ColorPane.
+	 * Create a ColorPane with the specified initial text.
+	 * @param text the text
 	 */
 	public ColorPane(String text) {
 		super();
@@ -47,6 +48,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Get the line height of the default font.
+	 * @return the line height of the default font.
 	 */
 	public int getLineHeight() {
 		return lineHeight;
@@ -55,6 +57,7 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Get the flag that indicates whether the pane is to track the width
 	 * of its container.
+	 * @return true if the ColorPane tracks the viewport width; false otherwise.
 	 */
 	public boolean getScrollableTracksViewportWidth() {
 		return trackWidth;
@@ -63,6 +66,7 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Set the flag that indicates whether the pane is to track the width
 	 * of its container.
+	 * @param trackWidth true if the ColorPane is to track the viewport width; false otherwise.
 	 */
 	public void setScrollableTracksViewportWidth(boolean trackWidth) {
 		this.trackWidth = trackWidth;
@@ -88,6 +92,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Set text with the current color. This method is thread safe.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void setText(String s) {
 		clear();
@@ -96,6 +101,8 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Set text with the specified color. This method is thread safe.
+	 * @param c the color to be used for this and subsequent insertions.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void setText(Color c, String s) {
 		clear();
@@ -104,6 +111,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the current color. This method is thread safe.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void print(String s) {
 		if (SwingUtilities.isEventDispatchThread()) {
@@ -122,6 +130,8 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the specified color. This method is thread safe.
+	 * @param c the color to be used for this and subsequent insertions.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void print(Color c, String s) {
 		if (SwingUtilities.isEventDispatchThread()) {
@@ -141,6 +151,7 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the current color, and add a newline. This method is thread safe.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void println(String s) {
 		print(s + "\n");
@@ -148,6 +159,8 @@ public class ColorPane extends JTextPane {
 
 	/**
 	 * Append a string with the specified color, and add a newline. This method is thread safe.
+	 * @param c the color to be used for this and subsequent insertions.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void println(Color c, String s) {
 		print(c, s + "\n");
@@ -156,6 +169,7 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Append a string with the current color, and add a newline. This method is not thread safe.
 	 * This method is public only for backward compatibility; use println instead.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void appendln(String s) {
 		append(s + "\n");
@@ -164,6 +178,8 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Append a string with the specified color, and add a newline. This method is not thread safe.
 	 * This method is public only for backward compatibility; use println instead.
+	 * @param c the color to be used for this and subsequent insertions.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public void appendln(Color c, String s) {
 		append(c, s + "\n");
@@ -172,6 +188,7 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Append a string with the current color. This method is not thread safe.
 	 * This method is public only for backward compatibility; use print instead.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public synchronized void append(String s) {
 		int len = getDocument().getLength(); // same value as getText().length();
@@ -182,6 +199,8 @@ public class ColorPane extends JTextPane {
 	/**
 	 * Append a string with the specified color. This method is not thread safe.
 	 * This method is public only for backward compatibility; use print instead.
+	 * @param c the color to be used for this and subsequent insertions.
+	 * @param s the string to set in the ColorPane.
 	 */
 	public synchronized void append(Color c, String s) {
 		StyleContext sc = StyleContext.getDefaultStyleContext();

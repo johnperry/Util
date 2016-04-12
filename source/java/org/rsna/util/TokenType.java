@@ -29,6 +29,7 @@ public class TokenType {
 	
 	/**
 	 * Construct an <code>empty</code> TokenType.
+	 * @return an empty type
 	 */
 	public static TokenType getEmptyInstance() {
 		return new TokenType(emptyType);
@@ -36,6 +37,7 @@ public class TokenType {
 	
 	/**
 	 * Construct a <code>literal</code> TokenType.
+	 * @return a literal type
 	 */
 	public static TokenType getLiteralInstance() {
 		return new TokenType(literalType);
@@ -43,6 +45,7 @@ public class TokenType {
 	
 	/**
 	 * Construct an <code>identifier</code> TokenType.
+	 * @return an identifier type
 	 */
 	public static TokenType getIdentifierInstance() {
 		return new TokenType(identifierType);
@@ -50,6 +53,7 @@ public class TokenType {
 	
 	/**
 	 * Construct a <code>tag</code> TokenType.
+	 * @return a code type
 	 */
 	public static TokenType getTagInstance() {
 		return new TokenType(tagType);
@@ -57,6 +61,7 @@ public class TokenType {
 	
 	/**
 	 * Get the type.
+	 * @return the type name
 	 */
 	public String getType() {
 		return type;
@@ -64,6 +69,7 @@ public class TokenType {
 	
 	/**
 	 * Determine whether the token is a literal.
+	 * @return true if this is a literal type; false otherwise
 	 */
 	public boolean isLiteral() {
 		return type.equals(literalType);
@@ -71,6 +77,7 @@ public class TokenType {
 	
 	/**
 	 * Determine whether the token is an element identifier.
+	 * @return true if this is an identifier type; false otherwise
 	 */
 	public boolean isIdentifier() {
 		return type.equals(identifierType);
@@ -78,6 +85,7 @@ public class TokenType {
 	
 	/**
 	 * Determine whether the token is a tag.
+	 * @return true if this is a tag type; false otherwise
 	 */
 	public boolean isTag() {
 		return type.equals(tagType);
@@ -85,6 +93,7 @@ public class TokenType {
 	
 	/**
 	 * Determine whether the token is empty.
+	 * @return true if this is an empty type; false otherwise
 	 */
 	public boolean isEmpty() {
 		return type.equals(emptyType);

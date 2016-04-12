@@ -119,7 +119,7 @@ public class MultipartInputStream extends FilterInputStream  {
      * @param len the maximum number of bytes to read
      * @return the actual number of bytes placed in the buffer,
      * or -1 if the end of the stream is reached
-     * @throws IOException
+     * @throws IOException on a read error
      */
     public int readLine(byte[] buf, int off, int len) throws IOException  {
 		if (len <= 0) return 0;

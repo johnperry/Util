@@ -30,6 +30,8 @@ public class LdapUtil {
 	 * @param securityAuthentication the authentication type (e.g., "simple")
 	 * @param securityPrincipal the username (e.g., "cn=username, ou=NewHires, o=JNDITutorial"
 	 * @param securityCredentials the password (e.g., "mysecret")
+	 * @param referral whether to follow referrals (default: "ignore")
+	 * @param derefAliases whether to deref aliases (default: "never")
 	 * @return true if the authentication succeeds; false otherwise.
 	 */
     public static boolean authenticate(

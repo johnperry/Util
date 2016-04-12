@@ -43,6 +43,7 @@ public class DataChunkOutputStream extends FilterOutputStream {
     /**
      * Writes an chunk type identifier (4 bytes).
      * @param s A string with a length of 4 characters.
+	 * @throws IOException on any error
      */
     public void writeType(String s) throws IOException {
         if (s.length() != 4) {
@@ -64,6 +65,7 @@ public class DataChunkOutputStream extends FilterOutputStream {
      *
      * @param      v   a <code>byte</code> value to be written.
      * @exception  IOException  if an I/O error occurs.
+	 * @throws IOException on any error
      * @see        java.io.FilterOutputStream#out
      */
     public final void writeByte(int v) throws IOException {
@@ -129,7 +131,7 @@ public class DataChunkOutputStream extends FilterOutputStream {
      * Writes an unsigned 32 bit integer value.
      *
      * @param v The value
-     * @throws java.io.IOException
+	 * @throws IOException on any error
      */
     public void writeUInt(long v) throws IOException {
         out.write((int) ((v >>> 0) & 0xff));
@@ -143,7 +145,7 @@ public class DataChunkOutputStream extends FilterOutputStream {
      * Writes a signed 16 bit integer value.
      *
      * @param v The value
-     * @throws java.io.IOException
+	 * @throws IOException on any error
      */
     public void writeShort(int v) throws IOException {
         out.write((int) ((v >>> 0) & 0xff));
@@ -172,6 +174,8 @@ public class DataChunkOutputStream extends FilterOutputStream {
     /**
      * Increases the written counter by the specified value
      * until it reaches Long.MAX_VALUE.
+     * @param value the number of bytes to be added to the total
+     * of bytes written.
      */
     protected void incCount(int value) {
         long temp = written + value;

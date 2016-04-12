@@ -30,6 +30,8 @@ public class HttpHandler extends Thread {
 	/**
 	 * Construct an HttpHandler.
 	 * @param socket the socket on which the connection was received.
+	 * @param selector the class that decodes request paths into servlet calls
+	 * @param server the HttpServer to pass to HttpRequest
 	 */
 	public HttpHandler(Socket socket, ServletSelector selector, HttpServer server) {
 		super("HttpHandler");

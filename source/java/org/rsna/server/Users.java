@@ -72,6 +72,7 @@ public abstract class Users {
 	 * Get a specific user.
 	 * This implementation returns null. Implementations that
 	 * manage users must override this method.
+	 * @param username the plaintext username
 	 * @return the user or null if unable.
 	 */
 	public User getUser(String username) {
@@ -94,6 +95,8 @@ public abstract class Users {
 	 * This implementation returns null, indicating that users cannot
 	 * be authenticated locally. Users class extensions that can authenticate
 	 * users locally must override this method.
+	 * @param username the plaintext username
+	 * @param password the plaintext password
 	 * @return the user who matches the credentials, or null if no matching user exists.
 	 */
 	public User authenticate(String username, String password) {
@@ -105,6 +108,8 @@ public abstract class Users {
 	 * This implementation returns null, indicating that no external system can
 	 * associate a user with this request. Single Sign On implementations must
 	 * override this method.
+	 * @param req the request to use in determining whether the user is known to 
+	 * an external system.
 	 * @return the user who matches the request, or null if no matching user exists.
 	 */
 	public User validate(HttpRequest req) {
@@ -115,6 +120,7 @@ public abstract class Users {
 	 * Get the URL of the external system's login servlet that provides authentication.
 	 * This implementation returns the empty string, indicating that no external system provides
 	 * authentication. Single Sign On implementations must override this method.
+	 * @param redirectURL the URL of the external authentication system
 	 * @return the URL of the external authentication system's login servlet, or
 	 * the empty string if authentication is done locally.
 	 */

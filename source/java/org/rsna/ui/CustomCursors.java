@@ -31,6 +31,8 @@ public class CustomCursors {
 
 	/**
 	 * Get the singleton instance of the CustomCursors.
+	 * @return the singleton instance of this class, instantiating
+	 * it if necessary.
 	 */
 	public static CustomCursors getInstance() {
 		if (instance == null) {
@@ -45,6 +47,7 @@ public class CustomCursors {
 	 * @param name the name of the cursor (which is the name of 
 	 * the PNG file in the cursors directory - without the ".png"
 	 * extension.
+	 * @return the cursor
 	 */
 	public Cursor getCursor(String name) {
 		return getCursor(name, 0, 0);
@@ -58,6 +61,7 @@ public class CustomCursors {
 	 * extension.
 	 * @param hotspotX the x coordinate of the cursor's hot spot
 	 * @param hotspotY the y coordinate of the cursor's hot spot
+	 * @return the cursor
 	 */
 	public Cursor getCursor(String name, int hotspotX, int hotspotY) {
 		Cursor c = cursors.get(name);

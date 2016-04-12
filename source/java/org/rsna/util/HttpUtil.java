@@ -107,7 +107,8 @@ public class HttpUtil {
 	}
 
 	/**
-	 * Initialize the CookieHandler.
+	 * Initialize the CookieHandler and set it as the default.
+	 * @return the CookieManager
 	 */
 	public static CookieManager initializeCookieManager() {
 		CookieManager cookieManager = new CookieManager();

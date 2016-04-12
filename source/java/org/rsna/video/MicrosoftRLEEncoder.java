@@ -59,7 +59,7 @@ import java.util.Arrays;
  * 00 01                   End of RLE bitmap
  * </pre>
  *
- * References:<br/>
+ * References:
  * <a
  * href="http://wiki.multimedia.cx/index.php?title=Microsoft_RLE">http://wiki.
  * multimedia.cx/index.php?title=Microsoft_RLE</a><br>
@@ -88,6 +88,9 @@ public class MicrosoftRLEEncoder {
 	 *            The width of the image in data elements.
 	 * @param step
 	 *            The number to add to offset to get to the next scanline.
+	 * @param height
+	 *            The multiplier for step to get to the next scanline.
+	 * @throws IOException on any error
 	 */
 	public void writeKey8(OutputStream out, byte[] data, int offset,
 			int length, int step, int height) throws IOException {
@@ -183,6 +186,9 @@ public class MicrosoftRLEEncoder {
 	 *            The width of the image in data elements.
 	 * @param step
 	 *            The number to add to offset to get to the next scanline.
+	 * @param height
+	 *            The multiplier for step to get to the next scanline.
+	 * @throws IOException on any error
 	 */
 	public void writeDelta8(OutputStream out, byte[] data, byte[] prev,
 			int offset, int length, int step, int height) throws IOException {

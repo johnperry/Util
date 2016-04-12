@@ -66,6 +66,8 @@ public class RowLayout implements LayoutManager2 {
 
 	/**
 	 * Get a constraint object to span multiple columns.
+	 * @param colspan the number of columns to span
+	 * @return the constraint object specifying the requested colspan
 	 */
 	public static Integer span(int colspan) {
 		return new Integer( (colspan>0) ? colspan : 1 );
@@ -275,6 +277,7 @@ public class RowLayout implements LayoutManager2 {
 
 	/**
 	 * Get an object to end a row.
+	 * @return a CRLF object
 	 */
 	public static JComponent crlf() {
 		return new CRLF();
@@ -282,6 +285,8 @@ public class RowLayout implements LayoutManager2 {
 
 	/**
 	 * Test whether a component is a CRLF.
+	 * @param c to component to test for being a CRLF
+	 * @return true if c is a CRLF object; false otherwise.
 	 */
 	public static boolean isCRLF(Component c) {
 		return (c instanceof CRLF);

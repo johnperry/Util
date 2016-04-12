@@ -92,6 +92,7 @@ public class FileUtil {
 	/**
 	 * Read the first bytes of an InputStream and leave the stream open.
 	 * @param stream the InputStream to read.
+	 * @param length the maximum number of bytes to read.
 	 * @return the bytes, or an empty byte array if an error occurred.
 	 * Note: the returned byte array may be shorter than the requested
 	 * length if the input stream ends before the length has been reached.
@@ -216,6 +217,7 @@ public class FileUtil {
 	 * @param charset the character set to use for the encoding of the input stream.
 	 * @param close true to close the input stream; false to leave it open.
 	 * @return the text, or an empty string if an error occurred.
+	 * @throws Exception on any error.
 	 */
 	public static String getTextOrException(InputStream stream, Charset charset, boolean close) throws Exception {
 		BufferedReader br = null;

@@ -64,7 +64,7 @@ public class ClientHttpRequest {
    * Create a new multipart POST HTTP request on a freshly opened URLConnection
    * @param connection an already open URL connection
    * @param reqContentType the Content-Type of the request (ending in ';')
-   * @throws IOException
+   * @throws IOException on any error
    */
   public ClientHttpRequest(URLConnection connection, String reqContentType) throws IOException {
     this.connection = connection;
@@ -75,7 +75,7 @@ public class ClientHttpRequest {
   /**
    * Create a new multipart POST HTTP request on a freshly opened URLConnection
    * @param connection an already open URL connection
-   * @throws IOException
+   * @throws IOException on any error
    */
   public ClientHttpRequest(URLConnection connection) throws IOException {
     this(connection, "multipart/form-data;");
@@ -84,7 +84,7 @@ public class ClientHttpRequest {
   /**
    * Create a new multipart POST HTTP request for a specified URL
    * @param url the URL to send request to
-   * @throws IOException
+   * @throws IOException on any error
    */
   public ClientHttpRequest(URL url) throws IOException {
     this(url.openConnection());
@@ -93,7 +93,7 @@ public class ClientHttpRequest {
   /**
    * Create a new multipart POST HTTP request for a specified URL string
    * @param urlString the string representation of the URL to send request to
-   * @throws IOException
+   * @throws IOException on any error
    */
   public ClientHttpRequest(String urlString) throws IOException {
     this(new URL(urlString));
@@ -118,7 +118,7 @@ public class ClientHttpRequest {
    * Add a cookie to the request
    * @param name cookie name
    * @param value cookie value
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void setCookie(String name, String value) throws IOException {
     cookies.put(name, value);
@@ -135,7 +135,7 @@ public class ClientHttpRequest {
    * Add a string parameter to the request
    * @param name parameter name
    * @param value parameter value
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void setParameter(String name, String value) throws IOException {
     boundary();
@@ -163,7 +163,7 @@ public class ClientHttpRequest {
    * @param name parameter name
    * @param filename the name of the file
    * @param is input stream to read the contents of the file from
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void setParameter(String name, String filename, InputStream is) throws IOException {
     boundary();
@@ -185,7 +185,7 @@ public class ClientHttpRequest {
    * Add a file parameter to the request
    * @param name parameter name
    * @param file the file to upload
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void setParameter(String name, File file) throws IOException {
 	InputStream in = new FileInputStream(file);
@@ -197,7 +197,7 @@ public class ClientHttpRequest {
    * Add a file part to the request
    * @param file the file to upload
    * @param partContentType the ContentType to be used for this part
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void addFilePart(File file, String partContentType) throws IOException {
 	InputStream in = new FileInputStream(file);
@@ -214,7 +214,7 @@ public class ClientHttpRequest {
    * Add a file part to the request
    * @param file the file to upload
    * @param partHeaders the headers to be used for this part (without \r\n at the end)
-   * @throws IOException
+   * @throws IOException on any error
    */
   public void addFilePart(File file, String[] partHeaders) throws IOException {
 	InputStream in = new FileInputStream(file);
@@ -230,7 +230,7 @@ public class ClientHttpRequest {
   /**
    * Post the request to the server
    * @return input stream with the server response
-   * @throws IOException
+   * @throws IOException on any error
    */
   public InputStream post() throws IOException {
     boundary();

@@ -45,12 +45,13 @@ public class DateUtil {
 	}
 
 	/**
-	 * Get a time in time in DICOM format.
+	 * Get a time in DICOM format.
+	 * @param time the time string to parse
 	 * @return the time in seconds for the time string,
 	 * or zero if the string cannot be parsed as a time.
 	 * @throws Exception if the time is in an illegal format.
 	 */
-	public static long getTime(String time) {
+	public static long getTime(String time) throws Exception {
 		time.replaceAll(":", "");
 		long hr = Long.parseLong(time.substring(0, 2));
 		long min = Long.parseLong(time.substring(2, 4));

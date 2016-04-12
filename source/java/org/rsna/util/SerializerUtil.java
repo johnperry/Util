@@ -119,6 +119,7 @@ public class SerializerUtil {
 	/**
 	 * Serialize the supplied object to a byte array.
 	 * @param object the instance to be serialized.
+	 * @return the serialized object.
 	 */
 	public static byte[] serialize(Object object) {
 		ObjectOutputStream out = null;

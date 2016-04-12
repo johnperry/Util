@@ -512,7 +512,8 @@ public class AVIOutputStream {
 	 * @param format
 	 *            Selects an encoder for the video format.
 	 * @exception IllegalArgumentException
-	 *                if videoFormat is null or if frame rate is <= 0
+	 *                if videoFormat is null or if frame rate is &le;= 0
+	 * @throws IOException if unable to create the stream
 	 */
 	public AVIOutputStream(File file, VideoFormat format) throws IOException {
 		this(file, format, 24);
@@ -528,7 +529,8 @@ public class AVIOutputStream {
 	 * @param bitsPerPixel
 	 *            the number of bits per pixel.
 	 * @exception IllegalArgumentException
-	 *                if videoFormat is null or if frame rate is <= 0
+	 *                if videoFormat is null or if frame rate is &le;= 0
+	 * @throws IOException if unable to create the stream
 	 */
 	public AVIOutputStream(File file, VideoFormat format, int bitsPerPixel)
 			throws IOException {
@@ -569,7 +571,8 @@ public class AVIOutputStream {
 	 * @param format
 	 *            Selects an encoder for the video format.
 	 * @exception IllegalArgumentException
-	 *                if videoFormat is null or if framerate is <= 0
+	 *                if videoFormat is null or if framerate is &le;=0
+	 * @throws IOException if unable to create the stream
 	 */
 	public AVIOutputStream(ImageOutputStream out, VideoFormat format)
 			throws IOException {
@@ -591,7 +594,7 @@ public class AVIOutputStream {
 	 * <p>
 	 * The default value is 1.
 	 *
-	 * @param newValue
+	 * @param newValue the new time scale
 	 */
 	public void setTimeScale(int newValue) {
 		if (newValue <= 0) {
@@ -615,7 +618,7 @@ public class AVIOutputStream {
 	 * The default value is 30. Together with the default value 1 of timeScale
 	 * this results in 30 frames pers second.
 	 *
-	 * @param newValue
+	 * @param newValue the new frame rate
 	 */
 	public void setFrameRate(int newValue) {
 		if (newValue <= 0) {
@@ -638,7 +641,10 @@ public class AVIOutputStream {
 		return frameRate;
 	}
 
-	/** Sets the global color palette. */
+	/*
+	 * Sets the global color palette. 
+	 * @param palette the palette to store
+	 */
 	public void setPalette(IndexColorModel palette) {
 		this.palette = palette;
 	}
@@ -655,7 +661,7 @@ public class AVIOutputStream {
 	 * <p>
 	 * The default value is 0.9.
 	 *
-	 * @param newValue
+	 * @param newValue the new compression quality
 	 */
 	public void setVideoCompressionQuality(float newValue) {
 		this.quality = newValue;
@@ -695,8 +701,7 @@ public class AVIOutputStream {
 
 	/**
 	 * Gets the dimension of the video track.
-	 * <p>
-	 * Returns null if the dimension is not known.
+	 * @return the video dimension, or null if the dimension is not known.
 	 */
 	public Dimension getVideoDimension() {
 		if (imgWidth < 1 || imgHeight < 1) {
@@ -707,7 +712,6 @@ public class AVIOutputStream {
 
 	/**
 	 * Sets the state of the QuickTimeOutpuStream to started.
-	 * <p>
 	 * If the state is changed by this method, the prolog is written.
 	 */
 	private void ensureStarted() throws IOException {

@@ -41,6 +41,7 @@ public class CipherUtil {
 	 * @param text the base-64 text representation of the encrypted UTF-8 string.
 	 * @param key the encryption key as a Base-64 string.
 	 * @return the encrypted string in Based-64.
+	 * @throws Exception on any error.
 	 */
 	public static String encrypt(String text, String key) throws Exception {
 		if (text == null) text = "null";
@@ -54,6 +55,7 @@ public class CipherUtil {
 	 * @param text the base-64 text representation of the encrypted UTF-8 string.
 	 * @param key the encryption key as a Base-64 string.
 	 * @return the decrypted string.
+	 * @throws Exception on any error.
 	 */
 	public static String decrypt(String text, String key) throws Exception {
 		Cipher cipher = getCipher(key.trim(), Cipher.DECRYPT_MODE);

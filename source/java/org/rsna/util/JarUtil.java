@@ -20,6 +20,8 @@ public class JarUtil {
 	/**
 	 * Get all the main attributes from the manifest of
 	 * a jar and return them in a hashtable.
+	 * @param jarFile the jar file from which to get the manifest
+	 * @return the table of manifest attributes
 	 */
 	public static Hashtable<String,String> getManifestAttributes(File jarFile) {
 		Hashtable<String,String> h = new Hashtable<String,String>();

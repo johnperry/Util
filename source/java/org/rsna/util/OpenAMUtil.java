@@ -66,6 +66,7 @@ public class OpenAMUtil {
 
 	/**
 	 * Convert the attributes string to a hashtable.
+	 * @param attributes the attributes
 	 * @return the attributes in a hashtable
 	 */
     public static Hashtable<String,LinkedList<String>> parseAttributes(String attributes) {
@@ -163,6 +164,7 @@ public class OpenAMUtil {
 
 	/**
 	 * Get the URL of the logout page.
+	 * @param baseURL the base url of the OpenAM server, including the protocol, host, and port
 	 * @return the URL of the logout page.
 	 */
 	public static String getLogoutURL(String baseURL) {

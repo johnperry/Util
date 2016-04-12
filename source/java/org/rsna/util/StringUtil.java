@@ -131,6 +131,7 @@ public class StringUtil {
 	/**
 	 * Make a time string for the specified time in the standard form:
 	 * hh[sep]mm[sep]ss.sss, where [sep] is the supplied separator string.
+	 * @param time the time in milliseconds
 	 * @param sep the separator string to insert between the hour, minute, and second.
 	 * @return the time string.
 	 */

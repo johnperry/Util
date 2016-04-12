@@ -78,6 +78,7 @@ public class ClasspathUtil {
 
 	/**
 	 * List the current classpath.
+	 * @return the current classpath in a readable string.
 	 */
 	public static String listClasspath() {
 		StringBuffer sb = new StringBuffer();
@@ -90,6 +91,7 @@ public class ClasspathUtil {
 
 	/**
 	 * Get a Set of class names available on the current classpath.
+	 * @return the set of class names.
 	 */
 	public static HashSet<String> getClassNames() {
 		HashSet<String> names = new HashSet<String>();

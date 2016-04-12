@@ -71,6 +71,8 @@ public class ParamPart extends Part {
    * if the user entered no value for this parameter.
    *
    * @return value of parameter as a string.
+   * @throws UnsupportedEncodingException if the parameter cannot be parsed
+   * as a String.
    */
   public String getStringValue()
       throws UnsupportedEncodingException {
@@ -80,8 +82,10 @@ public class ParamPart extends Part {
   /**
    * Returns the value of the parameter in the supplied encoding
    * or empty string if the user entered no value for this parameter.
-   *
+   * @param encoding the name of the encoding (e.g. "UTF-8").
    * @return value of parameter as a string.
+   * @throws UnsupportedEncodingException if the parameter cannot be parsed
+   * as a String.
    */
   public String getStringValue(String encoding)
       throws UnsupportedEncodingException {

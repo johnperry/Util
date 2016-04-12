@@ -111,6 +111,8 @@ public class ProxyServer {
 	/**
 	 * Determine whether the proxy parameters indicate that the
 	 * proxy server is enabled.
+	 * @return true if the proxy parameters indicate that the
+	 * proxy server is enabled.
 	 */
 	public boolean getProxyEnabled() {
 		return !proxyIPAddress.equals("") && !proxyPort.equals("");
@@ -118,6 +120,8 @@ public class ProxyServer {
 
 	/**
 	 * Determine whether the parameters indicate
+	 * that proxy user authentication is to be used.
+	 * @return true if the parameters indicate
 	 * that proxy user authentication is to be used.
 	 */
 	public boolean authenticate() {
@@ -153,7 +157,8 @@ public class ProxyServer {
 
 	/**
 	 * Get the base-64 encoded value of the proxy user authentication credentials
-	 * in the form required for an HTTP Proxy-Authorization header:
+	 * in the form required for an HTTP Proxy-Authorization header.
+	 * @return the credentials encoded in Base64
 	 */
 	public String getEncodedCredentials() {
 		return Base64.encodeToString((proxyUsername + ":" + proxyPassword).getBytes());

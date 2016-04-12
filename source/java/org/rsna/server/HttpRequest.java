@@ -62,6 +62,7 @@ public class HttpRequest {
 	 * Construct an HttpRequest, connect it to an InputStream, and
 	 * read the request from the stream.
 	 * @param socket the socket on which to construct the request.
+	 * @throws Exception if the request cannot be parsed for any reason
 	 */
 	public HttpRequest(Socket socket) throws Exception {
 		this(socket, null);
@@ -72,6 +73,7 @@ public class HttpRequest {
 	 * read the request from the stream.
 	 * @param socket the socket on which to construct the request.
 	 * @param server the HttpServer which received the request.
+	 * @throws Exception if the request cannot be parsed for any reason
 	 */
 	public HttpRequest(Socket socket, HttpServer server) throws Exception {
 		this.socket = socket;
@@ -268,6 +270,7 @@ public class HttpRequest {
 
 	/**
 	 * Determine whether the User associated with this request has a specified role.
+	 * @param role the role name
 	 * @return true if the User is authenticated and has the specified role; false otherwise.
 	 */
 	public boolean userHasRole(String role) {
@@ -462,6 +465,7 @@ public class HttpRequest {
 	 * @param name the name of the parameter.
 	 * @return the string value of the parameter, or null if
 	 * the parameter does not exist in the query string.
+	 * @param defaultValue the value to return if the parameter is missing.
 	 */
 	public String getParameter(String name, String defaultValue) {
 		String param = params.get(name);
@@ -484,7 +488,9 @@ public class HttpRequest {
 	 * and updating the parameters.
 	 * @param dir the directory in which to store the files.
 	 * @param maxPostSize the maximum size POST to accept.
-	 * @return the index of uploaded files.
+	 * @return the list of uploaded files.
+	 * @throws IOException if the parts cannot be be read from
+	 * the input stream.
 	 */
 	public LinkedList<UploadedFile> getParts(File dir, int maxPostSize) throws IOException {
 		LinkedList<UploadedFile> files = new LinkedList<UploadedFile>();
@@ -726,6 +732,8 @@ public class HttpRequest {
 
 	/**
 	 * List the headers from this HttpRequest
+	 * @param margin the indent string for readability
+	 * @return the formatted list of header names and values
 	 */
 	public String listHeaders(String margin) {
 		StringBuffer sb = new StringBuffer();
@@ -738,6 +746,8 @@ public class HttpRequest {
 
 	/**
 	 * List the cookies from this HttpRequest
+	 * @param margin the indent string for readability
+	 * @return the formatted list of cookie names and values
 	 */
 	public String listCookies(String margin) {
 		StringBuffer sb = new StringBuffer();
@@ -749,7 +759,9 @@ public class HttpRequest {
 	}
 
 	/**
-	 * List the cookies from this HttpRequest
+	 * List the parameters from this HttpRequest
+	 * @param margin the indent string for readability
+	 * @return the formatted list of parameter names and values
 	 */
 	public String listParameters(String margin) {
 		StringBuffer sb = new StringBuffer();

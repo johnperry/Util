@@ -40,6 +40,7 @@ public class XmlUtil {
 	/**
 	 * Get a DocumentBuilder that is namespace aware.
 	 * @return a namespace-aware DocumentBuilder.
+	 * @throws Exception on any error
 	 */
 	public static DocumentBuilder getDocumentBuilder() throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -61,6 +62,7 @@ public class XmlUtil {
 	 * Parse an XML file.
 	 * @param file the file containing the XML to parse.
 	 * @return the XML DOM document.
+	 * @throws Exception on any error
 	 */
 	public static Document getDocument(File file) throws Exception {
 		DocumentBuilder db = getDocumentBuilder();
@@ -71,6 +73,7 @@ public class XmlUtil {
 	 * Parse an XML string.
 	 * @param xmlString the file containing the XML to parse.
 	 * @return the XML DOM document.
+	 * @throws Exception on any error
 	 */
 	public static Document getDocument(String xmlString) throws Exception {
 		StringReader sr = new StringReader(xmlString);
@@ -82,6 +85,7 @@ public class XmlUtil {
 	 * Parse an XML InputStream.
 	 * @param inputStream the stream to parse.
 	 * @return the XML DOM document.
+	 * @throws Exception on any error
 	 */
 	public static Document getDocument(InputStream inputStream) throws Exception {
 		DocumentBuilder db = getDocumentBuilder();
@@ -91,6 +95,7 @@ public class XmlUtil {
 	/**
 	 * Create a new empty XML DOM document.
 	 * @return the XML DOM document.
+	 * @throws Exception on any error
 	 */
 	public static Document getDocument() throws Exception {
 		DocumentBuilder db = getDocumentBuilder();
@@ -102,6 +107,7 @@ public class XmlUtil {
 	 * @param file the file containing the XML to parse.
 	 * @param resource the resource containing the XML to parse if the file does not exist.
 	 * @return the XML DOM document.
+	 * @throws Exception on any error
 	 */
 	public static Document getDocument(File file, String resource) throws Exception {
 		InputStream in = FileUtil.getStream(file, resource);
@@ -116,6 +122,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed text.
+	 * @throws Exception on any error
 	 */
 	public static String getTransformedText(File doc, File xsl, Object[] params) throws Exception {
 		return getTransformedText(new StreamSource(doc), new StreamSource(xsl), params);
@@ -129,6 +136,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed text.
+	 * @throws Exception on any error
 	 */
 	public static String getTransformedText(Document doc, File xsl, Object[] params) throws Exception {
 		return getTransformedText(new DOMSource(doc), new StreamSource(xsl), params);
@@ -142,6 +150,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed text.
+	 * @throws Exception on any error
 	 */
 	public static String getTransformedText(Document doc, Document xsl, Object[] params) throws Exception {
 		return getTransformedText(new DOMSource(doc), new DOMSource(xsl), params);
@@ -156,6 +165,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed text.
+	 * @throws Exception on any error
 	 */
 	public static String getTransformedText(Source doc, Source xsl, Object[] params) throws Exception {
 		TransformerFactory tFactory = TransformerFactory.newInstance();
@@ -178,6 +188,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed DOM Document.
+	 * @throws Exception on any error
 	 */
 	public static Document getTransformedDocument(File doc, File xsl, Object[] params) throws Exception {
 		return getTransformedDocument(new StreamSource(doc), new StreamSource(xsl), params);
@@ -191,6 +202,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed DOM Document.
+	 * @throws Exception on any error
 	 */
 	public static Document getTransformedDocument(Document doc, File xsl, Object[] params) throws Exception {
 		return getTransformedDocument(new DOMSource(doc), new StreamSource(xsl), params);
@@ -204,6 +216,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed DOM Document.
+	 * @throws Exception on any error
 	 */
 	public static Document getTransformedDocument(File doc, Document xsl, Object[] params) throws Exception {
 		return getTransformedDocument(new StreamSource(doc), new DOMSource(xsl), params);
@@ -217,6 +230,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed DOM Document.
+	 * @throws Exception on any error
 	 */
 	public static Document getTransformedDocument(Document doc, Document xsl, Object[] params) throws Exception {
 		return getTransformedDocument(new DOMSource(doc), new DOMSource(xsl), params);
@@ -231,6 +245,7 @@ public class XmlUtil {
 	 * @param xsl the XSL transformation program.
 	 * @param params the array of transformation parameters.
 	 * @return the transformed text.
+	 * @throws Exception on any error
 	 */
 	public static Document getTransformedDocument(Source doc, Source xsl, Object[] params) throws Exception {
 		TransformerFactory tFactory = TransformerFactory.newInstance();

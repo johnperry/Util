@@ -51,6 +51,7 @@ public class HttpResponse {
 	 * Create an HttpResponse, connecting it to an OutputStream and
 	 * setting a default response code of 200.
 	 * @param socket the socket on which to construct the response.
+	 * @throws Exception if the response cannot be created for any reason
 	 */
 	public HttpResponse(Socket socket) throws Exception {
 		this.socket = socket;
@@ -129,7 +130,7 @@ public class HttpResponse {
 	 * If the string doesn't correspond to a known Content-Type,
 	 * the header is not set.
 	 * <br><br>
-	 * <table border="1">
+	 * <table border="1" summary="Content-Types">
 	 *	<tr><td>application</td><td>application/x-ms-application</td></tr>
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></tr>
 	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></tr>
@@ -187,6 +188,7 @@ public class HttpResponse {
 	 * Set the Disposition header for a file.
 	 * @param file the file whose name is to be inserted into
 	 * the Disposition header.
+	 * @return the disposition created for the specified file
 	 */
 	public String setContentDisposition(File file) {
 		String disposition = "attachment; filename=\"" + file.getName() + "\"";
@@ -197,6 +199,7 @@ public class HttpResponse {
 	/**
 	 * Set the Content-Encoding header for a file if the request accepts gzip encoding.
 	 * @param req the request containing the Accept-Encoding header.
+	 * @param file the file whose extension is used to set the content encoding
 	 * @return the value of the header set, or null if no header was set.
 	 */
 	public String setContentEncoding(HttpRequest req, File file) {
@@ -270,6 +273,7 @@ public class HttpResponse {
 	 * Convert a millisecond time to the Http date format for use in headers.
 	 * The format returned is: "Thu, 16 Mar 2000 11:00:00 GMT"
 	 * @param time Date value, or -1 to use the current datetime.
+	 * @return the formatted date
 	 */
 	public synchronized String getHttpDate(long time) {
 		if (dateFormat == null) {
@@ -357,6 +361,7 @@ public class HttpResponse {
 	/**
 	 * Send the response, setting the Content-Length header
 	 * and including all the content items.
+	 * @return true if the transmission succeeds; false otherwise.
 	 */
 	public boolean send() {
 		try {
@@ -400,6 +405,8 @@ public class HttpResponse {
 
 	/**
 	 * List the headers for this HttpResponse
+	 * @param margin the indent string for readability
+	 * @return the formatted list of header names and values
 	 */
 	public String listHeaders(String margin) {
 		StringBuffer sb = new StringBuffer();

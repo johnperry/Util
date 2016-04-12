@@ -42,6 +42,7 @@ public class TimerUtil {
 	/**
 	 * Get the interval from the last reset to the current time
 	 * using the System nanosecond timer.
+	 * @param text the suffix to be appended after the time
 	 * @return the interval in nanoseconds from the last reset
 	 * to the current time as a string with the supplied text
 	 * appended to the string.
@@ -66,6 +67,7 @@ public class TimerUtil {
 	/**
 	 * Get the interval from the last lap start time to the current time
 	 * as a text string and reset the lap start time.
+	 * @param text the suffix to be appended after the time
 	 * @return the interval from the last reset to the current time
 	 * as a string with the supplied text appended to the string..
 	 */
@@ -78,6 +80,7 @@ public class TimerUtil {
 	 * Get a string formatting a time.
 	 * @param time the time to be displayed.
 	 * @param text any text describing the time.
+	 * @return time: text
 	 */
 	public static String getText(long time, String text) {
 		text = text.trim();

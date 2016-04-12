@@ -18,7 +18,8 @@ public interface FileRenamePolicy {
 
   /**
    * Returns a File object holding a new name for the specified file.
-   *
+   * @param f the file.
+   * @return the renamed file.
    * @see FilePart#writeTo(File fileOrDirectory)
    */
   public File rename(File f);

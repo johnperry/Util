@@ -144,7 +144,8 @@ public class SeekableByteArrayOutputStream extends ByteArrayOutputStream {
 
     /** Writes the contents of the byte array into the specified output
      * stream.
-     * @param out
+     * @param out the output stream
+	 * @throws IOException on any error
      */
     public void toOutputStream(OutputStream out) throws IOException {
         out.write(buf, 0, count);

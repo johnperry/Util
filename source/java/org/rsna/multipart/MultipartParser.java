@@ -38,6 +38,7 @@ public class MultipartParser {
 	 *
 	 * @param type the content type of the POST.
 	 * @param in the input stream of the request.
+	 * @throws IOException on a read error.
 	 */
 	public MultipartParser(String type, MultipartInputStream in) throws IOException {
 

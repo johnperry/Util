@@ -68,6 +68,7 @@ public class FilePart extends Part {
 
   /**
    * Puts in place the specified policy for handling file name collisions.
+   * @param policy the rename policy for future files.
    */
   public void setRenamePolicy(FileRenamePolicy policy) {
     this.policy = policy;
@@ -133,7 +134,7 @@ public class FilePart extends Part {
    * a directory, we write it to that directory with the filename
    * that accompanied it. If this part doesn't contain a file this
    * method does nothing.
-   *
+   * @param fileOrDirectory where to write the data
    * @return number of bytes written
    * @exception IOException	if an input or output exception has occurred.
    */
@@ -173,7 +174,7 @@ public class FilePart extends Part {
   /**
    * Write this file part to the given output stream. If this part doesn't
    * contain a file this method does nothing.
-   *
+   * @param out the output stream
    * @return number of bytes written.
    * @exception IOException	if an input or output exception has occurred.
    */

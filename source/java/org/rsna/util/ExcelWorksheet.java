@@ -74,6 +74,7 @@ public class ExcelWorksheet {
 	
 	/**
 	 * Get the name of this worksheet.
+	 * @return the name of this worksheet
 	 */
 	public String getName() {
 		return name;
@@ -81,6 +82,7 @@ public class ExcelWorksheet {
 	
 	/**
 	 * Get the number of cells in this worksheet.
+	 * @return the number of cells in this worksheet
 	 */
 	public int getSize() {
 		return cells.size();
@@ -88,6 +90,7 @@ public class ExcelWorksheet {
 
 	/**
 	 * Get the last row number in this worksheet.
+	 * @return the last row number in this worksheet
 	 */
 	public int getLastRow() {
 		return lastRow;
@@ -95,6 +98,7 @@ public class ExcelWorksheet {
 
 	/**
 	 * Get the last column identifier in this worksheet.
+	 * @return the last column identifier in this worksheet
 	 */
 	public String getLastColumn() {
 		return lastColumn;

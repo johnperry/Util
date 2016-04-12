@@ -69,6 +69,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Get the user's name.
+	 * @return the user's username
 	 */
     public String getUsername() {
 		return username;
@@ -76,6 +77,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Get the user's password.
+	 * @return the user's password
 	 */
     public String getPassword() {
 		return password;
@@ -83,6 +85,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Set the user's password.
+	 * @param password the password to set for the user
 	 */
     public void setPassword(String password) {
 		this.password = password;
@@ -90,6 +93,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Test whether a user has a specific role.
+	 * @param role the name of the role.
 	 * @return true if the user has the specified role; false otherwise.
 	 */
     public boolean hasRole(String role) {
@@ -98,6 +102,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Get the user's roles HashSet.
+	 * @return the set of roles possessed by the user
 	 */
     public HashSet<String> getRoles() {
 		return roles;
@@ -105,6 +110,7 @@ public class User implements Comparable<User> {
 
 	/**
 	 * Get the user's role names (unsorted).
+	 * @return the array of roles possessed by the user
 	 */
     public String[] getRoleNames() {
 		String[] names = new String[roles.size()];

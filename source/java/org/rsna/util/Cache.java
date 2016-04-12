@@ -80,6 +80,7 @@ public class Cache {
 	 * Load all the files in a zip file into the cache, preserving the
 	 * directory structure of the zip file, and ignoring any .class files.
 	 * @param file the zip file to unpack.
+	 * @return the number of files loaded.
 	 */
 	public synchronized int load(File file) {
 		int count = 0;

@@ -224,6 +224,7 @@ public class UsersXmlFileImpl extends Users {
 
 	/**
 	 * Get the users in an XML Document.
+	 * @return the XML Document containing all the users
 	 */
 	public Document getXML() {
 		try {

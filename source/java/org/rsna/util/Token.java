@@ -36,6 +36,7 @@ public class Token {
 	
 	/**
 	 * Get the text of the token.
+	 * @return the text of the token
 	 */
 	public String getText() {
 		return text;
@@ -43,6 +44,7 @@ public class Token {
 	
 	/**
 	 * Get the delimiter of the token.
+	 * @return the delimiter of the token
 	 */
 	public char getDelimiter() {
 		return delimiter;
@@ -50,6 +52,7 @@ public class Token {
 	
 	/**
 	 * Get the type of the token.
+	 * @return the type of the token
 	 */
 	public TokenType getType() {
 		return type;
@@ -57,6 +60,7 @@ public class Token {
 	
 	/**
 	 * Determine whether the token is empty.
+	 * @return true if the token is empty; false otherwise
 	 */
 	public boolean isEmpty() {
 		return type.isEmpty();
@@ -65,6 +69,7 @@ public class Token {
 	/**
 	 * Determine whether the token is a literal text string
 	 * (delimited by double-quotes or possibly by nothing).
+	 * @return true if the token is a literal; false otherwise
 	 */
 	public boolean isLiteral() {
 		return type.isLiteral();
@@ -72,6 +77,7 @@ public class Token {
 	
 	/**
 	 * Determine whether the token is an element identifier.
+	 * @return true if the token is an identifier; false otherwise
 	 */
 	public boolean isIdentifier() {
 		return type.isIdentifier();
@@ -79,6 +85,7 @@ public class Token {
 	
 	/**
 	 * Determine whether the token is a tag.
+	 * @return true if the token is a tag; false otherwise
 	 */
 	public boolean isTag() {
 		return type.isTag();

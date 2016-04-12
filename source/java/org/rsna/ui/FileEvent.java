@@ -44,6 +44,7 @@ public class FileEvent extends AWTEvent {
 	 * Get a FileEvent capturing a SELECT file event.
 	 * @param source the source of the event.
 	 * @param file the file on which the event occurred.
+	 * @return the SELECT FileEvent with the specified source and file.
 	 */
 	public static FileEvent SELECT(Object source, File file) {
 		return new FileEvent(source, SELECT, file, null);
@@ -53,6 +54,7 @@ public class FileEvent extends AWTEvent {
 	 * Get a FileEvent capturing a DELETE file event.
 	 * @param source the source of the event.
 	 * @param file the file on which the event occurred.
+	 * @return the DELETE FileEvent with the specified source and file.
 	 */
 	public static FileEvent DELETE(Object source, File file) {
 		return new FileEvent(source, DELETE, file, null);
@@ -62,6 +64,7 @@ public class FileEvent extends AWTEvent {
 	 * Get a FileEvent capturing a STORE file event.
 	 * @param source the source of the event.
 	 * @param file the file on which the event occurred.
+	 * @return the STORE FileEvent with the specified source and file.
 	 */
 	public static FileEvent STORE(Object source, File file) {
 		return new FileEvent(source, STORE, file, null);
@@ -72,6 +75,7 @@ public class FileEvent extends AWTEvent {
 	 * @param source the source of the event.
 	 * @param from the original location of the file which was moved.
 	 * @param to the final location of the file which was moved.
+	 * @return the MOVE FileEvent with the specified source and file.
 	 */
 	public static FileEvent MOVE(Object source, File from, File to) {
 		return new FileEvent(source, MOVE, from, to);

@@ -34,6 +34,7 @@ public class HtmlUtil {
 	 * Generate a close box linking to a specified URL,
 	 * using the _self target. This method calls the
 	 * more general getCloseBox method.
+	 * @param url the URL to load.
 	 * @return the HTML code for the close box div.
 	 */
 	public static String getCloseBox(String url) {

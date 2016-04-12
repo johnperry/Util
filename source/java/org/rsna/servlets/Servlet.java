@@ -35,10 +35,13 @@ public class Servlet {
 	 * AND if the example-index.html file DOES exist, this method copies
 	 * the example to the real index.html file; otherwise, it leaves
 	 * everything alone.
+	 * @param root the root directory used by the servlet
+	 * @param context the context of the servlet (the first path element
+	 * for any request mapping to the servlet)
 	 */
 	public static void init(File root, String context) {
 		File contextRoot = new File(root, context);
-		File index = new File(contextRoot,"index.html");
+		File index = new File(contextRoot, "index.html");
 		if (!index.exists()) {
 			File exindex = new File(contextRoot,"example-index.html");
 			if (exindex.exists()) FileUtil.copy(exindex, index);
@@ -73,6 +76,7 @@ public class Servlet {
 	 * If that fails, it returns a NOT FOUND response code.
 	 * @param req the request object
 	 * @param res the response object
+	 * @throws Exception on any error
 	 */
 	public void doGet(HttpRequest req, HttpResponse res) throws Exception {
 		File file = getRequestedFile(req);
@@ -120,6 +124,7 @@ public class Servlet {
 	 * Return a not found error in the response.
 	 * @param req the request object
 	 * @param res the response object
+	 * @throws Exception on any error
 	 */
 	public void doPost(HttpRequest req, HttpResponse res) throws Exception {
 		res.disableCaching();
@@ -132,6 +137,7 @@ public class Servlet {
 	 * Return a not found error in the response.
 	 * @param req the request object
 	 * @param res the response object
+	 * @throws Exception on any error
 	 */
 	public void doPut(HttpRequest req, HttpResponse res) throws Exception {
 		res.disableCaching();
@@ -144,6 +150,7 @@ public class Servlet {
 	 * Return a not found error in the response.
 	 * @param req the request object
 	 * @param res the response object
+	 * @throws Exception on any error
 	 */
 	public void doDelete(HttpRequest req, HttpResponse res) throws Exception {
 		res.disableCaching();
@@ -156,6 +163,7 @@ public class Servlet {
 	 * Return a response allowing everything.
 	 * @param req the request object
 	 * @param res the response object
+	 * @throws Exception on any error
 	 */
 	public void doOptions(HttpRequest req, HttpResponse res) throws Exception {
 		res.disableCaching();
@@ -180,7 +188,7 @@ public class Servlet {
 	 * Get the file identified in an HttpRequest.
 	 * @param req the request object
 	 * @return the file identified by the request, treating
-	 * the path as an offset to the ROOT directory.
+	 * the path as an offset to the root directory.
 	 */
 	public File getRequestedFile(HttpRequest req) {
 		String p = req.path;
@@ -198,6 +206,8 @@ public class Servlet {
 
 	/**
 	 * Filter a string for cross-site scripting attacks.
+	 * @param s the string to be filtered
+	 * @return the filtered string
 	 */
 	public String filter(String s) {
 		return StringUtil.filterXSS(s).replaceAll("<[^>]*>","").replaceAll("[<%>]","");

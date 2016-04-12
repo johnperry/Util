@@ -36,6 +36,8 @@ public class Authenticator {
 
 	/**
 	 * Get the Authenticator instance, creating it if it does not exist.
+	 * @return the current instance of the Authenticator, or a new instance
+	 * if no current instance exists.
 	 */
 	public static synchronized Authenticator getInstance() {
 		if (authenticator == null) authenticator = new Authenticator();
@@ -52,6 +54,7 @@ public class Authenticator {
 
 	/**
 	 * Get the Session timeout.
+	 * @return the current timeout
 	 */
 	public synchronized long getSessionTimeout() {
 		return timeout;
@@ -59,6 +62,7 @@ public class Authenticator {
 
 	/**
 	 * Get the number of active sessions.
+	 * @return the number of sessions in the sessions table
 	 */
 	public synchronized int getActiveSessionCount() {
 		return sessions.size();
@@ -234,6 +238,7 @@ public class Authenticator {
 	
 	/**
 	 * GetActiveUsers.
+	 * @return the list of active users (after removing inactive users from the sessions table).
 	 */
 	public LinkedList<User> getActiveUsers() {
 		LinkedList<User> users = new LinkedList<User>();

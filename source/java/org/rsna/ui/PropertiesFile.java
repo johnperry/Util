@@ -32,6 +32,7 @@ public class PropertiesFile extends Properties {
 
 	/**
 	 * Set the file without loading it.
+	 * @param file the properties file
 	 */
 	public void setFile(File file) {
 		this.file = file;

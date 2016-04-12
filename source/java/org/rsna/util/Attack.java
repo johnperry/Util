@@ -23,6 +23,7 @@ public class Attack implements Comparable<Attack> {
 	/**
 	 * Create a new Attack for an IP address, initializing
 	 * the count and the last time to zero.
+	 * @param ip the IP address of the attacker
 	 */
 	public Attack(String ip) {
 		this.ip = ip;
@@ -33,6 +34,7 @@ public class Attack implements Comparable<Attack> {
 	/**
 	 * Create a new Attack by copying the parameters from
 	 * another Attack.
+	 * @param attack the attack to clone
 	 */
 	public Attack(Attack attack) {
 		this.ip = attack.getIP();
@@ -45,6 +47,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Get the IP address of the attacker.
+	 * @return the IP address of the attacker
 	 */
 	public String getIP() {
 		return ip;
@@ -52,6 +55,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Get the country of the attacker.
+	 * @return the country of the attacker
 	 */
 	public String getCountry() {
 		return country;
@@ -59,13 +63,15 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Get the city of the attacker.
+	 * @return the city of the attacker
 	 */
 	public String getCity() {
 		return city;
 	}
 
 	/**
-	 * Get the city of the attacker.
+	 * Get the region (state) of the attacker.
+	 * @return the region (state) of the attacker
 	 */
 	public String getRegion() {
 		return region;
@@ -73,6 +79,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Get the number of attacks received from the attacker.
+	 * @return the number of attacks received from the attacker
 	 */
 	public int getCount() {
 		return count;
@@ -80,6 +87,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Get the system time of the last attack from the attacker.
+	 * @return the system time of the last attack from the attacker
 	 */
 	public long getLast() {
 		return last;
@@ -94,6 +102,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Set the city.
+	 * @param city the city of the attacker
 	 */
 	public void setCity(String city) {
 		this.city = city;
@@ -101,6 +110,7 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Set the region.
+	 * @param region the region or state of the attacker
 	 */
 	public void setRegion(String region) {
 		this.region = region;
@@ -108,21 +118,26 @@ public class Attack implements Comparable<Attack> {
 
 	/**
 	 * Set the country.
+	 * @param country the country of the attacker
 	 */
 	public void setCountry(String country) {
 		this.country = country;
 	}
 
 	/**
-	 * Set the country.
+	 * Set the last time indicator for an attack from this attacker.
+	 * @param last the time to store for the last attack from this attacker
 	 */
 	public void setLast(long last) {
 		this.last = last;
 	}
 
 	/**
-	 * Implement the Comparable<Attack> interface, sorting in reverse
-	 * chronological order by last attack time..
+	 * Implement the Comparable interface, sorting in reverse
+	 * chronological order by last attack time.
+	 * @param attack the Attack to compare to this instance
+	 * @return as specified in the Comparable interface (in this case,
+	 * sorting in reverse chronological order by last attack time.
 	 */
 	public int compareTo(Attack attack) {
 		long x = attack.getLast();
