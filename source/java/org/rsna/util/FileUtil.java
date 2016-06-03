@@ -363,7 +363,11 @@ public class FileUtil {
 	 * @return true if the operation succeeded completely; false otherwise.
 	 */
 	public static synchronized boolean copy(File inFile, File outFile) {
-		try { return copy(new FileInputStream(inFile), new FileOutputStream(outFile), -1); }
+		try { 
+			return copy(new FileInputStream(inFile), 
+						new BufferedOutputStream( new FileOutputStream(outFile) ),
+						-1);
+		}
 		catch (Exception e) { return false; }
 	}
 
