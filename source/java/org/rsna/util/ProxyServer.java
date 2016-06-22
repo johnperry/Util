@@ -135,10 +135,19 @@ public class ProxyServer {
 		System.setProperty("proxySet","true");
 		System.setProperty("http.proxyHost",proxyIPAddress);
 		System.setProperty("http.proxyPort",proxyPort);
+		System.setProperty("http.proxyUser",proxyUsername);
+		System.setProperty("http.proxyPassword",proxyPassword);
+		
 		System.setProperty("https.proxyHost",proxyIPAddress);
 		System.setProperty("https.proxyPort",proxyPort);
+		System.setProperty("https.proxyUser",proxyUsername);
+		System.setProperty("https.proxyPassword",proxyPassword);
+		
 		System.setProperty("ftp.proxyHost",proxyIPAddress);
 		System.setProperty("ftp.proxyPort",proxyPort);
+		System.setProperty("ftp.proxyUser",proxyUsername);
+		System.setProperty("ftp.proxyPassword",proxyPassword);
+
 	}
 
 	/**
@@ -149,10 +158,19 @@ public class ProxyServer {
 		sys.remove("proxySet");
 		sys.remove("http.proxyHost");
 		sys.remove("http.proxyPort");
+		sys.remove("http.proxyUser");
+		sys.remove("http.proxyPassword");
+		
 		sys.remove("https.proxyHost");
 		sys.remove("https.proxyPort");
+		sys.remove("https.proxyUser");
+		sys.remove("https.proxyPassword");
+		
 		sys.remove("ftp.proxyHost");
 		sys.remove("ftp.proxyPort");
+		sys.remove("ftp.proxyUser");
+		sys.remove("ftp.proxyPassword");
+		
 	}
 
 	/**
