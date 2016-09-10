@@ -96,6 +96,9 @@ public class SysPropsServlet extends Servlet {
 		sb.append( "<tr><td>TOTAL MEMORY</td><td>"  );
 		formatter.format("%,d bytes", runtime.totalMemory());
 		sb.append( "</td></tr>\n" );
+		sb.append( "<tr><td>MAXIMUM MEMORY</td><td>"  );
+		formatter.format("%,d bytes", runtime.maxMemory());
+		sb.append( "</td></tr>\n" );
 		File[] roots = File.listRoots();
 		for (File root : roots) {
 			String name = root.getAbsolutePath()+" partition";
