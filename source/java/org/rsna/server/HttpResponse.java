@@ -376,10 +376,11 @@ public class HttpResponse {
 			String preamble =
 				"HTTP/1.1 " + responseCode + "\r\n" +
 				getHeadersString() +
-				"Content-Length: " + responseLength + "\r\n\r\n";
+				(isGzipEncoding ? "" : "Content-Length: " + responseLength + "\r\n") +
+				"\r\n";
 			byte[] preambleBytes = preamble.getBytes("UTF-8");
 			outputStream.write(preambleBytes);
-			if (isGzipEncoding) outputStream = new GZIPOutputStream(outputStream);
+			if (isGzipEncoding) outputStream = new GZIPOutputStream(outputStream, true); //syncFlush
 			for (ResponseItem item : responseContent) item.write();
 			if (isGzipEncoding) ((GZIPOutputStream)outputStream).finish();
 			outputStream.flush();
