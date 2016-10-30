@@ -25,6 +25,7 @@ public class Authenticator {
 
 	protected Hashtable<String,Session> sessions = null;
 	long timeout = 1 * 60 * 60 * 1000; //default session timeout in ms = 1 hour
+	String sessionCookieName = "RSNASESSION";
 
 	/**
 	 * The protected constructor to prevent instantiation of
@@ -42,6 +43,14 @@ public class Authenticator {
 	public static synchronized Authenticator getInstance() {
 		if (authenticator == null) authenticator = new Authenticator();
 		return authenticator;
+	}
+
+	/**
+	 * Set the Session cookie name.
+	 * @param sessionCookieName the name of the session cookie
+	 */
+	public synchronized void setSessionCookieName(String sessionCookieName) {
+		this.sessionCookieName = sessionCookieName;
 	}
 
 	/**
@@ -111,8 +120,8 @@ public class Authenticator {
 			}
 		}
 
-		//No joy, try the RSNA session cookie
-		String id = req.getCookie("RSNASESSION");
+		//No joy, try the session cookie
+		String id = req.getCookie(sessionCookieName);
 		if ( (id != null) && ((session=sessions.get(id)) != null) && session.appliesTo(req) ) {
 			session.recordAccess();
 			return session.user;
@@ -187,7 +196,7 @@ public class Authenticator {
 			Session session = new Session(user, req.getRemoteAddress());
 			sessions.put(session.id, session);
 			if (!Users.getInstance().supportsSSO()) {
-				res.setHeader("Set-Cookie", "RSNASESSION="+session.id + "; path=/");
+				res.setHeader("Set-Cookie", sessionCookieName+"="+session.id + "; path=/");
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
 			}
 			return true;
@@ -211,7 +220,7 @@ public class Authenticator {
 
 		//Get the session cookie name
 		String name = users.getSSOCookieName();
-		if (name.equals("")) name = "RSNASESSION";
+		if (name.equals("")) name = sessionCookieName;
 
 		//See if there is a cookie specifying an existing session.
 		String id = req.getCookie(name);
@@ -220,7 +229,7 @@ public class Authenticator {
 			sessions.remove(id);
 			if (!users.supportsSSO()) {
 				//Set a dummy session cookie that expires immediately.
-				res.setHeader("Set-Cookie", "RSNASESSION=NONE; Max-Age=0");
+				res.setHeader("Set-Cookie", sessionCookieName+"=NONE; Max-Age=0");
 				res.setHeader("Cache-Control", "no-cache=\"set-cookie\"");
 			}
 		}
