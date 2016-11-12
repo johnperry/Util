@@ -44,8 +44,10 @@ public class HttpRequest {
 	public final Socket socket;
 	public final HttpServer server;
 	public final InputStream inputStream;
-	public String protocol = "[]";
+	public String protocolName = "";
 	public String protocolVersion = "";
+	public String protocol = "[]";
+	public String ssl = "";
 	public String method = "[]";
 	public String path = "";
 	public String query = "";
@@ -78,6 +80,7 @@ public class HttpRequest {
 	public HttpRequest(Socket socket, HttpServer server) throws Exception {
 		this.socket = socket;
 		this.server = server;
+		if (server != null) ssl = server.getSSL() ? "s" : "";
 		socket.setSoTimeout(soTimeout);
 		inputStream = new BufferedInputStream(socket.getInputStream());
 		parseRequestLine();
@@ -303,8 +306,27 @@ public class HttpRequest {
 	}
 
 	/**
-	 * Get the protocol associated with this request.
-	 * @return the protocol.
+	 * Get the name of the protocol standard specified in the request line. 
+	 * Note: even if the request is SSL, the name of the protocol standard
+	 * will be "HTTP". To get the protocol actually used in the request,
+	 * call getProtocol.
+	 * @return the protocol name (in upper case).
+	 */
+	public String getProtocolName() {
+		return protocolName;
+	}
+
+	/**
+	 * Get the protocol version specified in the request line.
+	 * @return the protocol version.
+	 */
+	public String getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	/*
+	 * Get the protocol actually used in this request (http or https). 
+	 * @return the protocol (http or https).
 	 */
 	public String getProtocol() {
 		return protocol;
@@ -549,6 +571,7 @@ public class HttpRequest {
 		parsedPath = new Path("");
 
 		String line = getLine();
+		logger.debug(line);
 
 		//get the method
 		line = line.trim();
@@ -567,14 +590,15 @@ public class HttpRequest {
 		}
 		int protocolVersionStart = line.indexOf("/", protocolStart);
 		if (protocolVersionStart > 0) {
-			protocol = line.substring(protocolStart, protocolVersionStart);
+			protocolName = line.substring(protocolStart, protocolVersionStart);
 			protocolVersion = line.substring(protocolVersionStart + 1).trim();
 		}
 		else {
-			protocol = line.substring(protocolStart);
+			protocolName = line.substring(protocolStart);
 			protocolVersion = "";
 		}
-		protocol = protocol.trim().toLowerCase(); //note: trim is necessary
+		protocolName = protocolName.trim().toUpperCase(); //note: trim is necessary
+		protocol = (protocolName + ssl).toLowerCase();
 
 		try { path = URLDecoder.decode(path,"UTF-8"); }
 		catch (Exception ex) { logger.warn("Undecodable path: \""+path+"\""); }
@@ -725,7 +749,7 @@ public class HttpRequest {
 	 * @return the text value of the request, including the method, path, and query or content.
 	 */
 	public String toString() {
-		return method + " " + path
+		return getProtocol().toUpperCase() + " " + method + " " + path
 				+ (query.equals("") ? "" : "?" + query)
 				+ ( (method.equals("POST") && (content != null) && (content.length() > 0)) ? "\n" + content : "");
 	}
