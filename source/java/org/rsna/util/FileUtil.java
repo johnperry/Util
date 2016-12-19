@@ -364,7 +364,7 @@ public class FileUtil {
 	 */
 	public static synchronized boolean copy(File inFile, File outFile) {
 		try { 
-			return copy(new FileInputStream(inFile), 
+			return copy(new BufferedInputStream( new FileInputStream(inFile)), 
 						new BufferedOutputStream( new FileOutputStream(outFile) ),
 						-1);
 		}
@@ -386,8 +386,9 @@ public class FileUtil {
 		boolean result = true;
 		long bytesRead = 0;
 		try {
+			int bufferSize = 1024 * 64;
 			in = new BufferedInputStream(in);
-			byte[] b = new byte[4096];
+			byte[] b = new byte[bufferSize];
 			int n;
 
 			while ( (bytesRead < length) &&
