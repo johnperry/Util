@@ -127,6 +127,14 @@ public class ServletSelector {
 	}
 
 	/**
+	 * Get the boolean that specifies whether users are required to be authenticated.
+	 * @return true if the SerevletSelector requires users to be authenticated; false otherwise.
+	 */
+	public boolean getRequireAuthentication() {
+		return requireAuthentication;
+	}
+
+	/**
 	 * Get the root directory for all servlets managed by this instance.
 	 * @return root the root directory for all servlets managed by this instance.
 	 */

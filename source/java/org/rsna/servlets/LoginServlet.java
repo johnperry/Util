@@ -16,6 +16,7 @@ import org.rsna.server.HttpRequest;
 import org.rsna.server.HttpResponse;
 import org.rsna.server.User;
 import org.rsna.server.Users;
+import org.rsna.server.UsersOpenAMImpl;
 import org.rsna.util.FileUtil;
 import org.rsna.util.StringUtil;
 
@@ -59,9 +60,20 @@ public class LoginServlet extends Servlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		String logout = req.getParameter("logout");
+		
+		//See if this is an OpenAM login that requires authentication.
+		Users users = Users.getInstance();
+		if (!req.isFromAuthenticatedUser() 
+				&& (users instanceof UsersOpenAMImpl)
+				&& req.getServer().getServletSelector().getRequireAuthentication()) {
+			
+			String redirectURL = req.getProtocol()+"://"+req.getHost()+"/";
+			String url = ((UsersOpenAMImpl)users).getLoginURL(redirectURL);
+			res.redirect(url);
+		}
 
 		//See if this is an ajax call or a web page request
-		if (req.getPath().endsWith("/ajax")) {
+		else if (req.getPath().endsWith("/ajax")) {
 			//It's an ajax call.
 			if (logout == null) {
 				res.setResponseCode( login(req, res, username, password) ? 200 : 403 );
