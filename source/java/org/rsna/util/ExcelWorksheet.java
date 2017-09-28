@@ -105,6 +105,42 @@ public class ExcelWorksheet {
 	}
 
 	/**
+	 * Get a column identifier from an integer, with column A being integer 0.
+	 * @param column integer
+	 * @return the alphabetic identifier of the column.
+	 */
+	public static String getColumnID(int column) {
+		LinkedList<String> stack = new LinkedList<String>();
+		do {
+			char c = (char)('A' + (column%26));
+			stack.push(Character.toString(c));
+		}
+		while ( (column/=26) != 0 );
+		StringBuffer sb = new StringBuffer();
+		while (stack.size() > 0) sb.append(stack.pop());
+		return sb.toString();		
+	}
+
+	/**
+	 * Get an integer corresponding to a column identifier, with column A being integer 0.
+	 * @param columnID integer
+	 * @return the int corresponding to the alphabetic identifier of the column.
+	 */
+	public static int getColumn(String columnID) {
+		char[] cArray = columnID.toCharArray();
+		int c = 0;
+		for (int k=0; k<cArray.length; k++) {
+			c = 26 * c + (cArray[k] - 'A');
+		}
+		int n = 26;
+		for (int i=1; i<cArray.length; i++) {
+			c += n;
+			n *= 26;
+		}
+		return c;
+	}
+
+	/**
 	 * Get the list of worksheet names in an xlsx file.
 	 * @param file the xlsx file
 	 * @return the list of worksheet names.
