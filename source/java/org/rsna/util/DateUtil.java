@@ -23,7 +23,7 @@ public class DateUtil {
 	 */
 	public static GregorianCalendar getCalendar(String date) throws Exception {
 		//do a little filtering to protect against the most common booboos
-		date = date.replaceAll("[@:T-\\s]","");
+		date = date.replaceAll("[@:T\\-\\s]","");
 		if (date.startsWith("00")) date = "19" + date.substring(2);
 		int bslash = date.indexOf("\\");
 		if (bslash != -1) date = date.substring(0, bslash);
