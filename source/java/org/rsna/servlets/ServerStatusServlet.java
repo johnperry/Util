@@ -10,8 +10,7 @@ package org.rsna.servlets;
 import java.io.File;
 import org.rsna.server.*;
 import org.rsna.servlets.Servlet;
-import org.rsna.util.Attack;
-import org.rsna.util.AttackLog;
+import org.rsna.util.StringUtil;
 
 /**
  * The ServerStatusServlet. This servlet returns the status of the
@@ -52,10 +51,17 @@ public class ServerStatusServlet extends Servlet {
 								+ " waiting in the queue.\n"
 								+ sessionCount + " session"
 								+ ((sessionCount == 1) ? " is" : "s are")
-								+ " currently active" + ((sessionCount > 0) ? ":" : ".") );
+								+ " currently active" + ((sessionCount > 0) ? ":" : ".")
+								+ "\n");
 			
-			for (User user : auth.getActiveUsers()) {
-				sb.append( "\n    "+user.getUsername() );
+			if (sessionCount > 0) {
+				sb.append( String.format("\n    %-10s  %s", "User name", "Last Access") );
+				sb.append( String.format("\n    %-10s  %s", "---------", "-----------") );
+			}
+			for (Session session : auth.getActiveSessions()) {
+				String n = session.user.getUsername();
+				String t = StringUtil.getTime(session.lastAccess, ":");
+				sb.append( String.format("\n    %-10s  %s", n, t) );
 			}
 
 			res.write(sb.toString());

@@ -16,7 +16,8 @@ import javax.swing.JComponent;
  * A LayoutManager2 that puts components in rows and columns.
  * Each row must be terminated by a CRLF object obtained from
  * RowLayout.crlf(). This manager supports the alignmentX and
- * alignmentY properties of the components.
+ * alignmentY properties of the components. It also allows
+ * components to span multiple columns.
  */
 public class RowLayout implements LayoutManager2 {
 	private int horizontalGap = 10;
@@ -172,8 +173,8 @@ public class RowLayout implements LayoutManager2 {
 				Integer span = spans.get(components[i]);
 				if (span != null) {
 					int w = span.intValue();
-					largestSpan = Math.max( largestSpan, w);
-					maxSpan[y] = Math.max( maxSpan[y], w);
+					largestSpan = Math.max( largestSpan, w );
+					maxSpan[y] = Math.max( maxSpan[y], w );
 				}
 			}
 		}
@@ -285,7 +286,7 @@ public class RowLayout implements LayoutManager2 {
 
 	/**
 	 * Test whether a component is a CRLF.
-	 * @param c to component to test for being a CRLF
+	 * @param c the component to test for being a CRLF
 	 * @return true if c is a CRLF object; false otherwise.
 	 */
 	public static boolean isCRLF(Component c) {

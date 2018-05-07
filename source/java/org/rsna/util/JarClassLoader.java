@@ -19,7 +19,7 @@ import java.util.LinkedList;
  * giving precedence in delegation to the JARs.
  */
 public class JarClassLoader extends URLClassLoader {
-
+	
 	/**
 	 * Get a JarClassLoader initialized to a set of files and directories.
 	 * This method places all individual files in the array of JARs.
@@ -31,30 +31,7 @@ public class JarClassLoader extends URLClassLoader {
 	 * files array.
 	 */
 	public static JarClassLoader getInstance(File[] files) {
-		LinkedList<URL> urlList = new LinkedList<URL>();
-		for (int i=0; i<files.length; i++) {
-			if (files[i].exists()) {
-				if (files[i].isFile()) {
-					try { urlList.add( files[i].toURI().toURL() ); }
-					catch (Exception skip) {
-						System.out.println("Unable to add file to classpath: "+files[i]);
-					}
-				}
-				else if (files[i].isDirectory()) {
-					File[] jars = files[i].listFiles();
-					for (int k=0; k<jars.length; k++) {
-						if (jars[k].getName().toLowerCase().endsWith(".jar")) {
-							try { urlList.add( jars[k].toURI().toURL() ); }
-							catch (Exception skip) {
-								System.out.println("Unable to add file to classpath: "+jars[k]);
-							}
-						}
-					}
-				}
-			}
-		}
-		URL[] urls = new URL[urlList.size()];
-		urls = urlList.toArray(urls);
+		URL[] urls = getJars(files);
 		return new JarClassLoader(urls);
 	}
 
@@ -69,10 +46,11 @@ public class JarClassLoader extends URLClassLoader {
 	protected synchronized Class loadClass(String classname, boolean resolve)
 			throws ClassNotFoundException {
 
+		//If the class is already loaded, return it.
 		Class theClass = findLoadedClass(classname);
 		if (theClass != null) return theClass;
 
-		//If it looks like a system class, try the parent first.
+		//If it looks like a system class, try the parent class loader first.
 		if (classname.startsWith("java.") || classname.startsWith("javax.")) {
 			try { theClass = findBaseClass(classname); }
 			catch (ClassNotFoundException cnfe) {
@@ -99,4 +77,26 @@ public class JarClassLoader extends URLClassLoader {
 		return (getParent() == null) ? findSystemClass(name) : getParent().loadClass(name);
 	}
 
+	private static URL[] getJars(File[] files) {
+		LinkedList<URL> urlList = new LinkedList<URL>();
+		for (File file : files) addJars(urlList, file);
+		URL[] urls = new URL[urlList.size()];
+		urls = urlList.toArray(urls);
+		return urls;
+	}
+	
+	private static void addJars(LinkedList<URL> urlList, File file) {
+		if (file.exists()) {
+			if (file.isFile() && file.getName().toLowerCase().endsWith(".jar")) {
+				try { urlList.add( file.toURI().toURL() ); }
+				catch (Exception skip) {
+					System.out.println("Unable to add file to classpath: "+file);
+				}
+			}
+			else if (file.isDirectory()) {
+				File[] files = file.listFiles();
+				for (File f : files) addJars(urlList, f);
+			}
+		}
+	}
 }

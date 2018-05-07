@@ -249,13 +249,13 @@ public class Authenticator {
 	 * GetActiveUsers.
 	 * @return the list of active users (after removing inactive users from the sessions table).
 	 */
-	public LinkedList<User> getActiveUsers() {
-		LinkedList<User> users = new LinkedList<User>();
+	public LinkedList<Session> getActiveSessions() {
+		LinkedList<Session> sessionList = new LinkedList<Session>();
 		removeInactiveSessions();
 		for (Session session : sessions.values()) {
-			users.add(session.getUser());
+			sessionList.add(session);
 		}
-		return users;
+		return sessionList;
 	}
 
 }
