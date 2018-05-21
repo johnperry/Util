@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 public class ImageIOTools {
 
 	static final Logger logger = Logger.getLogger(ImageIOTools.class);
+	static File installedJAI = null;
 	
 	public static boolean areInstalled() {
 		String javaHome = System.getProperty("java.home");
@@ -26,23 +27,26 @@ public class ImageIOTools {
 		File libDir = new File(javaDir, "lib");
 		File extDir = new File(libDir, "ext");
 		if (!extDir.exists()) return false;
-		File clib = FileUtil.getFile(extDir, "clibwrapper_jiio", ".jar");
-		File jai = FileUtil.getFile(extDir, "jai_imageio", ".jar");
-		return ((clib != null) && (jai != null));
+		File installedCLIB = FileUtil.getFile(extDir, "clibwrapper_jiio", ".jar");
+		installedJAI = FileUtil.getFile(extDir, "jai_imageio", ".jar");
+		return ((installedCLIB != null) && (installedJAI != null));
 	}
 
-	public static void load(File dir) {
-		if (!areInstalled() && dir.exists()) {
+	public static String load(File dir) {
+		if (areInstalled()) {
+			return getVersion(installedJAI) + " (installed)";
+		}
+		else if (dir.exists()) {
 			String thisOS = System.getProperty("os.name");
 			String thisJavaBits = System.getProperty("sun.arch.data.model");
 			File clib = FileUtil.getFile(dir, "clibwrapper_jiio", ".jar");
 			File jai = FileUtil.getFile(dir, "jai_imageio", ".jar");
 			boolean haveJARs = (clib != null) && (jai != null);
 			if (haveJARs) {
-				Hashtable<String,String> jaiManifest = JarUtil.getManifestAttributes(jai);
-				String thisImageIOVersion  = jaiManifest.get("Implementation-Version");
-				boolean ok = true;
+				String thisImageIOVersion  = getVersion(jai);
+				boolean ok = false;
 				if (thisOS.contains("Windows") && thisJavaBits.equals("32")) {
+					ok = true;
 					for (File file : dir.listFiles()) {
 						if (file.getName().endsWith(".dll")) {
 							ok &= loadNativeLib(file);
@@ -57,15 +61,15 @@ public class ImageIOTools {
 					File file = new File(dir, "libclib_jiio-64.so");
 					ok = loadNativeLib(file);										
 				}
-				if (ok) logger.info("ImageIO Tools loaded (with native libraries): version "+thisImageIOVersion);
-				else logger.info("ImageIO Tools loaded (JARs only): version "+thisImageIOVersion);
+				if (ok) return thisImageIOVersion + " (loaded with native libraries)";
+				else return thisImageIOVersion + " (loaded with JARs only)";
 			}
-			else logger.info("ImageIO Tools are not available");
 		}
+		return "not available";
 	}
 	
 	public static boolean loadNativeLib(File lib) {
-		try { 
+		try {
 			System.load(lib.getAbsolutePath());
 			return true;
 		}
@@ -78,11 +82,13 @@ public class ImageIOTools {
 	public static String listAvailableCodecs() {
 		Hashtable<String,String> codecs = new Hashtable<String,String>();
 		for (String reader : ImageIO.getReaderFormatNames()) {
-			reader = reader.toUpperCase();
+			reader = reader.toUpperCase().replace(" ","");
+			if (reader.equals("TIF")) reader = "TIFF";
 			codecs.put(reader, "R");
 		}
 		for (String writer : ImageIO.getWriterFormatNames()) {
-			writer = writer.toUpperCase();
+			writer = writer.toUpperCase().replace(" ","");
+			if (writer.equals("TIF")) writer = "TIFF";
 			String rw = codecs.get(writer);
 			if (rw == null) codecs.put(writer, "W");
 			else codecs.put(writer, "R/W");
@@ -96,6 +102,14 @@ public class ImageIOTools {
 			sb.append(String.format("%-4s%s\n",rw,key));
 		}
 		return sb.toString();
+	}
+	
+	public static String getVersion(File jai) {
+		try {
+			Hashtable<String,String> jaiManifest = JarUtil.getManifestAttributes(jai);
+			return jaiManifest.get("Implementation-Version");
+		}
+		catch (Exception unable) { return "?"; }
 	}
 
 }

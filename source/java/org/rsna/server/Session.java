@@ -13,7 +13,7 @@ import java.security.*;
 /**
  * Class to encapsulate a session.
  */
-public class Session {
+public class Session implements Comparable<Session> {
 	public long lastAccess;
 	public final User user;
 	public final String ipAddress;
@@ -47,6 +47,11 @@ public class Session {
 
 	public void recordAccess() {
 		lastAccess = System.currentTimeMillis();
+	}
+	
+	public int compareTo(Session s) {
+		long dif = lastAccess - s.lastAccess;
+		return (dif>0) ? 1 : ((dif==0) ? 0 : -1);
 	}
 
 	//Make a session ID by hashing the username, the IP address and the current time.
