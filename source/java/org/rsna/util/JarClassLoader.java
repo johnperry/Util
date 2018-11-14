@@ -50,8 +50,8 @@ public class JarClassLoader extends URLClassLoader {
 		Class theClass = findLoadedClass(classname);
 		if (theClass != null) return theClass;
 
-		//If it looks like a system class, try the parent class loader first.
-		if (classname.startsWith("java.") || classname.startsWith("javax.")) {
+		//Delegate the loading of non-RSNA classes
+		if (!classname.startsWith("org.rsna")) {
 			try { theClass = findBaseClass(classname); }
 			catch (ClassNotFoundException cnfe) {
 				theClass = findClass(classname);

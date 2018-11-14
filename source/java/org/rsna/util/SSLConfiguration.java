@@ -11,7 +11,7 @@ import java.io.File;
 import org.w3c.dom.Element;
 
 /**
- * A singleton class encapsulating a proxy server.
+ * A singleton class encapsulating the SSL configuration.
  */
 public class SSLConfiguration {
 
