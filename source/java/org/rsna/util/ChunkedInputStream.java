@@ -28,8 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 
-Transparently coalesces chunks of a HTTP stream that uses
+ * Transparently coalesces chunks of a HTTP stream that uses
  * Transfer-Encoding chunked.
  * Note that this class NEVER closes the underlying stream, even when close
  * gets called.  Instead, it will read until the "end" of its chunking on close,

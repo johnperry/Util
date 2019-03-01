@@ -41,7 +41,7 @@ public abstract class Users {
 	public static synchronized Users getInstance(String className, Element element) {
 		if ((users == null) && (className != null) && !className.trim().equals("")) {
 			try {
-				Class theClass = Class.forName(className);
+				Class<?> theClass = Class.forName(className);
 				Class[] signature = { Element.class };
 				Constructor constructor = theClass.getConstructor(signature);
 				Object[] args = { element };

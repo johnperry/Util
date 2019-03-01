@@ -10,6 +10,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarEntry;
 
 public class ClasspathUtil {
+	
 	static ClasspathUtil cpu = new ClasspathUtil();
 
 	/**
@@ -18,9 +19,7 @@ public class ClasspathUtil {
 	 */
 	public static URL[] getClasspath() {
 		URLClassLoader cl = (URLClassLoader) cpu.getClass().getClassLoader();
-		try {
-			return cl.getURLs();
-		}
+		try { return cl.getURLs(); }
 		catch (Throwable t) { return new URL[0]; }
 	}
 

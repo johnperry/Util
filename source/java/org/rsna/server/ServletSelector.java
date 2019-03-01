@@ -23,7 +23,7 @@ public class ServletSelector {
 
 	File root;
 	boolean requireAuthentication;
-	Hashtable<String,Class> servlets;
+	Hashtable<String,Class<? extends Servlet>> servlets;
 
 	/**
 	 * Class constructor; creates a new instance of the ServletSelector
@@ -36,7 +36,7 @@ public class ServletSelector {
 					boolean requireAuthentication) {
 		this.root = root;
 		this.requireAuthentication = requireAuthentication;
-		this.servlets = new Hashtable<String,Class>();
+		this.servlets = new Hashtable<String,Class<? extends Servlet>>();
 		Servlet.init(root, ""); //Initialize the base servlet.
 	}
 
@@ -45,7 +45,7 @@ public class ServletSelector {
 	 * @param path the path string associated with the servlet.
 	 * @param servlet the class to be instantiated for the servlet.
 	 */
-	public void addServlet(String path, Class servlet) {
+	public void addServlet(String path, Class<? extends Servlet> servlet) {
 		//Check for a duplicate path
 		if (servlets.get(path) != null) {
 			logger.debug("Installing "+servlet.getName()+" on an existing context ("+path+")");
@@ -92,12 +92,12 @@ public class ServletSelector {
 
 		//Okay, it is permissable to serve this request.
 		//Find a matching servlet.
-		Class servlet = servlets.get(pathElement);
+		Class<? extends Servlet> servlet = servlets.get(pathElement);
 		if (servlet != null) {
 			//A matching servlet was found, instantiate it.
 			Class[] signature = { File.class, String.class };
 			Object[] args = { root, pathElement };
-			try { return (Servlet)servlet.getConstructor(signature).newInstance(args); }
+			try { return servlet.getConstructor(signature).newInstance(args); }
 			catch (Exception ex) {
 				logger.warn("Unable to instantiate "+servlet.getName());
 			}
@@ -114,10 +114,10 @@ public class ServletSelector {
     public void shutdown() {
 		Class[] signature = { File.class, String.class };
 		for (String path : servlets.keySet()) {
-			Class cl = servlets.get(path);
+			Class<? extends Servlet> cl = servlets.get(path);
 			try {
 				Object[] args = { root, path };
-				Servlet servlet = (Servlet)cl.getConstructor(signature).newInstance(args);
+				Servlet servlet = cl.getConstructor(signature).newInstance(args);
 				servlet.destroy();
 			}
 			catch (Exception skip) {

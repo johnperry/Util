@@ -570,10 +570,12 @@ public class FileUtil {
 	 * @return the first matching file, or null if no matching file is found in the directory.
 	 */
 	public static File getFile(File dir, String nameStart, String nameEnd) {
-		for (File file : dir.listFiles()) {
-			String name = file.getName();
-			if (name.startsWith(nameStart) && name.endsWith(nameEnd)) {
-				return file;
+		if (dir.exists() && dir.isDirectory()) {
+			for (File file : dir.listFiles()) {
+				String name = file.getName();
+				if (name.startsWith(nameStart) && name.endsWith(nameEnd)) {
+					return file;
+				}
 			}
 		}
 		return null;

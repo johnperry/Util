@@ -35,14 +35,14 @@ public class FileTreeModel
 
 	protected EventListenerList listeners;
 	private static final Object LEAF = new Serializable() { };
-	private Map map;
+	private Map<File,Object> map;
 	private File root;
 	private FileFilter filter;
 
 	public FileTreeModel(File root, GeneralFileFilter filter) {
 		this.root = root;
 		this.filter = filter;
-		this.map = new HashMap();
+		this.map = new HashMap<File,Object>();
 		if (!root.isDirectory()) map.put(root, LEAF);
 		this.listeners = new EventListenerList();
 	}
@@ -56,7 +56,7 @@ public class FileTreeModel
 	}
 
 	public int getChildCount(Object node) {
-		List children = children(node);
+		List<Object> children = children(node);
 		if (children == null) return 0;
 		return children.size();
 	}
@@ -69,21 +69,22 @@ public class FileTreeModel
 		return children(parent).indexOf(child);
 	}
 
-	protected List children(Object node) {
+	@SuppressWarnings("unchecked")
+	protected List<Object> children(Object node) {
 		File f = (File)node;
 		Object value = map.get(f);
 		if (value == LEAF) return null;
-		List children = (List)value;
+		List<Object> children = (List<Object>)value; //offending unchecked cast
 		if (children == null) {
 			File[] c = f.listFiles(filter);
 			if (c != null) {
-				children = new ArrayList(c.length);
+				children = new ArrayList<Object>(c.length);
 				for (int len = c.length, i = 0; i < len; i++) {
 					children.add(c[i]);
 					if (!c[i].isDirectory()) map.put(c[i], LEAF);
 				}
 			}
-			else children = new ArrayList(0);
+			else children = new ArrayList<Object>(0);
 			map.put(f, children);
 		}
 		return children;
@@ -103,7 +104,7 @@ public class FileTreeModel
 		try {
 			FileTreeModel clone = (FileTreeModel)super.clone();
 			clone.listeners = new EventListenerList();
-			clone.map = new HashMap(map);
+			clone.map = new HashMap<File,Object>(map);
 			return clone;
 		}
 		catch (CloneNotSupportedException e) {

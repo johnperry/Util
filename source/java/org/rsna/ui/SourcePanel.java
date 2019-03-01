@@ -144,7 +144,7 @@ public class SourcePanel extends JPanel implements FileListener {
 	}
 
 	class HeaderPanel extends JPanel implements ActionListener {
-		public JComboBox root;
+		public JComboBox<String> root;
 		public JButton refresh;
 		public HeaderPanel(String heading) {
 			super();
@@ -159,7 +159,7 @@ public class SourcePanel extends JPanel implements FileListener {
 			refresh.addActionListener(this);
 			this.add(refresh);
 			this.add(Box.createHorizontalStrut(5));
-			root = new JComboBox();
+			root = new JComboBox<String>();
 			Dimension d = root.getPreferredSize();
 			d.width = 90;
 			root.setPreferredSize(d);
