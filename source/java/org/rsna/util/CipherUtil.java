@@ -72,12 +72,16 @@ public class CipherUtil {
 			byte[] key = getEncryptionKey(keyText, 128);
 			SecretKeySpec skeySpec = new SecretKeySpec(key, transform);
 
-			SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-			byte[] seed = random.generateSeed(8);
-			random.setSeed(seed);
-
 			Cipher cipher = Cipher.getInstance(transform);
-			cipher.init(mode, skeySpec, random);
+			if (transform.equals("Blowfish")) {
+				cipher.init(mode, skeySpec);
+			}
+			else {
+				SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+				byte[] seed = random.generateSeed(8);
+				random.setSeed(seed);
+				cipher.init(mode, skeySpec, random);
+			}
 			return cipher;
 		}
 		catch (Exception ex) { return null; }
