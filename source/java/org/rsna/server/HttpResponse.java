@@ -132,6 +132,7 @@ public class HttpResponse {
 	 * <br><br>
 	 * <table border="1" summary="Content-Types">
 	 *	<tr><td>application</td><td>application/x-ms-application</td></tr>
+	 *	<tr><td>apk</td><td>application/vnd.android.package-archive</td></tr>
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></tr>
 	 *	<tr><td>css</td><td>text/css;charset=UTF-8</td></tr>
 	 *	<tr><td>csv</td><td>text/csv;charset=UTF-8</td></tr>
@@ -465,6 +466,7 @@ public class HttpResponse {
 		public ContentTypes() {
 			super();
 			put("application", "application/x-ms-application");
+			put("apk","application/vnd.android.package-archive");
 			put("avi","video/x-msvideo");
 			put("css","text/css;charset=UTF-8");
 			put("csv","text/csv;charset=UTF-8");

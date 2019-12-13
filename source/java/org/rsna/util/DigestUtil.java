@@ -74,8 +74,9 @@ public class DigestUtil {
 			if (string == null) string = "null";
 			if (maxlen < 1) maxlen = Integer.MAX_VALUE;
 			result = getUSMD5(string);
-			if (result.length() <= maxlen) return result;
-			result = result.substring(0,maxlen);
+			if (result.length() > maxlen) {
+				result = result.substring(0,maxlen);
+			}
 		}
 		catch (Exception ex) { result = ""; }
 		return result;

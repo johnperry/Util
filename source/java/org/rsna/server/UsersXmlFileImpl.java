@@ -127,6 +127,14 @@ public class UsersXmlFileImpl extends Users {
 	}
 
 	/**
+	 * Remove a role name.
+	 * @param role the role name.
+	 */
+	public synchronized void removeRole(String role) {
+		roles.remove(role);
+	}
+
+	/**
 	 * Get all the role names in a HashSet.
 	 * @return the HashSet of role names or null if unable.
 	 */

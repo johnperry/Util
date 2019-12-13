@@ -179,4 +179,12 @@ public abstract class Users {
 	 */
 	public void addRole(String role) { }
 
+	/**
+	 * Remove a role from the list of standard roles.
+	 * This method does nothing. Implementations
+	 * that manage roles must override this method.
+	 * @param role the name of the role.
+	 */
+	public void removeRole(String role) { }
+
 }
