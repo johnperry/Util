@@ -521,7 +521,7 @@ public class HttpRequest {
 		String type = getContentType();
 		String typeLC = type.toLowerCase();
 		if (typeLC.contains("multipart/form-data")
-			|| (typeLC.contains("multipart/related") && typeLC.contains("type=application/dicom"))) {
+			|| (typeLC.contains("multipart/related") && typeLC.contains("application/dicom"))) {
 
 			// Check the content length
 			int length = getContentLength();
