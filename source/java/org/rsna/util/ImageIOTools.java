@@ -10,7 +10,10 @@ package org.rsna.util;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.Iterator;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageWriter;
 import org.apache.log4j.Logger;
 
 /**
@@ -100,6 +103,25 @@ public class ImageIOTools {
 		for (String key : keys) {
 			String rw = codecs.get(key);
 			sb.append(String.format("%-4s%s\n",rw,key));
+		}
+		return sb.toString();
+	}
+	
+	public static String listAvailableReadersAndWriters() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("Readers:\n");
+		for (String name : ImageIO.getReaderFormatNames()) {
+			Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName(name);
+			while (readers.hasNext()) {
+				sb.append(String.format("%15s: %s\n", name, readers.next()));
+			}
+		}
+		sb.append("\nWriters:\n");
+		for (String name : ImageIO.getWriterFormatNames()) {
+			Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(name);
+			while (writers.hasNext()) {
+				sb.append(String.format("%15s: %s\n", name, writers.next()));
+			}
 		}
 		return sb.toString();
 	}

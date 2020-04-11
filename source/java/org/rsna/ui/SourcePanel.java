@@ -190,6 +190,7 @@ public class SourcePanel extends JPanel implements FileListener {
 			this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 			this.setBackground(Color.getHSBColor(0.58f, 0.17f, 0.95f));
 			subdirectories = new JCheckBox("Include subdirectories");
+			subdirectories.setSelected(properties.getProperty("subdirectories", "no").equals("yes"));
 			subdirectories.setBackground(background);
 			this.add(subdirectories);
 			this.add(Box.createHorizontalGlue());

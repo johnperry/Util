@@ -25,19 +25,22 @@ public class FileEvent extends AWTEvent {
 	public final File file;
 	public final File dest;
 	public final int type;
+	public final String info;
 
 	/**
-	 * Private class constructor capturing a file event.
+	 * Protected class constructor capturing a file event.
 	 * @param source the source of the event.
 	 * @param type the type of the event.
 	 * @param file the file on which the event occurred.
 	 * @param dest the destination file (only when the event is a MOVE).
+	 * @param info optional extra information.
 	 */
-	private FileEvent(Object source, int type, File file, File dest) {
+	protected FileEvent(Object source, int type, File file, File dest, String info) {
 		super(source, FILE_EVENT);
 		this.type = type;
 		this.file = file;
 		this.dest = dest;
+		this.info = info;
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class FileEvent extends AWTEvent {
 	 * @return the SELECT FileEvent with the specified source and file.
 	 */
 	public static FileEvent SELECT(Object source, File file) {
-		return new FileEvent(source, SELECT, file, null);
+		return new FileEvent(source, SELECT, file, null, null);
 	}
 
 	/**
@@ -57,7 +60,7 @@ public class FileEvent extends AWTEvent {
 	 * @return the DELETE FileEvent with the specified source and file.
 	 */
 	public static FileEvent DELETE(Object source, File file) {
-		return new FileEvent(source, DELETE, file, null);
+		return new FileEvent(source, DELETE, file, null, null);
 	}
 
 	/**
@@ -67,7 +70,18 @@ public class FileEvent extends AWTEvent {
 	 * @return the STORE FileEvent with the specified source and file.
 	 */
 	public static FileEvent STORE(Object source, File file) {
-		return new FileEvent(source, STORE, file, null);
+		return new FileEvent(source, STORE, file, null, null);
+	}
+
+	/**
+	 * Get a FileEvent capturing a STORE file event.
+	 * @param source the source of the event.
+	 * @param file the file on which the event occurred.
+	 * @param info extra info supplied by the source of the file (e.g., CallingAET)
+	 * @return the STORE FileEvent with the specified source and file.
+	 */
+	public static FileEvent STORE(Object source, File file, String info) {
+		return new FileEvent(source, STORE, file, null, info);
 	}
 
 	/**
@@ -78,7 +92,7 @@ public class FileEvent extends AWTEvent {
 	 * @return the MOVE FileEvent with the specified source and file.
 	 */
 	public static FileEvent MOVE(Object source, File from, File to) {
-		return new FileEvent(source, MOVE, from, to);
+		return new FileEvent(source, MOVE, from, to, null);
 	}
 
 	public File getFile() {
@@ -87,6 +101,10 @@ public class FileEvent extends AWTEvent {
 
 	public File getDestination() {
 		return dest;
+	}
+
+	public String getInfo() {
+		return info;
 	}
 
 	public boolean isSELECT() {

@@ -154,6 +154,8 @@ public class HttpResponse {
 	 *	<tr><td>mp4</td><td>video/mp4</td></tr>
 	 *	<tr><td>mpeg</td><td>video/mpeg</td></tr>
 	 *	<tr><td>mpg</td><td>video/mpg</td></tr>
+	 *	<tr><td>odp</td><td>application/vnd.oasis.opendocument.presentation</td></tr>
+	 *	<tr><td>ods</td><td>application/vnd.oasis.opendocument.spreadsheet</td></tr>
 	 *	<tr><td>oga</td><td>audio/oga</td></tr>
 	 *	<tr><td>ogg</td><td>video/ogg</td></tr>
 	 *	<tr><td>ogv</td><td>video/ogg</td></tr>
@@ -488,7 +490,9 @@ public class HttpResponse {
 			put("mp4","video/mp4");
 			put("mpeg","video/mpg");
 			put("mpg","video/mpg");
-			put("oga","audio/oga");
+			put("odp","application/vnd.oasis.opendocument.presentation");
+			put("ods","application/vnd.oasis.opendocument.spreadsheet");
+ 			put("oga","audio/oga");
 			put("ogg","video/ogg");
 			put("ogv","video/ogg");
 			put("pdf","application/pdf");

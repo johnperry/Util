@@ -47,6 +47,13 @@ public class DirectoryPane extends JScrollPane implements TreeSelectionListener 
 		showTree();
 		showCurrentPath(currentPath);
 	}
+	
+	public void setCurrentPath(String currentPath) {
+		this.currentPath = currentPath;
+		currentRootIndex = getRootIndexFromPath(currentPath);
+		showTree();
+		showCurrentPath(currentPath);
+	}
 
 	/**
 	 * Get an array of file system roots.
