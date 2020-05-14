@@ -759,10 +759,56 @@ public class FileUtil {
 		catch (Exception ex) { return false; }
 	}
 
+	/**
+	 * Zip a directory and its subdirectories.
+	 * @param manifest file to put in the root of the zip file (with no path information
+	 * @param dir the directory to zip.
+	 * @param zipFile the output zip file.
+	 * @return true if the operation succeeded completely; false otherwise.
+	 */
+	public static synchronized boolean zipDirectory(File manifest, File dir, File zipFile) {
+		try {
+			dir = dir.getCanonicalFile();
+
+			//Get the length of the parent path
+			File parent = dir.getParentFile();
+			int rootLength = parent.getAbsolutePath().length();
+			rootLength++; //allow for the slash that will appear in files that are zipped
+
+			//Get the streams
+			FileOutputStream fout = new FileOutputStream(zipFile);
+			ZipOutputStream zout = new ZipOutputStream(fout);
+			
+			//put the manifest in the file
+			String name = manifest.getName();
+			ZipEntry ze = new ZipEntry(name);
+			byte[] buffer = new byte[10000];
+			int bytesread;
+			FileInputStream fin = new FileInputStream(manifest);
+			zout.putNextEntry(ze);
+			while ((bytesread = fin.read(buffer)) > 0) zout.write(buffer,0,bytesread);
+			zout.closeEntry();
+			fin.close();
+
+			zipDirectory(zout, dir, rootLength, manifest);
+			zout.close();
+			return true;
+		}
+		catch (Exception ex) { return false; }
+	}
+
 	//Zip a directory and its subdirectories into a ZipOutputStream,
 	//setting the root of the zip package to be the parent directory
 	//of the originally requested directory.
 	private static synchronized void zipDirectory(ZipOutputStream zout, File dir, int rootLength)
+												throws Exception {
+		zipDirectory(zout, dir, rootLength, null);
+	}
+	
+	//Zip a directory and its subdirectories into a ZipOutputStream,
+	//setting the root of the zip package to be the parent directory
+	//of the originally requested directory.
+	private static synchronized void zipDirectory(ZipOutputStream zout, File dir, int rootLength, File fileToSuppress)
 												throws Exception {
 		if (dir.isDirectory()) {
 			String name = dir.getAbsolutePath() + "/";
@@ -774,8 +820,10 @@ public class FileUtil {
 			}
 			File[] files = dir.listFiles();
 			for (File file : files) {
-				if (file.isDirectory()) zipDirectory(zout, file, rootLength);
-				else zipFile(zout, file, rootLength);
+				if ((fileToSuppress == null) || !file.equals(fileToSuppress)) {
+					if (file.isDirectory()) zipDirectory(zout, file, rootLength);
+					else zipFile(zout, file, rootLength);
+				}
 			}
 		}
 	}

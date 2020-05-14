@@ -121,6 +121,13 @@ public class SourcePanel extends JPanel implements FileListener {
 	}
 
 	/**
+	 * Set the selection value of the "Include subdirectories" checkbox in the footer panel.
+	 */
+	public void setSubdirectories(boolean selected) {
+		footerPanel.subdirectories.setSelected(selected);
+	}
+
+	/**
 	 * Get the current filter used to select files for display in the directory tree.
 	 * @return the DirectoryPane containing the directory tree.
 	 */
@@ -190,7 +197,7 @@ public class SourcePanel extends JPanel implements FileListener {
 			this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 			this.setBackground(Color.getHSBColor(0.58f, 0.17f, 0.95f));
 			subdirectories = new JCheckBox("Include subdirectories");
-			subdirectories.setSelected(properties.getProperty("subdirectories", "no").equals("yes"));
+			subdirectories.setSelected(properties.getProperty("subdirectories", "yes").equals("yes"));
 			subdirectories.setBackground(background);
 			this.add(subdirectories);
 			this.add(Box.createHorizontalGlue());

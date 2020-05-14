@@ -77,6 +77,14 @@ public class Cache {
 	}
 
 	/**
+	 * Get the root directory of the cache.
+	 * @return the root directory of the cache.
+	 */
+	public synchronized File getDirectory() {
+		return dir;
+	}
+
+	/**
 	 * Load all the files in a zip file into the cache, preserving the
 	 * directory structure of the zip file, and ignoring any .class files.
 	 * @param file the zip file to unpack.
