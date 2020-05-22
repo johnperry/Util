@@ -36,7 +36,23 @@ public class ExcelWorksheet {
 		String stext = getEntryText(zipFile, "xl/sharedStrings.xml");
 		String sheet = getEntryText(zipFile, "xl/worksheets/"+worksheet);
 		zipFile.close();
+		process(stext, sheet);
+	}
 		
+	/**
+	 * Constructor: get a worksheet from an input stream.
+	 * @param in the input stream pointing to the Excel resource (must be an xlsx structure)
+	 * @param worksheet name (e.g., "sheet.xml", case-sensitive)
+	 * @throws Exception if the worksheet cannot be obtained.
+	 */
+	public ExcelWorksheet(String resource, String worksheet) throws Exception {
+		this.name = worksheet;
+		String stext = getEntryText(resource, "xl/sharedStrings.xml");
+		String sheet = getEntryText(resource, "xl/worksheets/"+worksheet);
+		process(stext, sheet);
+	}
+		
+	private void process(String stext, String sheet) throws Exception {
 		Document sdoc = XmlUtil.getDocument(stext);
 		Element sroot = sdoc.getDocumentElement();
 		shared = new Hashtable<Integer,String>();
@@ -168,6 +184,32 @@ public class ExcelWorksheet {
 	}
 	
 	/**
+	 * Get the list of worksheet names in an xlsx file.
+	 * @param file the xlsx file
+	 * @return the list of worksheet names.
+	 */
+	public static LinkedList<String> getWorksheetNames(String resource) {
+		LinkedList<String> list = new LinkedList<String>();
+		try {
+			InputStream in = ExcelWorksheet.class.getResourceAsStream(resource);
+			ZipInputStream zis = new ZipInputStream(in, FileUtil.utf8);
+			ZipEntry ze;
+			while ((ze = zis.getNextEntry()) != null) {
+				if (!ze.isDirectory()) {
+					String name = ze.getName();
+					if (name.startsWith("xl/worksheets/") && name.endsWith(".xml")) {
+						File sheet = new File(ze.getName());
+						list.add( sheet.getName() );
+					}
+				}
+			}
+			zis.close();
+		}
+		catch (Exception ex) { ex.printStackTrace(); }
+		return list;
+	}
+	
+	/**
 	 * Search a row and return the column identifier (e.g., "A", "B", etc.) of the
 	 * first cell containing the specified text. Note: this method only searches the first
 	 * 26 columns ("A" through "Z").
@@ -188,14 +230,33 @@ public class ExcelWorksheet {
 	private String getEntryText(ZipFile zipFile, String name) throws Exception {
 		ZipEntry entry = zipFile.getEntry(name);
 		StringWriter sw = new StringWriter();
-		BufferedReader in = null;
-		in = new BufferedReader(
+		BufferedReader in = new BufferedReader(
 					new InputStreamReader(zipFile.getInputStream(entry), FileUtil.utf8));
 		int n = 0;
 		char[] cbuf = new char[1024];
 		while ((n = in.read(cbuf, 0, cbuf.length)) != -1) sw.write(cbuf, 0, n);
 		in.close();
 		return sw.toString();
+	}
+	
+	private String getEntryText(String resource, String name) throws Exception {
+		InputStream in = ExcelWorksheet.class.getResourceAsStream(resource);
+		ZipInputStream zis = new ZipInputStream(in);
+		ZipEntry entry;
+		while ((entry = zis.getNextEntry()) != null) {
+			if (entry.getName().equals(name)) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				byte[] buf = new byte[2048];
+				int n = 0;
+				while ((n=zis.read(buf)) > 0) {
+					baos.write(buf, 0, n);
+				}
+				zis.close();
+				return baos.toString("UTF-8");
+			}
+		}
+		zis.close();
+		return "";
 	}
 	
 	/**
