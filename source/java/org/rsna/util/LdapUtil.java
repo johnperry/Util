@@ -42,6 +42,11 @@ public class LdapUtil {
 			String securityCredentials,
 			String referral,
 			String derefAliases) {
+		
+		if ((securityCredentials == null) || securityCredentials.trim().equals("")) {
+			logger.debug("Rejected: blank security credentials");
+			return false;
+		}
 
 		initialContextFactory = initialContextFactory.trim();
 		initialContextFactory = (initialContextFactory.equals("") ? defaultContextFactory : initialContextFactory);

@@ -41,7 +41,7 @@ public class ExcelWorksheet {
 		
 	/**
 	 * Constructor: get a worksheet from an input stream.
-	 * @param in the input stream pointing to the Excel resource (must be an xlsx structure)
+	 * @param resource resource path pointing to the Excel resource (must be an xlsx structure)
 	 * @param worksheet name (e.g., "sheet.xml", case-sensitive)
 	 * @throws Exception if the worksheet cannot be obtained.
 	 */
@@ -185,7 +185,7 @@ public class ExcelWorksheet {
 	
 	/**
 	 * Get the list of worksheet names in an xlsx file.
-	 * @param file the xlsx file
+	 * @param resource path pointing to the Excel xlsx file
 	 * @return the list of worksheet names.
 	 */
 	public static LinkedList<String> getWorksheetNames(String resource) {
