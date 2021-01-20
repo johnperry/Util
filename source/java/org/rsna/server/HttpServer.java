@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import org.apache.log4j.Logger;
+import org.rsna.util.IPUtil;
 
 
 /**
@@ -64,6 +65,7 @@ public class HttpServer extends Thread {
 	 */
 	public void run() {
 		logger.info((ssl?"SSL ":"")+"HttpServer started on port "+port+" [maxThreads="+maxThreads+"]");
+		logger.info((ssl?"SSL ":"")+"HttpServer IP adddress: "+IPUtil.getIPAddress());
 		while (!this.isInterrupted()) {
 			try {
 				//Wait for a connection
