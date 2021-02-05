@@ -125,6 +125,7 @@ public class SourcePanel extends JPanel implements FileListener {
 	 */
 	public void setSubdirectories(boolean selected) {
 		footerPanel.subdirectories.setSelected(selected);
+		properties.setProperty("subdirectories", (selected ? "yes" : "no"));
 	}
 
 	/**
@@ -197,6 +198,7 @@ public class SourcePanel extends JPanel implements FileListener {
 			this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 			this.setBackground(Color.getHSBColor(0.58f, 0.17f, 0.95f));
 			subdirectories = new JCheckBox("Include subdirectories");
+			subdirectories.addActionListener(this);
 			subdirectories.setSelected(properties.getProperty("subdirectories", "yes").equals("yes"));
 			subdirectories.setBackground(background);
 			this.add(subdirectories);
@@ -207,18 +209,24 @@ public class SourcePanel extends JPanel implements FileListener {
 			extensionButton.addActionListener(this);
 		}
 		public void actionPerformed(ActionEvent evt) {
-			Component parent = extensionButton.getParent();
-			while ((parent != null) && !(parent instanceof Frame)) parent = parent.getParent();
-			String newExtensions = JOptionPane.showInputDialog(
-						parent,
-						"Edit the extension list.\nSeparate extensions by commas.\n\n",
-						filter.getExtensionString());
-			if ((newExtensions != null) && !newExtensions.trim().equals("")) {
-				newExtensions = newExtensions.replaceAll("\\s","");
-				filter.setExtensions(newExtensions);
-				extensionButton.setText(filter.getDescription());
-				properties.setProperty("extensions",filter.getExtensionString());
-				directoryPane.reloadTree();
+			if (evt.getSource().equals(extensionButton)) {
+				Component parent = extensionButton.getParent();
+				while ((parent != null) && !(parent instanceof Frame)) parent = parent.getParent();
+				String newExtensions = JOptionPane.showInputDialog(
+							parent,
+							"Edit the extension list.\nSeparate extensions by commas.\n\n",
+							filter.getExtensionString());
+				if ((newExtensions != null) && !newExtensions.trim().equals("")) {
+					newExtensions = newExtensions.replaceAll("\\s","");
+					filter.setExtensions(newExtensions);
+					extensionButton.setText(filter.getDescription());
+					properties.setProperty("extensions",filter.getExtensionString());
+					directoryPane.reloadTree();
+				}
+			}
+			else if (evt.getSource().equals(subdirectories)) {
+				boolean sel = subdirectories.isSelected();
+				properties.setProperty("subdirectories", (sel ? "yes" : "no"));
 			}
 		}
 	}
