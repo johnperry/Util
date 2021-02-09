@@ -35,6 +35,7 @@ public class HttpResponse {
 	public static final int forbidden 		= 403;
 	public static final int notfound 		= 404;
 	public static final int notallowed 		= 405;
+	public static final int unprocessable	= 422;
 	public static final int servererror		= 500;
 	public static final int notimplemented	= 501;
 

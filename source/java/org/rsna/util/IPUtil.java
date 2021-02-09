@@ -42,7 +42,6 @@ public class IPUtil {
 		if (ipAddress == null) {
 			ipAddress = getInet4Address();
 			//System.out.println("IPUtil.getInet4Address returned "+ipAddress);
-
 		}
 		//System.out.println("IPUtil.getIPAddress() returning "+ipAddress);
 		return ipAddress;
