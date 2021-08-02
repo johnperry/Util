@@ -1,4 +1,4 @@
-<project name="Utilities" default="all" basedir=".">
+<project name="Util" default="all" basedir=".">
 
 	<property name="name" value="util"/>
 
@@ -24,6 +24,9 @@
 	</target>
 
 	<target name="init">
+		<echo message="=================================================="/>
+		<echo message="Building ${ant.project.name}"/>
+		<echo message="=================================================="/>
 		<tstamp>
 			<format property="today" pattern="yyyy.MM.dd"/>
 			<format property="now" pattern="HH:mm:ss z"/>

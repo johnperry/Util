@@ -45,28 +45,7 @@ public class ImageIOTools {
 			File clib = FileUtil.getFile(dir, "clibwrapper_jiio", ".jar");
 			File jai = FileUtil.getFile(dir, "jai_imageio", ".jar");
 			boolean haveJARs = (clib != null) && (jai != null);
-			if (haveJARs) {
-				String thisImageIOVersion  = getVersion(jai);
-				boolean ok = false;
-				if (thisOS.contains("Windows") && thisJavaBits.equals("32")) {
-					ok = true;
-					for (File file : dir.listFiles()) {
-						if (file.getName().endsWith(".dll")) {
-							ok &= loadNativeLib(file);
-						}
-					}
-				}
-				else if (thisOS.contains("Linux") && thisJavaBits.equals("32")) {
-					File file = new File(dir, "libclib_jiio-32.so");
-					ok = loadNativeLib(file);					
-				}
-				else if (thisOS.contains("Linux") && thisJavaBits.equals("64")) {
-					File file = new File(dir, "libclib_jiio-64.so");
-					ok = loadNativeLib(file);										
-				}
-				if (ok) return thisImageIOVersion + " (loaded with native libraries)";
-				else return thisImageIOVersion + " (loaded with JARs only)";
-			}
+			if (haveJARs) return getVersion(jai);
 		}
 		return "not available";
 	}

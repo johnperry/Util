@@ -47,8 +47,8 @@ public class ColorPane extends JTextPane {
 	}
 
 	/**
-	 * Get the line height of the default font.
-	 * @return the line height of the default font.
+	 * Get the line height of the current font.
+	 * @return the line height of the current font.
 	 */
 	public int getLineHeight() {
 		return lineHeight;
