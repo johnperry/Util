@@ -8,9 +8,11 @@
 package org.rsna.util;
 
 import java.io.*;
+import java.net.Authenticator;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.Properties;
@@ -56,6 +58,7 @@ public class HttpUtil {
 	 */
 	public static HttpURLConnection getConnection(URL url) throws Exception {
 
+		initializeProxyAuthenticator();
 		String protocol = url.getProtocol().toLowerCase();
 		if (!protocol.startsWith("https") && !protocol.startsWith("http")) {
 			throw new Exception("Unsupported protocol ("+protocol+")");
@@ -114,5 +117,34 @@ public class HttpUtil {
 		CookieManager cookieManager = new CookieManager();
 		CookieHandler.setDefault(cookieManager);
 		return cookieManager;
+	}
+
+	/**
+	 * Initialize a default Authenticator for proxy server basic authentication.
+	 */
+	private static void initializeProxyAuthenticator() {
+		Authenticator.setDefault(new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				if (getRequestorType() == RequestorType.PROXY) {
+					String prot = getRequestingProtocol().toLowerCase();
+					String host = System.getProperty(prot + ".proxyHost");
+					String port = System.getProperty(prot + ".proxyPort");
+					String user = System.getProperty(prot + ".proxyUser");
+					String password = System.getProperty(prot + ".proxyPassword");
+					if (user != null && password != null) {
+						if (getRequestingHost().equalsIgnoreCase(host)) {
+							if (Integer.parseInt(port) == getRequestingPort()) {
+								// Host and port seems to match configured proxy details
+								return new PasswordAuthentication(user, password.toCharArray());
+							}
+						}
+					}
+				}
+				return null;
+			}
+		});
+                // Need to remove basic auth from disabled schemes in Java 8
+		System.setProperty("jdk.http.auth.tunneling.disabledSchemes", "");
 	}
 }
