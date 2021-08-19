@@ -20,24 +20,25 @@ public class SSLConfiguration {
 	static final String truststoreProp			= "javax.net.ssl.trustStore";
 	static final String truststorePasswordProp	= "javax.net.ssl.trustStorePassword";
 
-	String keystore			= "";
-	String keystorePassword	= "";
-	String truststore		= "";
-	String truststorePassword = "";
+	final String keystore;
+	final String keystorePassword;
+	final String truststore;
+	final String truststorePassword;
 
 	static SSLConfiguration sslConfiguration = null;
 
 	protected SSLConfiguration(String keystore, String keystorePassword,
 							   String truststore, String truststorePassword) {
 
-		this.keystore = StringUtil.replace( StringUtil.trim(keystore), System.getProperties(), true ).trim();
-		this.keystorePassword = StringUtil.trim(keystorePassword);
+		keystore = StringUtil.replace( StringUtil.trim(keystore), System.getProperties(), true ).trim();
+		keystorePassword = StringUtil.trim(keystorePassword);
+		if (keystore.equals("")) keystore = "keystore";
+		if (keystorePassword.equals("")) keystorePassword = "ctpstore";
+		this.keystore = keystore;
+		this.keystorePassword = keystorePassword;
 
 		this.truststore = StringUtil.replace( StringUtil.trim(truststore), System.getProperties(), true ).trim();
 		this.truststorePassword = StringUtil.trim(truststorePassword);
-
-		if (keystore.equals("")) this.keystore = "keystore";
-		if (keystorePassword.equals("")) this.keystorePassword = "ctpstore";
 	}
 
 
@@ -82,9 +83,12 @@ public class SSLConfiguration {
 	public static synchronized SSLConfiguration getInstance(
 													String keystore, String keystorePassword,
 						  							String truststore, String truststorePassword) {
-		sslConfiguration = new SSLConfiguration(
-									keystore, keystorePassword,
-									truststore, truststorePassword);
+		if (sslConfiguration == null) {
+			sslConfiguration = new SSLConfiguration(
+										keystore, keystorePassword,
+										truststore, truststorePassword);
+			sslConfiguration.setSystemParameters();
+		}
 		return sslConfiguration;
 	}
 
@@ -96,10 +100,10 @@ public class SSLConfiguration {
 		return sslConfiguration;
 	}
 
-	/**
+	/*
 	 * Set the System properties based on the parameters in the SSLConfiguration.
 	 */
-	public void setSystemParameters() {
+	private void setSystemParameters() {
 		if (!keystore.equals("")) {
 			System.setProperty(keystoreProp, keystore);
 			System.setProperty(keystorePasswordProp, keystorePassword);
@@ -119,4 +123,3 @@ public class SSLConfiguration {
 		}
 	}
 }
-

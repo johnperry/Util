@@ -7,18 +7,19 @@
 
 package org.rsna.util;
 
+import java.net.Authenticator;
 import java.util.Properties;
 import org.w3c.dom.Element;
 
 /**
- * A singleton class encapsulating a proxy server.
+ * A singleton class encapsulating proxy server parameters.
  */
 public class ProxyServer {
 
-	String proxyIPAddress	= "";
-	String proxyPort		= "";
-	String proxyUsername	= "";
-	String proxyPassword	= "";
+	final String proxyIPAddress;
+	final String proxyPort;
+	final String proxyUsername;
+	final String proxyPassword;
 
 	static ProxyServer proxyServer = null;
 
@@ -77,9 +78,12 @@ public class ProxyServer {
 	public static synchronized ProxyServer getInstance(String proxyIPAddress, String proxyPort,
 						  			  String proxyUsername, String proxyPassword) {
 		if (proxyServer == null) {
-			proxyServer =
-				new ProxyServer(
-						proxyIPAddress, proxyPort, proxyUsername, proxyPassword);
+			proxyServer = new ProxyServer(
+									proxyIPAddress, proxyPort, proxyUsername, proxyPassword);
+			proxyServer.setSystemParameters();
+			if (proxyServer.hasCredentials()) {
+				Authenticator.setDefault(new ProxyAuthenticator());
+			}
 		}
 		return proxyServer;
 	}
@@ -96,16 +100,10 @@ public class ProxyServer {
 	 * Set the System properties based on the parameters in the ProxyServer.
 	 * If the proxy is enabled, set the System properties.
 	 * If the proxy is not enabled, clear the System properties.
-	 * @return the encoded proxy credentials or the empty string if
-	 * the proxy is not enabled or if proxy credentials are not required.
 	 */
-	public String setSystemParameters() {
-		if (getProxyEnabled()) {
-			setProxyProperties();
-			return (authenticate() ? getEncodedCredentials() : "");
-		}
-		clearProxyProperties();
-		return "";
+	public void setSystemParameters() {
+		if (isEnabled()) setProxyProperties();
+		else clearProxyProperties();
 	}
 
 	/**
@@ -114,7 +112,7 @@ public class ProxyServer {
 	 * @return true if the proxy parameters indicate that the
 	 * proxy server is enabled.
 	 */
-	public boolean getProxyEnabled() {
+	public boolean isEnabled() {
 		return !proxyIPAddress.equals("") && !proxyPort.equals("");
 	}
 
@@ -124,15 +122,22 @@ public class ProxyServer {
 	 * @return true if the parameters indicate
 	 * that proxy user authentication is to be used.
 	 */
-	public boolean authenticate() {
-		return getProxyEnabled() && !proxyUsername.equals("") && !proxyPassword.equals("");
+	public boolean hasCredentials() {
+		return isEnabled() && !proxyUsername.equals("") && !proxyPassword.equals("");
+	}
+	
+	/**
+	 * Get the proxyPort as an integer
+	 * @return the proxyPort, or 0 if no port is available.
+	 */
+	public int getPort() {
+		return StringUtil.getInt(proxyPort, 0);
 	}
 
-	/**
+	/*
 	 * Set the Java System properties that apply to the proxy server.
 	 */
-	public void setProxyProperties() {
-		System.setProperty("proxySet","true");
+	private void setProxyProperties() {
 		System.setProperty("http.proxyHost",proxyIPAddress);
 		System.setProperty("http.proxyPort",proxyPort);
 		System.setProperty("https.proxyHost",proxyIPAddress);
@@ -150,12 +155,11 @@ public class ProxyServer {
 		}			
 	}
 
-	/**
+	/*
 	 * Clear the Java System properties that apply to the proxy server.
 	 */
-	public void clearProxyProperties() {
+	private void clearProxyProperties() {
 		Properties sys = System.getProperties();
-		sys.remove("proxySet");
 		sys.remove("http.proxyHost");
 		sys.remove("http.proxyPort");
 		sys.remove("http.proxyUser");
@@ -171,12 +175,11 @@ public class ProxyServer {
 	}
 
 	/**
-	 * Get the base-64 encoded value of the proxy user authentication credentials
-	 * in the form required for an HTTP Proxy-Authorization header.
+	 * Get the base-64 encoded value of the proxy user credentials
+	 * in Basic auth form for an HTTP Proxy-Authorization header.
 	 * @return the credentials encoded in Base64
 	 */
 	public String getEncodedCredentials() {
 		return Base64.encodeToString((proxyUsername + ":" + proxyPassword).getBytes());
 	}
 }
-

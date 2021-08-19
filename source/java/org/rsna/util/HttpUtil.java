@@ -8,11 +8,17 @@
 package org.rsna.util;
 
 import java.io.*;
+import java.net.Authenticator;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.PasswordAuthentication;
+import java.net.Proxy;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -55,20 +61,34 @@ public class HttpUtil {
 	 * or if an error occurs in initializing the connection.
 	 */
 	public static HttpURLConnection getConnection(URL url) throws Exception {
+		HttpURLConnection conn;
+		Proxy proxy = null;
 
 		String protocol = url.getProtocol().toLowerCase();
-		if (!protocol.startsWith("https") && !protocol.startsWith("http")) {
+		if (!protocol.equals("https") && !protocol.equals("http")) {
 			throw new Exception("Unsupported protocol ("+protocol+")");
 		}
 
-		HttpURLConnection conn;
-		if (protocol.startsWith("https")) {
-			HttpsURLConnection httpsConn = (HttpsURLConnection)url.openConnection();
+		//If the connection is through a proxy server, create a Proxy object.
+		ProxyServer proxyServer = ProxyServer.getInstance();
+		if ((proxyServer != null) && proxyServer.isEnabled()) {
+			proxy = new Proxy( Proxy.Type.HTTP, 
+							   new InetSocketAddress(
+									proxyServer.proxyIPAddress,
+									proxyServer.getPort()) );
+		}
+		else proxy = Proxy.NO_PROXY;
+		
+		//Instantiate the connection.
+		if (protocol.equals("https")) {
+			HttpsURLConnection httpsConn = (HttpsURLConnection)url.openConnection(proxy);
+			
+			//Accept all hosts
 			httpsConn.setHostnameVerifier(new AcceptAllHostnameVerifier());
 			httpsConn.setUseCaches(false);
 			httpsConn.setDefaultUseCaches(false);
 
-			//Set the socket factory
+			//Accept all certs
 			TrustManager[] trustAllCerts = new TrustManager[] { new AcceptAllX509TrustManager() };
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
@@ -76,22 +96,18 @@ public class HttpUtil {
 
 			conn = httpsConn;
 		}
-		else conn = (HttpURLConnection)url.openConnection();
+		else conn = (HttpURLConnection)url.openConnection(proxy);
 
-		conn.setDoOutput(true);
-		conn.setDoInput(true);
-		conn.setRequestMethod("POST");
-		conn.setRequestProperty("Content-Type", "application/x-mirc");
-
-		//If the proxy is enabled and proxy authentication
-		//credentials are available, set them in the request.
-		ProxyServer proxy = ProxyServer.getInstance();
-		if ((proxy != null) && proxy.authenticate()) {
+		//If proxy authentication credentials are available,
+		//add the Proxy-Authorization header.
+		//Note: The default Authenticator was set when the ProxyServer was first instantiated.
+		if ((proxyServer != null) && proxyServer.hasCredentials()) {
 			conn.setRequestProperty(
 				"Proxy-Authorization",
-				"Basic "+proxy.getEncodedCredentials());
+				"Basic "+proxyServer.getEncodedCredentials());
 		}
 		
+		//If user credentials are embedded in the URL, add the Authorization header.
 		String userinfo = url.getUserInfo();
 		if (userinfo != null) {
 			String[] creds = userinfo.split(":");
@@ -101,8 +117,13 @@ public class HttpUtil {
 					"Basic "+Base64.encodeToString((creds[0].trim() + ":" + creds[1].trim()).getBytes()));
 			}
 		}
+		
+		conn.setDoOutput(true);
+		conn.setDoInput(true);
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Content-Type", "application/x-mirc");
 
-		//and return the connection.
+		//Return the connection.
 		return conn;
 	}
 
