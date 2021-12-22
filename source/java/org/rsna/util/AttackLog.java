@@ -72,7 +72,10 @@ public class AttackLog {
 	}
 
 	private void getInfo(Attack attack) {
-		if (attack.getCountry().equals("")) {
+		//Geobytes has changed the API, so this is commented
+		//out until I get time to figure out what to do.
+		/*
+		if ((attack != null) && attack.getCountry().equals("")) {
 			String ip = attack.getIP();
 			String url = "http://gd.geobytes.com/GetCityDetails?fqcn="+ip;
 			try {
@@ -90,6 +93,7 @@ public class AttackLog {
 			}
 			catch (Exception skip) { }
 		}
+		*/
 	}
 	
 /* Example result from geobytes (with newlines added for readability):

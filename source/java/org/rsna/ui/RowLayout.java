@@ -71,7 +71,7 @@ public class RowLayout implements LayoutManager2 {
 	 * @return the constraint object specifying the requested colspan
 	 */
 	public static Integer span(int colspan) {
-		return new Integer( (colspan>0) ? colspan : 1 );
+		return Integer.valueOf( (colspan>0) ? colspan : 1 );
 	}
 
 	public void invalidateLayout(Container target) { }
