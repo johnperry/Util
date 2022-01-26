@@ -183,3 +183,4 @@ public class ProxyServer {
 		return Base64.encodeToString((proxyUsername + ":" + proxyPassword).getBytes());
 	}
 }
+

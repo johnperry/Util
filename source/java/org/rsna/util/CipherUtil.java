@@ -67,8 +67,9 @@ public class CipherUtil {
 	//Get a Cipher initialized with the specified key.
 	private static Cipher getCipher(String keyText, int mode) {
 		try {
-			Provider sunJce = new com.sun.crypto.provider.SunJCE();
-			Security.addProvider(sunJce);
+			//Changes to support building on JDK8
+			//Provider sunJce = new com.sun.crypto.provider.SunJCE();
+			//Security.addProvider(sunJce);
 			byte[] key = getEncryptionKey(keyText, 128);
 			SecretKeySpec skeySpec = new SecretKeySpec(key, transform);
 
@@ -77,7 +78,7 @@ public class CipherUtil {
 				cipher.init(mode, skeySpec);
 			}
 			else {
-				SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
+				SecureRandom random = new SecureRandom(); //SecureRandom.getInstance("SHA1PRNG", "SUN");
 				byte[] seed = random.generateSeed(8);
 				random.setSeed(seed);
 				cipher.init(mode, skeySpec, random);

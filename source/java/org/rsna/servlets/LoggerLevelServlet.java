@@ -44,7 +44,7 @@ public class LoggerLevelServlet extends Servlet {
 	 */
 	public LoggerLevelServlet(File root, String context) {
 		super(root, context);
-		if (classes == null) classes = ClasspathUtil.getClassNames();
+		if (classes == null) classes = ClasspathUtil.getInstance().getClassNames();
 	}
 
 	/**

@@ -122,6 +122,7 @@ public class SourcePanel extends JPanel implements FileListener {
 
 	/**
 	 * Set the selection value of the "Include subdirectories" checkbox in the footer panel.
+	 * @param selected the selection value for the chexckbox
 	 */
 	public void setSubdirectories(boolean selected) {
 		footerPanel.subdirectories.setSelected(selected);
