@@ -14,8 +14,8 @@
 	<property name="ctp" value="D:/Development/CTP"/>
 
 	<path id="classpath">
-		<pathelement location="${libraries}/jdbm.jar"/>
-		<pathelement location="${libraries}/log4j.jar"/>
+		<pathelement location="${ctp}/libraries/jdbm.jar"/>
+		<pathelement location="${ctp}/libraries/log4j/log4j-1.2-api-2.17.2.jar"/>
 	</path>
 
 	<target name="clean">

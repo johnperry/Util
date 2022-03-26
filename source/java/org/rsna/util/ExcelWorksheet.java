@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.zip.*;
+import org.rsna.util.FileUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -156,6 +157,42 @@ public class ExcelWorksheet {
 		return c;
 	}
 
+	/**
+	 * Get the workbook.xml text.
+	 * @param file the xlsx file
+	 * @return the text of the workbook XML
+	 */
+	public static String getWorkbookXML(File file) {
+		StringWriter sw = new StringWriter();
+		ZipFile zipFile = null;
+		BufferedReader in = null;
+		try {
+			zipFile = new ZipFile(file);
+			ZipEntry ze;
+			Enumeration<? extends ZipEntry> e = zipFile.entries();
+			while (e.hasMoreElements()) {
+				ze = e.nextElement();
+				if (!ze.isDirectory()) {
+					if (ze.getName().equals("xl/workbook.xml")) {
+						in = new BufferedReader(
+									new InputStreamReader(zipFile.getInputStream(ze),FileUtil.utf8));
+						int size = 1024;
+						int n = 0;
+						char[] c = new char[size];
+						while ((n = in.read(c,0,size)) != -1) sw.write(c,0,n);
+						return sw.toString();
+					}
+				}
+			}
+		}
+		catch (Exception e) { }
+		finally {
+			FileUtil.close(zipFile);
+			FileUtil.close(in);
+		}
+		return "";
+	}
+	
 	/**
 	 * Get the list of worksheet names in an xlsx file.
 	 * @param file the xlsx file
