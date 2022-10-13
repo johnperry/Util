@@ -63,8 +63,8 @@ function loginKeyDown(event) {
 }
 
 function loginPopupOK() {
-	var username = document.getElementById("username").value;
-	var password = document.getElementById("password").value;
+	var username = encodeURIComponent(document.getElementById("username").value);
+	var password = encodeURIComponent(document.getElementById("password").value);
 	var url = document.getElementById("loginPopupContentID").redirectURL;
 
 	var qs = "username="+username+"&password="+password+"&url="+url+"&timeStamp="+new Date().getTime();

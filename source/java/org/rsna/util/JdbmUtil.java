@@ -43,7 +43,7 @@ public class JdbmUtil {
 			recman = RecordManagerFactory.createRecordManager( indexPath, props );
 		}
 		catch (Exception e) {
-			logger.error("Unable to obtain the RecordManager for "+indexPath);
+			logger.error("Unable to obtain the RecordManager for "+indexPath, e);
 		}
 		return recman;
 	}
@@ -60,7 +60,10 @@ public class JdbmUtil {
 			long recid = recman.getNamedObject(name);
 			return (recid != 0);
 		}
-		catch (Exception notThere) { return false; }
+		catch (Exception notThere) { 
+			logger.error("Unable to obtain the named object for "+name, notThere);
+			return false; 
+		}
 	}
 
 	/**
@@ -96,7 +99,9 @@ public class JdbmUtil {
 				recman.commit();
 			}
 		}
-		catch (Exception ex) { logger.warn("Unable to find or create the HTree \""+name+"\""); }
+		catch (Exception e) { 
+			logger.warn("Unable to find or create the HTree \""+name+"\""); 
+		}
 		return index;
 	}
 
@@ -121,7 +126,9 @@ public class JdbmUtil {
 				recman.commit();
 			}
 		}
-		catch (Exception ex) { logger.warn("Unable to find or create the BTree \""+name+"\""); }
+		catch (Exception e) { 
+			logger.warn("Unable to find or create the BTree \""+name+"\"");
+		}
 		return index;
 	}
 
@@ -146,7 +153,7 @@ public class JdbmUtil {
 	}
 
 	/**
-	 * Commit and close a database, ignoring errors..
+	 * Commit and close a database, ignoring errors.
 	 * @param recman the RecordManager of the database to commit and close.
 	 */
 	public static void close(RecordManager recman) {
