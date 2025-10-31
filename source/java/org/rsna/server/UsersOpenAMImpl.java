@@ -7,6 +7,7 @@
 
 package org.rsna.server;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -39,7 +40,10 @@ public class UsersOpenAMImpl extends Users {
 			openAMURL = StringUtil.replace( openAMURL, System.getProperties(), true ).trim();
 			URL url = null;
 			if (!openAMURL.equals("")) {
-				try { url = new URL(openAMURL); }
+				try { 
+					URI uri = new URI(openAMURL);
+					url = uri.toURL();
+				}
 				catch (Exception ex) { url = null; }
 			}
 			if (url == null) logger.warn("Invalid openAMURL attribute");

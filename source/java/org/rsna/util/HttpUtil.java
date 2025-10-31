@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.PasswordAuthentication;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.List;
@@ -43,8 +44,7 @@ public class HttpUtil {
 	 * or if an error occurs in initializing the connection.
 	 */
 	public static HttpURLConnection getConnection(String urlString) throws Exception {
-		URL url = new URL(urlString);
-		return getConnection(url);
+		return getConnection(new URI(urlString).toURL());
 	}
 
 

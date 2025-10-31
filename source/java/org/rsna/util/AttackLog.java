@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.log4j.Logger;
 import org.rsna.util.FileUtil;
 import org.rsna.util.HttpUtil;
 import org.rsna.util.XmlUtil;
@@ -21,6 +22,7 @@ import org.rsna.util.XmlUtil;
  */
 public class AttackLog {
 
+	static final Logger logger = Logger.getLogger(AttackLog.class);
 	static AttackLog attackLog = null;
 	private Hashtable<String,Attack> attackTable;
 	final int readTimeout = 60000;
@@ -53,6 +55,7 @@ public class AttackLog {
 		attack.setLast(System.currentTimeMillis());
 		getInfo(attack);
 		attackTable.put(ip, attack);
+		logger.info("Attack logged:\n" + attack.toString());		
 	}
 
 	/**
@@ -72,12 +75,9 @@ public class AttackLog {
 	}
 
 	private void getInfo(Attack attack) {
-		//Geobytes has changed the API, so this is commented
-		//out until I get time to figure out what to do.
-		/*
 		if ((attack != null) && attack.getCountry().equals("")) {
 			String ip = attack.getIP();
-			String url = "http://gd.geobytes.com/GetCityDetails?fqcn="+ip;
+			String url = "https://secure.geobytes.com/GetCityDetails?key=7c756203dbb38590a66e01a5a3e1ad96&fqcn="+ip;
 			try {
 				HttpURLConnection conn = HttpUtil.getConnection(url);
 				conn.setReadTimeout(readTimeout);
@@ -93,7 +93,6 @@ public class AttackLog {
 			}
 			catch (Exception skip) { }
 		}
-		*/
 	}
 	
 /* Example result from geobytes (with newlines added for readability):

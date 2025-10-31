@@ -62,7 +62,7 @@ public class ExcelWorksheet {
 			Element si = (Element)texts.item(i);
 			NodeList tList = si.getElementsByTagName("t");
 			String t = (tList.getLength() > 0) ? tList.item(0).getTextContent().trim() : "";
-			shared.put( new Integer(i), t);
+			shared.put( Integer.valueOf(i), t);
 		}		
 		
 		Document doc = XmlUtil.getDocument(sheet);
@@ -82,7 +82,7 @@ public class ExcelWorksheet {
 			NodeList vList = c.getElementsByTagName("v");
 			String v = (vList.getLength() > 0) ? vList.item(0).getTextContent().trim() : "";
 			if (t.equals("s")) {
-				try { v = shared.get( new Integer(v) ); }
+				try { v = shared.get( Integer.valueOf(v) ); }
 				catch (Exception ignore) { }
 			}
 			cells.put(r, v);

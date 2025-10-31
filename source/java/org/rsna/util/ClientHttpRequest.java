@@ -1,6 +1,7 @@
 package org.rsna.util;
 
 import java.net.URLConnection;
+import java.net.URI;
 import java.net.URL;
 import java.io.IOException;
 import java.util.HashMap;
@@ -95,8 +96,8 @@ public class ClientHttpRequest {
    * @param urlString the string representation of the URL to send request to
    * @throws IOException on any error
    */
-  public ClientHttpRequest(String urlString) throws IOException {
-    this(new URL(urlString));
+  public ClientHttpRequest(String urlString) throws Exception {
+    this(new URI(urlString).toURL());
   }
 
   private void postCookies() {

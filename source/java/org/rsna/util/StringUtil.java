@@ -247,12 +247,12 @@ public class StringUtil {
 		try {
 			Integer i;
 			if (theString.length() < 8) {
-				return new Integer( Integer.parseInt(theString, 16) );
+				return Integer.parseInt(theString, 16);
 			}
 			else {
 				int high = Integer.parseInt(theString.substring(0,4), 16);
 				int low = Integer.parseInt(theString.substring(4), 16);
-				return new Integer( (high << 16) | low);
+				return (high << 16) | low;
 			}
 		}
 		catch (Exception e) { return defaultValue; }

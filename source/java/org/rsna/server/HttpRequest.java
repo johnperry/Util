@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Arrays;
@@ -241,13 +242,15 @@ public class HttpRequest {
 		try {
 			//Get the referrer
 			String referringPage = getHeader("referer"); //[sic]
-			URL refURL = new URL(referringPage);
+			URI refURI = new URI(referringPage);
+			URL refURL = refURI.toURL();
 			int refPort = refURL.getPort();
 			if (refPort == -1) refPort = 80;
 
 			//Get the host
 			String host = getHost();
-			URL hostURL = new URL("http://"+host);
+			URI hostURI = new URI("http://"+host);
+			URL hostURL = hostURI.toURL();
 			int hostPort = hostURL.getPort();
 			if (hostPort == -1) hostPort = 80;
 
@@ -689,6 +692,7 @@ public class HttpRequest {
 			for (String param : paramStrings) {
 				String[] paramParts = param.split("=");
 				String name = URLDecoder.decode(paramParts[0].trim(),"UTF-8");
+				if (name.startsWith("amp;")) name = name.substring(4);
 				String value = "";
 				if (paramParts.length == 2) {
 					value = URLDecoder.decode(paramParts[1].trim(),"UTF-8");

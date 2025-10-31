@@ -36,11 +36,11 @@ public class ApplicationServer extends Servlet {
 	/**
 	 * The servlet method that responds to an HTTP GET.
 	 *
-	 * The servlet responds to the path <tt>/webstart/{appname}?{params}</tt>
+	 * The servlet responds to the path <code>/webstart/{appname}?{params}</code>
 	 *
 	 * Parameters must be single-valued.
 	 *
-	 * All the files for the app must be in the ROOT/{appname} directory.
+	 * All the files for the app must be in the <code>ROOT/{appname}</code> directory.
 	 *
 	 * There must be a file named {appname}.xsl in the directory to produce
 	 * the jnlp file. The XSL program must process an XSL document in this form:

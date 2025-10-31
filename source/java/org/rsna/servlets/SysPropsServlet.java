@@ -149,7 +149,7 @@ public class SysPropsServlet extends Servlet {
 		long usedMemory1 = usedMemory();
 		long usedMemory2 = Long.MAX_VALUE;
 		for (int i=0; (usedMemory1 < usedMemory2) && (i < 40); i++) {
-			runtime.runFinalization();
+			//runtime.runFinalization();
 			runtime.gc();
 			Thread.currentThread().yield();
 			usedMemory2 = usedMemory1;

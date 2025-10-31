@@ -36,7 +36,7 @@ import java.io.InputStream;
  * not requiring the client to remember to read the entire contents of the
  * response.
  *
- * @author Ortwin Glück
+ * @author Ortwin Gluck
  * @author Sean C. Sullivan
  * @author Martin Elwin
  * @author Eric Johnson
@@ -66,6 +66,7 @@ public class ChunkedInputStream extends InputStream {
     private boolean closed = false;
 
     /**
+     * Create a ChunkedInputStream on an InputStream.
      * @param in must be non-null
      * @throws IOException if an IO error occurs
      */
@@ -78,8 +79,7 @@ public class ChunkedInputStream extends InputStream {
     }
 
     /**
-     * 
- Returns all the data in a chunked stream in coalesced form. A chunk
+     * Returns all the data in a chunked stream in coalesced form. A chunk
      * is followed by a CRLF. The method returns -1 as soon as a chunksize of 0 is detected.
      * @return -1 of the end of the stream has been reached or the next data byte
      * @throws IOException if an IO problem occurs

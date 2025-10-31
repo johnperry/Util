@@ -126,8 +126,8 @@ public class OpenAMUtil {
     public static String login(String baseURL, String redirectURL) {
 		String result = "OK";
 		try {
-			URL url = new URL( getLoginURL(baseURL, redirectURL) );
-			Desktop.getDesktop().browse( url.toURI() );
+			URI uri = new URI( getLoginURL(baseURL, redirectURL) );
+			Desktop.getDesktop().browse( uri );
 		}
 		catch (Exception ignore) { result = "Unable to launch browser."; }
 		return result;
@@ -174,7 +174,7 @@ public class OpenAMUtil {
 	private static String doGet(String urlString) {
 		String text = "";
 		try {
-			URL url = new URL(urlString);
+			URL url = new URI(urlString).toURL();
 			HttpURLConnection conn = HttpUtil.getConnection(url);
 			conn.setRequestMethod("GET");
 			conn.setDoOutput(false);
@@ -191,7 +191,7 @@ public class OpenAMUtil {
 		String text = "";
 		BufferedWriter writer = null;
 		try {
-			URL url = new URL(urlString);
+			URL url = new URI(urlString).toURL();
 			HttpURLConnection conn = HttpUtil.getConnection(url);
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");

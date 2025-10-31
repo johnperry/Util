@@ -352,6 +352,7 @@ public class UserManagerServlet extends Servlet {
 		}
 
 		sb.append(
+				"    <div>\n" +
 				"    <table id=\"userTable\" border=\"1\">\n"
 		);
 	}
@@ -359,6 +360,7 @@ public class UserManagerServlet extends Servlet {
 	private void responseTail(StringBuffer sb) {
 		sb.append(
 				"    </table>\n"
+			+	"    </div>\n"
 			+	"   </form>\n"
 			+	"  </center>\n"
 			+	" </body>\n"

@@ -131,7 +131,7 @@ public class HttpResponse {
 	 * If the string doesn't correspond to a known Content-Type,
 	 * the header is not set.
 	 * <br><br>
-	 * <table border="1" summary="Content-Types">
+	 * <table border="1">
 	 *	<tr><td>application</td><td>application/x-ms-application</td></tr>
 	 *	<tr><td>apk</td><td>application/vnd.android.package-archive</td></tr>
 	 *	<tr><td>avi</td><td>video/x-msvideo</td></tr>
@@ -152,6 +152,7 @@ public class HttpResponse {
 	 *	<tr><td>json</td><td>application/json;charset=UTF-8</td></tr>
 	 *	<tr><td>manifest</td><td>application/x-ms-manifest</td></tr>
 	 *	<tr><td>md</td><td>application/unknown</td></tr>
+	 *	<tr><td>mov</td><td>video/quicktime</td></tr>
 	 *	<tr><td>mp4</td><td>video/mp4</td></tr>
 	 *	<tr><td>mpeg</td><td>video/mpeg</td></tr>
 	 *	<tr><td>mpg</td><td>video/mpg</td></tr>
@@ -488,6 +489,7 @@ public class HttpResponse {
 			put("json","application/json;charset=UTF-8");
 			put("manifest","application/x-ms-manifest");
 			put("md","application/unknown");
+			put("mov","video/quicktime");
 			put("mp4","video/mp4");
 			put("mpeg","video/mpg");
 			put("mpg","video/mpg");

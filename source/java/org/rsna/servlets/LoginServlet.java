@@ -8,6 +8,7 @@
 package org.rsna.servlets;
 
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.util.*;
 import org.apache.log4j.Logger;
@@ -187,7 +188,8 @@ public class LoginServlet extends Servlet {
 	private boolean isSameHost(HttpRequest req, String urlString) {
 		if (!urlString.startsWith("/") && urlString.contains("://")) {
 			try {
-				URL url = new URL(urlString);
+				URI uri = new URI(urlString);
+				URL url = uri.toURL();
 				String urlHost = url.getHost();
 				String reqHost = req.getHost();
 				logger.debug("isSameHost: req; \""+urlHost+"\" url: \""+urlHost+"\"");

@@ -10,12 +10,20 @@ package org.rsna.util;
 import java.util.*;
 import javax.swing.*;
 
+/**
+ * Static methods for launching a browser to view a resource.
+ */
 public class BrowserUtil {
 
 	static final String[] browsers = { "google-chrome", "firefox", "opera",
 		"epiphany", "konqueror", "conkeror", "midori", "kazehakase", "mozilla" };
 	static final String errMsg = "Error attempting to launch web browser";
 
+	/**
+	 * Default constructor
+	 */
+	public BrowserUtil() { }
+	
 	/**
 	 * Opens the specified web page in the user's default browser
 	 * @param url A web address (URL) of a web page (ex: "http://www.google.com/")
@@ -42,7 +50,9 @@ public class BrowserUtil {
 									new Object[] { url });
 				}
 				else if (osName.startsWith("Windows")) {
-					Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " + url);
+					Runtime.getRuntime().exec( 
+						new String[] {"rundll32 url.dll,FileProtocolHandler ", url.toString()} 
+					);
 				}
 				else { //assume Unix or Linux
 					String browser = null;
